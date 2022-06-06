@@ -1,11 +1,11 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:path_visualizer/components/node/node_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../main.dart';
-import '../node/node_painter.dart';
+import '../../node/node_model.dart';
+import '../../node/node_painter.dart';
 import 'grid_gesture.dart';
 import 'grid_painter.dart';
 
@@ -20,50 +20,52 @@ class GridWidget extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: grid.width,
-      height: grid.height,
-      child: GridGestureDetector(
+    return FittedBox(
+      child: SizedBox(
         width: grid.width,
-        unitSize: grid.unitSize,
-        rows: grid.rows,
-        columns: grid.columns,
         height: grid.height,
-        onDragNode: (int i, int j, int newI, int newJ) {
-          grid.onDragUpdate(i, j, Provider.of<AlgoVisualizerTools>(context, listen: false).curBrush);
-        },
-        onTapNode: (int i, int j) {
-          grid.onTapNode(i, j, Provider.of<AlgoVisualizerTools>(context, listen: false).curBrush);
-        },
-        child: Stack(
-          children: [
-            StaticGrid(
-              columns: grid.columns,
-              height: grid.height,
-              rows: grid.rows,
-              unitSize: grid.unitSize,
-              width: grid.width,
-            ),
-            StaticNodeGrid(
-              grid: grid,
-            ),
-            ChangeNotifierProvider.value(
-              value: grid.walls,
-              child: Selector<Painter, Map<String,Widget>>(
-                shouldRebuild: (a,b) => true,
-                selector: (_, model) => model.map,
-                  builder: (context, walls, child) {
-                  return Stack(
-                    children: [
-                      for(Widget wall in walls.values) ...[
-                        wall,
-                      ]
-                    ],
-                  );
-                }
+        child: GridGestureDetector(
+          width: grid.width,
+          unitSize: grid.unitSize,
+          rows: grid.rows,
+          columns: grid.columns,
+          height: grid.height,
+          onDragNode: (int i, int j, int newI, int newJ) {
+            grid.onDragUpdate(i, j, Provider.of<AlgoVisualizerTools>(context, listen: false).curBrush);
+          },
+          onTapNode: (int i, int j) {
+            grid.onTapNode(i, j, Provider.of<AlgoVisualizerTools>(context, listen: false).curBrush);
+          },
+          child: Stack(
+            children: [
+              StaticGrid(
+                columns: grid.columns,
+                height: grid.height,
+                rows: grid.rows,
+                unitSize: grid.unitSize,
+                width: grid.width,
               ),
-            ),
-          ],
+              StaticNodeGrid(
+                grid: grid,
+              ),
+              ChangeNotifierProvider.value(
+                value: grid.walls,
+                child: Selector<Painter, Map<String,Widget>>(
+                  shouldRebuild: (a,b) => true,
+                  selector: (_, model) => model.map,
+                    builder: (context, walls, child) {
+                    return Stack(
+                      children: [
+                        for(Widget wall in walls.values) ...[
+                          wall,
+                        ]
+                      ],
+                    );
+                  }
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
