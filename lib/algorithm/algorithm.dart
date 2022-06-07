@@ -19,8 +19,14 @@ enum Algorithm {
 
 class AlgoVisualizerTools extends ChangeNotifier {
   Brush curBrush = Brush.wall;
-  int curSpeed = 15;
+  double curSpeed = 15;
   Algorithm curAlgorithm = Algorithm.bfs;
+  bool isVisualizing = false;
+
+  void toggleVisualizing() {
+    isVisualizing = !isVisualizing;;
+    notifyListeners();
+  }
 
   void changeBrush() {
     if(curBrush == Brush.start) {
@@ -33,7 +39,7 @@ class AlgoVisualizerTools extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeSpeed(int speed) {
+  void changeSpeed(double speed) {
     curSpeed = speed;
     notifyListeners();
   }
@@ -163,7 +169,8 @@ class Algorithms {
     return orderOfVisit;
   }
 
-  Future<void> visualizeAlgorithm(Algorithm curAlgorithm, int speed) {
+  Future<void> visualizeAlgorithm(Algorithm curAlgorithm, int speed, Function toggleVisualizing) {
+    toggleVisualizing();
     List<NodeModel> orderOfVisit = executeAlgorithm(curAlgorithm);
     List<NodeModel> pathingOrder = getPathFromStartToEnd();
     for(int i = 0; i <= orderOfVisit.length; i++) {
@@ -179,6 +186,9 @@ class Algorithms {
             });
             index++;
           }
+        });
+        Future<dynamic>.delayed(Duration(milliseconds: orderOfVisit.length * speed + pathingOrder.length * speed)).then((value) {
+          toggleVisualizing();
         });
         return Future<dynamic>.value(orderOfVisit.length * speed + pathingOrder.length * speed);
       }

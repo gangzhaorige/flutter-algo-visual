@@ -52,43 +52,50 @@ class HomeView extends StatelessWidget {
                 height: 55,
                 color: Colors.blue,
                 child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      MaterialButton(
-                        onPressed: () {
-                          grid.resetPath();
-                        },
-                        child: const Text('Reset Path'),
-                      ),
-                      MaterialButton(
-                        onPressed: () {
-                          grid.resetPath();
-                          Algorithms algo = Algorithms(
-                            columns: grid.columns,
-                            endCol: grid.endCol,
-                            endRow: grid.endRow,
-                            nodes: grid.nodes,
-                            rows: grid.rows,
-                            startCol: grid.startCol,
-                            startRow: grid.startRow,
-                            grid: grid,
-                          );
-                          AlgoVisualizerTools tool = Provider.of<AlgoVisualizerTools>(context, listen: false);
-                          algo.visualizeAlgorithm(
-                            tool.curAlgorithm,
-                            tool.curSpeed,
-                          );
-                        },
-                        child: const Text('Visualize'),
-                      ),
-                      MaterialButton(
-                        onPressed: () {
-                          grid.resetWalls();
-                        },
-                        child: const Text('Reset Wall'),
-                      ),
-                    ],
+                  child: Selector<AlgoVisualizerTools, bool>(
+                    selector: (_, AlgoVisualizerTools model) => model.isVisualizing,
+                    builder: (BuildContext context, bool isVisualizing, Widget? child) {
+                      print('rebuilding row...');
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          MaterialButton(
+                            onPressed: isVisualizing ? null : () {
+                              grid.resetPath();
+                            },
+                            child: const Text('Reset Path'),
+                          ),
+                          MaterialButton(
+                            onPressed: isVisualizing ? null : () {
+                              grid.resetPath();
+                              Algorithms algo = Algorithms(
+                                columns: grid.columns,
+                                endCol: grid.endCol,
+                                endRow: grid.endRow,
+                                nodes: grid.nodes,
+                                rows: grid.rows,
+                                startCol: grid.startCol,
+                                startRow: grid.startRow,
+                                grid: grid,
+                              );
+                              AlgoVisualizerTools tool = Provider.of<AlgoVisualizerTools>(context, listen: false);
+                              algo.visualizeAlgorithm(
+                                tool.curAlgorithm,
+                                tool.curSpeed.toInt(),
+                                tool.toggleVisualizing,
+                              );
+                            },
+                            child: const Text('Visualize'),
+                          ),
+                          MaterialButton(
+                            onPressed: isVisualizing ? null : () {
+                              grid.resetWalls();
+                            },
+                            child: const Text('Reset Wall'),
+                          ),
+                        ],
+                      );
+                    }
                   ),
                 ),
               ),
