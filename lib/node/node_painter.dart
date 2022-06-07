@@ -146,8 +146,8 @@ class Square extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     var rectl = Rect.fromCenter(
       center: Offset(unitSize / 2, unitSize / 2),
-      width: unitSize * 0.99,
-      height: unitSize * 0.99,
+      width: unitSize * 0.98,
+      height: unitSize * 0.98,
     );
     Paint paint = Paint();
     paint.color = nodeColor[type] as Color;

@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../main.dart';
 import '../../node/node_model.dart';
 import '../../node/node_painter.dart';
+import '../algorithm/algorithm.dart';
 import 'grid_gesture.dart';
 import 'grid_painter.dart';
 
@@ -21,6 +22,7 @@ class GridWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FittedBox(
+      fit: BoxFit.fill,
       child: SizedBox(
         width: grid.width,
         height: grid.height,
@@ -72,7 +74,7 @@ class GridWidget extends StatelessWidget {
   }
 }
 
-class Grid {
+class Grid extends ChangeNotifier{
   Grid({
     required this.startRow,
     required this.startCol,
@@ -97,8 +99,8 @@ class Grid {
   double unitSize;
   late double width;
   late double height;
-  final int rows;
-  final int columns;
+  late int rows;
+  late int columns;
   late List<List<NodeModel>> nodes;
   late Painter walls;
 
@@ -119,7 +121,7 @@ class Grid {
         if(curNode.type == NodeType.wall) {
           curNode.changeNodeType(NodeType.empty);
         } else {
-          walls.addWall(row, col, unitSize, createWall);
+          walls.addNodeWiget(row, col, unitSize, createNode, NodeType.wall);
         }
         break;
       case Brush.weight:
@@ -142,9 +144,9 @@ class Grid {
     }
   }
 
-  void createWall(int row, int col) {
+  void createNode(int row, int col, NodeType type) {
     NodeModel node = nodes[row][col];
-    node.changeNodeType(NodeType.wall);
+    node.changeNodeType(type);
   }
 
   void onDragUpdate(int row, int col, Brush brush) {
@@ -174,7 +176,7 @@ class Grid {
         if(isStartOrEnd(node.row, node.col)) {
           continue;
         }
-        if(node.type == NodeType.visiting || node.type == NodeType.pathing) {
+        if(node.type == NodeType.visiting || node.type == NodeType.pathing || node.type == NodeType.weight) {
           node.changeNodeType(NodeType.empty);
         }
       }

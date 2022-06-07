@@ -1,7 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path_visualizer/main.dart';
 import 'package:provider/provider.dart';
+
+import '../../algorithm/algorithm.dart';
 
 class TopBarMobile extends StatelessWidget {
   const TopBarMobile({Key? key}) : super(key: key);
@@ -28,14 +29,14 @@ class TopBarMobile extends StatelessWidget {
           style: TextStyle(
             color: Colors.white,
             fontSize: 18,
-            fontWeight: FontWeight.bold
+            fontWeight: FontWeight.bold,
           ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: GestureDetector(
             onTap: () {
-              Provider.of<AlgoVisualizerTools>(context, listen: false).changeAlgorithm(Algorithm.bfs);
+              Provider.of<AlgoVisualizerTools>(context, listen: false).changeBrush(Brush.start);
             },
             child: const Icon(
               Icons.menu,
