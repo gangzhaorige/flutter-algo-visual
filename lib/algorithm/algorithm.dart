@@ -157,16 +157,16 @@ class Algorithms {
     return orderOfVisit;
   }
 
-  Future<int> visualizeAlgorithm(Algorithm curAlgorithm) {
+  Future<void> visualizeAlgorithm(Algorithm curAlgorithm) {
     List<NodeModel> orderOfVisit = executeAlgorithm(curAlgorithm);
     List<NodeModel> pathingOrder = getPathFromStartToEnd();
     for(int i = 0; i <= orderOfVisit.length; i++) {
       if(i == orderOfVisit.length) {
-        Future<int>.delayed(Duration(milliseconds: 10 * i)).then((_) {
+        Future<dynamic>.delayed(Duration(milliseconds: 10 * i)).then((_) {
           int index = 0;
           for(int j = pathingOrder.length - 1; j >= 0; j--) {
             NodeModel cur = pathingOrder[j];
-            Future<int>.delayed(Duration(milliseconds: index * 10)).then((_) {
+            Future<dynamic>.delayed(Duration(milliseconds: index * 10)).then((_) {
               if(!isStartOrEnd(cur.row, cur.col)) {
                 grid.walls.addNodeWiget(cur.row, cur.col, grid.unitSize, (int i, int j, NodeType k) => grid.createNode(i, j, k), NodeType.weight);
               }
@@ -174,14 +174,14 @@ class Algorithms {
             index++;
           }
         });
-        return Future<int>.value(orderOfVisit.length * 10 + pathingOrder.length * 10);
+        return Future<dynamic>.value(orderOfVisit.length * 10 + pathingOrder.length * 10);
       }
-      Future<int>.delayed(Duration(milliseconds: 10 * i)).then((_) {
+      Future<dynamic>.delayed(Duration(milliseconds: 10 * i)).then((_) {
         if(!isStartOrEnd(orderOfVisit[i].row, orderOfVisit[i].col)) {
           grid.walls.addNodeWiget(orderOfVisit[i].row, orderOfVisit[i].col, grid.unitSize, (int i, int j, NodeType k) => grid.createNode(i, j, k), NodeType.visiting);
         }
       });
     }
-    return Future<int>.value(orderOfVisit.length * 10 + pathingOrder.length * 10);
+    return Future<dynamic>.value(orderOfVisit.length * 10 + pathingOrder.length * 10);
   }
 }

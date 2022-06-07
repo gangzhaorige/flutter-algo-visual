@@ -23,7 +23,6 @@ class WallNodePainter extends NodePainter{
   }
 }
 
-
 class WallNodePaintWidget extends StatefulWidget {
   const WallNodePaintWidget({
     Key? key,

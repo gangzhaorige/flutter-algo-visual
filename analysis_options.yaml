@@ -23,7 +23,9 @@ linter:
   # producing the lint.
   rules:
     always_specify_types: true
-    prefer_single_quotes: true 
+    prefer_single_quotes: true
+    always_declare_return_types: false
+    annotate_overrides: true
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
