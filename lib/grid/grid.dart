@@ -1,11 +1,12 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:path_visualizer/components/node/node_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../main.dart';
-import '../node/node_painter.dart';
+import '../../node/node_model.dart';
+import '../../node/node_painter.dart';
+import '../algorithm/algorithm.dart';
 import 'grid_gesture.dart';
 import 'grid_painter.dart';
 
@@ -20,57 +21,60 @@ class GridWidget extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: grid.width,
-      height: grid.height,
-      child: GridGestureDetector(
+    return FittedBox(
+      fit: BoxFit.fill,
+      child: SizedBox(
         width: grid.width,
-        unitSize: grid.unitSize,
-        rows: grid.rows,
-        columns: grid.columns,
         height: grid.height,
-        onDragNode: (int i, int j, int newI, int newJ) {
-          grid.onDragUpdate(i, j, Provider.of<AlgoVisualizerTools>(context, listen: false).curBrush);
-        },
-        onTapNode: (int i, int j) {
-          grid.onTapNode(i, j, Provider.of<AlgoVisualizerTools>(context, listen: false).curBrush);
-        },
-        child: Stack(
-          children: [
-            StaticGrid(
-              columns: grid.columns,
-              height: grid.height,
-              rows: grid.rows,
-              unitSize: grid.unitSize,
-              width: grid.width,
-            ),
-            StaticNodeGrid(
-              grid: grid,
-            ),
-            ChangeNotifierProvider.value(
-              value: grid.walls,
-              child: Selector<Painter, Map<String,Widget>>(
-                shouldRebuild: (a,b) => true,
-                selector: (_, model) => model.map,
-                  builder: (context, walls, child) {
-                  return Stack(
-                    children: [
-                      for(Widget wall in walls.values) ...[
-                        wall,
-                      ]
-                    ],
-                  );
-                }
+        child: GridGestureDetector(
+          width: grid.width,
+          unitSize: grid.unitSize,
+          rows: grid.rows,
+          columns: grid.columns,
+          height: grid.height,
+          onDragNode: (int i, int j, int newI, int newJ) {
+            grid.onDragUpdate(i, j, Provider.of<AlgoVisualizerTools>(context, listen: false).curBrush);
+          },
+          onTapNode: (int i, int j) {
+            grid.onTapNode(i, j, Provider.of<AlgoVisualizerTools>(context, listen: false).curBrush);
+          },
+          child: Stack(
+            children: [
+              StaticGrid(
+                columns: grid.columns,
+                height: grid.height,
+                rows: grid.rows,
+                unitSize: grid.unitSize,
+                width: grid.width,
               ),
-            ),
-          ],
+              StaticNodeGrid(
+                grid: grid,
+              ),
+              ChangeNotifierProvider.value(
+                value: grid.walls,
+                child: Selector<Painter, Map<String,Widget>>(
+                  shouldRebuild: (a,b) => true,
+                  selector: (_, model) => model.map,
+                    builder: (context, walls, child) {
+                    return Stack(
+                      children: [
+                        for(Widget wall in walls.values) ...[
+                          wall,
+                        ]
+                      ],
+                    );
+                  }
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-class Grid {
+class Grid extends ChangeNotifier{
   Grid({
     required this.startRow,
     required this.startCol,
@@ -95,8 +99,8 @@ class Grid {
   double unitSize;
   late double width;
   late double height;
-  final int rows;
-  final int columns;
+  late int rows;
+  late int columns;
   late List<List<NodeModel>> nodes;
   late Painter walls;
 
@@ -117,7 +121,7 @@ class Grid {
         if(curNode.type == NodeType.wall) {
           curNode.changeNodeType(NodeType.empty);
         } else {
-          walls.addWall(row, col, unitSize, createWall);
+          walls.addNodeWiget(row, col, unitSize, createNode, NodeType.wall);
         }
         break;
       case Brush.weight:
@@ -140,9 +144,9 @@ class Grid {
     }
   }
 
-  void createWall(int row, int col) {
+  void createNode(int row, int col, NodeType type) {
     NodeModel node = nodes[row][col];
-    node.changeNodeType(NodeType.wall);
+    node.changeNodeType(type);
   }
 
   void onDragUpdate(int row, int col, Brush brush) {
@@ -172,7 +176,7 @@ class Grid {
         if(isStartOrEnd(node.row, node.col)) {
           continue;
         }
-        if(node.type == NodeType.visiting || node.type == NodeType.pathing) {
+        if(node.type == NodeType.visiting || node.type == NodeType.pathing || node.type == NodeType.weight) {
           node.changeNodeType(NodeType.empty);
         }
       }

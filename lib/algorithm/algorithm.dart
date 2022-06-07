@@ -1,6 +1,8 @@
 import 'dart:collection';
+import 'package:flutter/material.dart';
 import 'package:path_visualizer/main.dart';
 
+import '../grid/grid.dart';
 import '../node/node_model.dart';
 
 const List<List<int>> directions = [
@@ -9,6 +11,32 @@ const List<List<int>> directions = [
   [0, -1], // up
   [-1, 0], // left
 ];
+
+enum Algorithm {
+  dfs,
+  bfs,
+}
+
+class AlgoVisualizerTools extends ChangeNotifier {
+  Brush curBrush = Brush.wall;
+  int curSpeed = 5;
+  Algorithm curAlgorithm = Algorithm.bfs;
+
+  void changeBrush(Brush type) {
+    curBrush = type;
+    notifyListeners();
+  }
+
+  void changeSpeed(int speed) {
+    curSpeed = speed;
+    notifyListeners();
+  }
+
+  void changeAlgorithm(Algorithm algorithm) {
+    curAlgorithm = algorithm;
+    notifyListeners();
+  }
+}
 
 class Algorithms {
 
@@ -19,6 +47,7 @@ class Algorithms {
   final int rows;
   final int columns;
   List<List<NodeModel>> nodes;
+  final Grid grid;
 
   Algorithms({
     required this.startRow,
@@ -28,6 +57,7 @@ class Algorithms {
     required this.rows, 
     required this.columns,
     required this.nodes,
+    required this.grid,
   });
 
   List<NodeModel> bfs() {
@@ -138,7 +168,7 @@ class Algorithms {
             NodeModel cur = pathingOrder[j];
             Future.delayed(Duration(milliseconds: index * 10)).then((value) {
               if(!isStartOrEnd(cur.row, cur.col)) {
-                cur.changeNodeType(NodeType.pathing);
+                grid.walls.addNodeWiget(cur.row, cur.col, grid.unitSize, (i, j, k) => grid.createNode(i, j, k), NodeType.weight);
               }
             });
             index++;
@@ -148,7 +178,7 @@ class Algorithms {
       }
       Future.delayed(Duration(milliseconds: 10 * i)).then((value) {
         if(!isStartOrEnd(orderOfVisit[i].row, orderOfVisit[i].col)) {
-          orderOfVisit[i].changeNodeType(NodeType.visiting);
+          grid.walls.addNodeWiget(orderOfVisit[i].row, orderOfVisit[i].col, grid.unitSize, (i, j, k) => grid.createNode(i, j, k), NodeType.visiting);
         }
       });
     }
