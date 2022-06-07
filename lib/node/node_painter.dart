@@ -125,7 +125,12 @@ class SquareWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      painter: Square(type: type, row: row, col: col, unitSize: unitSize),
+      painter: Square(
+        type: type,
+        row: row,
+        col: col,
+        unitSize: unitSize,
+      ),
     );
   }
 }
@@ -147,8 +152,8 @@ class Square extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     Rect rectl = Rect.fromCenter(
       center: Offset(unitSize / 2, unitSize / 2),
-      width: unitSize * 0.98,
-      height: unitSize * 0.98,
+      width: unitSize,
+      height: unitSize,
     );
     Paint paint = Paint();
     paint.color = nodeColor[type] as Color;

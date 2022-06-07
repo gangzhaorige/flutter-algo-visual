@@ -17,7 +17,7 @@ class GridPainter extends CustomPainter {
     canvas.drawRect(background, paint);
 
     paint.color = Colors.blue;
-    paint.strokeWidth = 1;
+    paint.strokeWidth = 0.7;
     
     for (int i = 0; i < rows + 1; i++) {
       canvas.drawLine(

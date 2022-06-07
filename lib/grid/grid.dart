@@ -41,15 +41,15 @@ class GridWidget extends StatelessWidget {
           },
           child: Stack(
             children: <Widget>[
+              StaticNodeGrid(
+                grid: grid,
+              ),
               StaticGrid(
                 columns: grid.columns,
                 height: grid.height,
                 rows: grid.rows,
                 unitSize: grid.unitSize,
                 width: grid.width,
-              ),
-              StaticNodeGrid(
-                grid: grid,
               ),
               ChangeNotifierProvider<Painter>.value(
                 value: grid.walls,
