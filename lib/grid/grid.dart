@@ -50,15 +50,15 @@ class GridWidget extends StatelessWidget {
               StaticNodeGrid(
                 grid: grid,
               ),
-              ChangeNotifierProvider.value(
+              ChangeNotifierProvider<Painter>.value(
                 value: grid.walls,
                 child: Selector<Painter, Map<String,Widget>>(
-                  shouldRebuild: (a,b) => true,
-                  selector: (_, model) => model.map,
-                    builder: (context, walls, child) {
+                  shouldRebuild: (Map<String, Widget> a, Map<String, Widget> b) => true,
+                  selector: (_, Painter model) => model.map,
+                    builder: (BuildContext context, Map<String, Widget> walls, Widget? child) {
                     return Stack(
                       children: [
-                        for(Widget wall in walls.values) ...[
+                        for(Widget wall in walls.values)...<Widget>[
                           wall,
                         ]
                       ],
@@ -84,7 +84,7 @@ class Grid extends ChangeNotifier{
     required this.columns,
     required this.unitSize
   }) {
-    nodes = List.generate(rows, (row) => List.generate(columns, (col) => NodeModel(row: row, col: col, type: NodeType.empty)));
+    nodes = List<List<NodeModel>>.generate(rows, (int row) => List<NodeModel>.generate(columns, (int col) => NodeModel(row: row, col: col, type: NodeType.empty)));
     nodes[startRow][startCol].type = NodeType.start;
     nodes[endRow][endCol].type = NodeType.end;
     width = rows * unitSize;
@@ -241,11 +241,11 @@ class StaticNodeGrid extends StatelessWidget {
       children: [
         for(int i = 0; i < grid.nodes.length; i++)...[
           for(int j = 0; j < grid.nodes[0].length; j++) ...[
-            ChangeNotifierProvider.value(
+            ChangeNotifierProvider<NodeModel>.value(
               value: grid.nodes[i][j],
               child: Selector<NodeModel, NodeType>(
-                selector: (_, type) => grid.nodes[i][j].type,
-                  builder: (context, type, child) {
+                selector: (_, NodeModel type) => grid.nodes[i][j].type,
+                  builder: (BuildContext context, NodeType type, Widget? child) {
                   return Positioned(
                     left: i * (grid.unitSize.toDouble()),
                     top:  j * (grid.unitSize.toDouble()),

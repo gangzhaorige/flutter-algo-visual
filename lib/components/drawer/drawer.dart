@@ -12,13 +12,20 @@ class AppDrawer extends StatelessWidget {
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
-        children: [
+        children: <Widget>[
           GestureDetector(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ChangeNotifierProvider.value(
-                value: algo,
-                child: const SecondRoute(),
-              )));
+              Navigator.push(
+                context,
+                MaterialPageRoute<dynamic>(
+                  builder: (
+                    BuildContext context,
+                  ) => ChangeNotifierProvider<AlgoVisualizerTools>.value(
+                    value: algo,
+                    child: const SecondRoute(),
+                  ),
+                ),
+              );
             },
             child: Container(
               color: Colors.red,
@@ -28,7 +35,7 @@ class AppDrawer extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
-                      children: const [
+                      children: const <Widget>[
                         Icon(
                           Icons.alarm,
                           size: 40,
@@ -38,22 +45,22 @@ class AppDrawer extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 20
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
                   Row(
                     children: [
                       Selector<AlgoVisualizerTools, Algorithm>(
-                        selector: (_, model) => model.curAlgorithm,
-                        builder: (context, algo, child) {
+                        selector: (_, AlgoVisualizerTools model) => model.curAlgorithm,
+                        builder: (BuildContext context, Algorithm algo, Widget? child) {
                           return Text('$algo');
                         }
                       ),
                       const Icon(
                         Icons.chevron_right,
                         size: 40,
-                      )
+                      ),
                     ],
                   ),
                 ],
@@ -76,5 +83,4 @@ class AppDrawer extends StatelessWidget {
       ),
     );
   }
-
 }

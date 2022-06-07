@@ -12,7 +12,7 @@ class WallNodePainter extends NodePainter{
 
   @override
   void paint(Canvas canvas, Size size) {
-    var rectl = Rect.fromCenter(
+    Rect rectl = Rect.fromCenter(
       center: Offset(unitSize/2,unitSize/2),
       width: fraction * (unitSize + 2),
       height: fraction * (unitSize + 2),
@@ -57,7 +57,7 @@ class _WallNodePaintWidgetState extends State<WallNodePaintWidget> with SingleTi
       duration: const Duration(milliseconds: 500),
       vsync: this,
     )
-    ..addStatusListener((status) {
+    ..addStatusListener((AnimationStatus status) {
       if (status == AnimationStatus.completed) {
         widget.callback(
           widget.row,
@@ -144,7 +144,7 @@ class Square extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    var rectl = Rect.fromCenter(
+    Rect rectl = Rect.fromCenter(
       center: Offset(unitSize / 2, unitSize / 2),
       width: unitSize * 0.98,
       height: unitSize * 0.98,

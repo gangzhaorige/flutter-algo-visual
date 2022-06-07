@@ -6,12 +6,16 @@ import 'package:statsfl/statsfl.dart';
 void main() {
   // debugRepaintRainbowEnabled = true;
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
-    (value) => runApp(
+  SystemChrome.setPreferredOrientations(
+    <DeviceOrientation>[
+      DeviceOrientation.portraitUp,
+    ],
+  ).then(
+    (_) => runApp(
       StatsFl(
         child: const MyApp(),
-      )
-    )
+      ),
+    ),
   );
 }
 

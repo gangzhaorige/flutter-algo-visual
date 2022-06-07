@@ -11,7 +11,7 @@ class TopBarMobile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
+      children: <Widget>[
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: GestureDetector(

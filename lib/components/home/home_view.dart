@@ -15,8 +15,8 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     const double unitSize = 25; 
     late Grid grid;
-    return ChangeNotifierProvider.value(
-      builder: (context, child) {
+    return ChangeNotifierProvider<AlgoVisualizerTools>.value(
+      builder: (BuildContext context, Widget? child) {
         return Scaffold(
           drawerEnableOpenDragGesture: false,
           drawer: const AppDrawer(),
@@ -25,12 +25,20 @@ class HomeView extends StatelessWidget {
               const TopBar(),
               Expanded(
                 child: LayoutBuilder(
-                  builder: (context, constraint) {
+                  builder: (BuildContext context, BoxConstraints constraint) {
                     int rows = constraint.maxWidth ~/ unitSize + 1;
                     int columns = constraint.maxHeight ~/ unitSize + 1;
-                    grid = Grid(startRow: 0, startCol: 0, endRow: rows - 1, endCol: columns - 1, rows: rows, columns: columns, unitSize: unitSize);
+                    grid = Grid(
+                      startRow: 0,
+                      startCol: 0,
+                      endRow: rows - 1,
+                      endCol: columns - 1,
+                      rows: rows,
+                      columns: columns,
+                      unitSize: unitSize,
+                    );
                     return GridWidget(
-                      grid: grid
+                      grid: grid,
                     );
                   },
                 ),
@@ -53,10 +61,12 @@ class HomeView extends StatelessWidget {
                         startRow: grid.startRow,
                         grid: grid,
                       );
-                      algo.visualizeAlgorithm(Provider.of<AlgoVisualizerTools>(context, listen: false).curAlgorithm);
+                      algo.visualizeAlgorithm(
+                        Provider.of<AlgoVisualizerTools>(context, listen: false).curAlgorithm,
+                      );
                     },
                     child: const Text('Visualize'),
-                  )
+                  ),
                 ),
               ),
             ],

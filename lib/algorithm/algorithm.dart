@@ -5,11 +5,11 @@ import 'package:path_visualizer/main.dart';
 import '../grid/grid.dart';
 import '../node/node_model.dart';
 
-const List<List<int>> directions = [
-  [0, 1],  // down
-  [1, 0],  // right
-  [0, -1], // up
-  [-1, 0], // left
+const List<List<int>> directions = <List<int>>[
+  <int>[0, 1],  // down
+  <int>[1, 0],  // right
+  <int>[0, -1], // up
+  <int>[-1, 0], // left
 ];
 
 enum Algorithm {
@@ -62,7 +62,7 @@ class Algorithms {
 
   List<NodeModel> bfs() {
     List<NodeModel> list = [];
-    Queue<NodeModel> queue = Queue();
+    Queue<NodeModel> queue = Queue<NodeModel>();
     queue.add(nodes[startRow][startCol]);
     nodes[startRow][startCol].visited = true;
     while(queue.isNotEmpty) {
@@ -162,26 +162,26 @@ class Algorithms {
     List<NodeModel> pathingOrder = getPathFromStartToEnd();
     for(int i = 0; i <= orderOfVisit.length; i++) {
       if(i == orderOfVisit.length) {
-        Future.delayed(Duration(milliseconds: 10 * i)).then((value) {
+        Future<int>.delayed(Duration(milliseconds: 10 * i)).then((_) {
           int index = 0;
           for(int j = pathingOrder.length - 1; j >= 0; j--) {
             NodeModel cur = pathingOrder[j];
-            Future.delayed(Duration(milliseconds: index * 10)).then((value) {
+            Future<int>.delayed(Duration(milliseconds: index * 10)).then((_) {
               if(!isStartOrEnd(cur.row, cur.col)) {
-                grid.walls.addNodeWiget(cur.row, cur.col, grid.unitSize, (i, j, k) => grid.createNode(i, j, k), NodeType.weight);
+                grid.walls.addNodeWiget(cur.row, cur.col, grid.unitSize, (int i, int j, NodeType k) => grid.createNode(i, j, k), NodeType.weight);
               }
             });
             index++;
           }
         });
-        return Future.value(orderOfVisit.length * 10 + pathingOrder.length * 10);
+        return Future<int>.value(orderOfVisit.length * 10 + pathingOrder.length * 10);
       }
-      Future.delayed(Duration(milliseconds: 10 * i)).then((value) {
+      Future<int>.delayed(Duration(milliseconds: 10 * i)).then((_) {
         if(!isStartOrEnd(orderOfVisit[i].row, orderOfVisit[i].col)) {
-          grid.walls.addNodeWiget(orderOfVisit[i].row, orderOfVisit[i].col, grid.unitSize, (i, j, k) => grid.createNode(i, j, k), NodeType.visiting);
+          grid.walls.addNodeWiget(orderOfVisit[i].row, orderOfVisit[i].col, grid.unitSize, (int i, int j, NodeType k) => grid.createNode(i, j, k), NodeType.visiting);
         }
       });
     }
-    return Future.value(orderOfVisit.length * 10 + pathingOrder.length * 10);
+    return Future<int>.value(orderOfVisit.length * 10 + pathingOrder.length * 10);
   }
 }
