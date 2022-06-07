@@ -80,6 +80,36 @@ class AppDrawer extends StatelessWidget {
               Provider.of<AlgoVisualizerTools>(context, listen: false).changeAlgorithm(Algorithm.dfs);
             },
           ),
+          Selector<AlgoVisualizerTools, double>(
+            selector: (_, AlgoVisualizerTools model) => model.curSpeed,
+            builder: (BuildContext context, double curSpeed, Widget? child) {
+              return Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Slower'),
+                        Text('Render Speed'),
+                        Text('Faster'),
+                      ],
+                    ),
+                  ),
+                  Slider(
+                    min: 15,
+                    max: 45,
+                    label: curSpeed.round().toString(),
+                    onChanged: (double value) {
+                      Provider.of<AlgoVisualizerTools>(context, listen: false).changeSpeed(value);
+                    },
+                    value: curSpeed,
+                    divisions: 3,
+                  ),
+                ],
+              );
+            }
+          ),
         ],
       ),
     );
