@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:path_visualizer/node/node_model.dart';
+import 'package:path_visualizer/node/node_painter.dart';
 import 'package:provider/provider.dart';
 
 import '../../algorithm/algorithm.dart';
@@ -13,6 +15,7 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('Rebuilding HomeView');
     const double unitSize = 25; 
     late Grid grid;
     return ChangeNotifierProvider<AlgoVisualizerTools>.value(
@@ -21,11 +24,12 @@ class HomeView extends StatelessWidget {
           drawerEnableOpenDragGesture: false,
           drawer: const AppDrawer(),
           body: Column(
-            children: [
+            children: <Widget>[
               const TopBar(),
               Expanded(
                 child: LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraint) {
+                    print('Rebuilding LayOutBuilder');
                     int rows = constraint.maxWidth ~/ unitSize + 1;
                     int columns = constraint.maxHeight ~/ unitSize + 1;
                     grid = Grid(
@@ -48,24 +52,43 @@ class HomeView extends StatelessWidget {
                 height: 55,
                 color: Colors.blue,
                 child: Center(
-                  child: MaterialButton(
-                    onPressed: () {
-                      grid.resetPath();
-                      Algorithms algo = Algorithms(
-                        columns: grid.columns,
-                        endCol: grid.endCol,
-                        endRow: grid.endRow,
-                        nodes: grid.nodes,
-                        rows: grid.rows,
-                        startCol: grid.startCol,
-                        startRow: grid.startRow,
-                        grid: grid,
-                      );
-                      algo.visualizeAlgorithm(
-                        Provider.of<AlgoVisualizerTools>(context, listen: false).curAlgorithm,
-                      );
-                    },
-                    child: const Text('Visualize'),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      MaterialButton(
+                        onPressed: () {
+                          grid.resetPath();
+                        },
+                        child: const Text('Reset Path'),
+                      ),
+                      MaterialButton(
+                        onPressed: () {
+                          grid.resetPath();
+                          Algorithms algo = Algorithms(
+                            columns: grid.columns,
+                            endCol: grid.endCol,
+                            endRow: grid.endRow,
+                            nodes: grid.nodes,
+                            rows: grid.rows,
+                            startCol: grid.startCol,
+                            startRow: grid.startRow,
+                            grid: grid,
+                          );
+                          AlgoVisualizerTools tool = Provider.of<AlgoVisualizerTools>(context, listen: false);
+                          algo.visualizeAlgorithm(
+                            tool.curAlgorithm,
+                            tool.curSpeed,
+                          );
+                        },
+                        child: const Text('Visualize'),
+                      ),
+                      MaterialButton(
+                        onPressed: () {
+                          grid.resetWalls();
+                        },
+                        child: const Text('Reset Wall'),
+                      ),
+                    ],
                   ),
                 ),
               ),

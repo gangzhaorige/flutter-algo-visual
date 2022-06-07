@@ -3,28 +3,40 @@ import 'package:flutter/material.dart';
 
 import 'node_model.dart';
 
-class WallNodePainter extends NodePainter{
-  WallNodePainter(
-    double unitSize,
-    double fraction,
-    NodeType type,
-  ) : super(unitSize, fraction, type);
+class NodePainter extends CustomPainter{
+  NodePainter({
+    required this.unitSize,
+    required this.fraction,
+    required this.type,
+  });
+
+  final double unitSize;
+  final double fraction;
+  final NodeType type;
 
   @override
   void paint(Canvas canvas, Size size) {
     Rect rectl = Rect.fromCenter(
-      center: Offset(unitSize/2,unitSize/2),
-      width: fraction * (unitSize + 2),
-      height: fraction * (unitSize + 2),
+      center: Offset(unitSize / 2, unitSize / 2),
+      width: fraction * (unitSize),
+      height: fraction * (unitSize),
     );
     Paint paint = Paint();
     paint.color = nodeColor[type] as Color;
     canvas.drawRect(rectl, paint);
   }
+  
+  @override
+  bool shouldRepaint(NodePainter oldDelegate) {
+    if(fraction != oldDelegate.fraction) {
+      return true;
+    }
+    return false;
+  }
 }
 
-class WallNodePaintWidget extends StatefulWidget {
-  const WallNodePaintWidget({
+class NodePaintWidget extends StatefulWidget {
+  const NodePaintWidget({
     Key? key,
     required this.unitSize,
     required this.row,
@@ -40,10 +52,10 @@ class WallNodePaintWidget extends StatefulWidget {
   final Function(int row, int column, NodeType type) callback;
 
   @override
-  State<WallNodePaintWidget> createState() => _WallNodePaintWidgetState();
+  State<NodePaintWidget> createState() => _NodePaintWidgetState();
 }
 
-class _WallNodePaintWidgetState extends State<WallNodePaintWidget> with SingleTickerProviderStateMixin{
+class _NodePaintWidgetState extends State<NodePaintWidget> with SingleTickerProviderStateMixin{
   double fraction = 0;
   late Animation<double> animation;
   late AnimationController controller;
@@ -66,23 +78,26 @@ class _WallNodePaintWidgetState extends State<WallNodePaintWidget> with SingleTi
       }
     });
 
-    animation = Tween(begin: 0.0, end: 0.96).animate(CurvedAnimation(
+    animation = Tween<double>(begin: 0.0, end: 0.96).animate(CurvedAnimation(
       parent: controller,
-      curve: Curves.elasticOut
+      curve: Curves.easeOutSine,
     ))
     ..addListener((){
       setState(() {
         fraction = animation.value;
       });
     });
-
     controller.forward();
   }
 
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      painter: WallNodePainter(widget.unitSize, fraction, widget.type)
+      painter: NodePainter(
+        unitSize: widget.unitSize,
+        fraction: fraction, 
+        type: widget.type,
+      ),
     );
   }
 
@@ -90,18 +105,6 @@ class _WallNodePaintWidgetState extends State<WallNodePaintWidget> with SingleTi
   void dispose() {
     controller.dispose();
     super.dispose();
-  }
-}
-
-abstract class NodePainter extends CustomPainter{
-  NodePainter(this.unitSize, this.fraction, this.type);
-  double fraction;
-  double unitSize;
-  NodeType type;
-
-  @override
-  bool shouldRepaint(NodePainter oldDelegate) {
-    return oldDelegate.fraction != fraction ? true : false;
   }
 }
 
@@ -126,7 +129,6 @@ class SquareWidget extends StatelessWidget {
     );
   }
 }
-
 
 class Square extends CustomPainter {
   Square({

@@ -21,6 +21,7 @@ class GridWidget extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+    print('Rebuilding Grid Widget');
     return FittedBox(
       fit: BoxFit.fill,
       child: SizedBox(
@@ -39,7 +40,7 @@ class GridWidget extends StatelessWidget {
             grid.onTapNode(i, j, Provider.of<AlgoVisualizerTools>(context, listen: false).curBrush);
           },
           child: Stack(
-            children: [
+            children: <Widget>[
               StaticGrid(
                 columns: grid.columns,
                 height: grid.height,
@@ -153,13 +154,11 @@ class Grid extends ChangeNotifier{
     onTapNode(row, col, brush);
   }
 
-  void reset() {
+  void resetGrid() {
     for(List<NodeModel> list in nodes) {
       for(NodeModel node in list) {
         node.parent = null;
-        if(node.visited) {
-          node.visited = false;
-        }
+        node.visited = false;
         if(isStartOrEnd(node.row, node.col)) {
           continue;
         }
@@ -173,9 +172,6 @@ class Grid extends ChangeNotifier{
       for(NodeModel node in list) {
         node.parent = null;
         node.visited = false;
-        if(isStartOrEnd(node.row, node.col)) {
-          continue;
-        }
         if(node.type == NodeType.visiting || node.type == NodeType.pathing || node.type == NodeType.weight) {
           node.changeNodeType(NodeType.empty);
         }
@@ -188,13 +184,7 @@ class Grid extends ChangeNotifier{
       for(NodeModel node in list) {
         if(node.type == NodeType.wall) {
           node.changeNodeType(NodeType.empty);
-        } else if(node.type == NodeType.empty && !isStartOrEnd(node.row, node.col)) {
-          if(node.type != NodeType.empty) {
-            node.changeNodeType(NodeType.empty);
-          }
         }
-        node.parent = null;
-        node.visited = false;
       }
     }
   }
@@ -218,6 +208,7 @@ class StaticGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('Rebuilding static Grid');
     return SizedBox(
       width: width,
       height: height,
@@ -237,15 +228,16 @@ class StaticNodeGrid extends StatelessWidget {
   final Grid grid;
   @override
   Widget build(BuildContext context) {
+    print('Rebuilding Static Node Grid');
     return Stack(
-      children: [
+      children: <Widget>[
         for(int i = 0; i < grid.nodes.length; i++)...[
           for(int j = 0; j < grid.nodes[0].length; j++) ...[
             ChangeNotifierProvider<NodeModel>.value(
               value: grid.nodes[i][j],
               child: Selector<NodeModel, NodeType>(
                 selector: (_, NodeModel type) => grid.nodes[i][j].type,
-                  builder: (BuildContext context, NodeType type, Widget? child) {
+                builder: (BuildContext context, NodeType type, Widget? child) {
                   return Positioned(
                     left: i * (grid.unitSize.toDouble()),
                     top:  j * (grid.unitSize.toDouble()),

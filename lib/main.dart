@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:path_visualizer/components/home/home_view.dart';
 import 'package:statsfl/statsfl.dart';
 
 void main() {
-  // debugRepaintRainbowEnabled = true;
   WidgetsFlutterBinding.ensureInitialized();
+  // debugRepaintRainbowEnabled = true;
   SystemChrome.setPreferredOrientations(
     <DeviceOrientation>[
       DeviceOrientation.portraitUp,
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('Rebuilding entire App');
     return MaterialApp(
       home: Container(
         color: Colors.blue,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../main.dart';
 import 'node_painter.dart';
 
 enum NodeType {
@@ -20,6 +21,12 @@ const Map<NodeType, Color> nodeColor = {
   NodeType.visiting: Colors.orangeAccent,
   NodeType.pathing: Colors.yellow,
   NodeType.weight: Colors.blue,
+};
+
+const Map<Brush, Color> brushColor = {
+  Brush.wall: Colors.black,
+  Brush.start: Colors.greenAccent,
+  Brush.end: Colors.red,
 };
 
 class NodeModel extends ChangeNotifier {
@@ -57,7 +64,7 @@ class Painter extends ChangeNotifier {
       left: row * (unitSize.toDouble()),
       top: column * (unitSize.toDouble()),
       child: RepaintBoundary(
-        child: WallNodePaintWidget(
+        child: NodePaintWidget(
           type: type,
           unitSize: unitSize,
           row: row,

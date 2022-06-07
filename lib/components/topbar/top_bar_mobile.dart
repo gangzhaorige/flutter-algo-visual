@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:path_visualizer/main.dart';
+import 'package:path_visualizer/node/node_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../algorithm/algorithm.dart';
@@ -9,6 +10,7 @@ class TopBarMobile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('Rebuilding TopBarMobile');
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -36,11 +38,16 @@ class TopBarMobile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: GestureDetector(
             onTap: () {
-              Provider.of<AlgoVisualizerTools>(context, listen: false).changeBrush(Brush.start);
+              Provider.of<AlgoVisualizerTools>(context, listen: false).changeBrush();
             },
-            child: const Icon(
-              Icons.menu,
-              color: Colors.white,
+            child: Selector<AlgoVisualizerTools, Brush>(
+              selector: (_, AlgoVisualizerTools model) => model.curBrush,
+              builder: (BuildContext context, Brush brush, Widget? child) {
+                return Icon(
+                  Icons.brush,
+                  color: brushColor[brush],
+                );
+              }
             ),
           ),
         ),
