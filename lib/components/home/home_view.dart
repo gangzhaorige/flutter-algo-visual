@@ -85,7 +85,7 @@ class HomeView extends StatelessWidget {
                                 tool.toggleVisualizing,
                               );
                             },
-                            child: const Text('Visualize'),
+                            child: Text(isVisualizing ? 'Visualizing' : 'Visualize'),
                           ),
                           MaterialButton(
                             onPressed: isVisualizing ? null : () {

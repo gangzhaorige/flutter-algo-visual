@@ -58,7 +58,7 @@ class Painter extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addNodeWiget(int row, int column, double unitSize, Function(int i, int j, NodeType type) addNode, NodeType type) {
+  void addNodeWidget(int row, int column, double unitSize, Function(int i, int j, NodeType type) addNode, NodeType type) {
     map['$row $column'] = Positioned(
       key: UniqueKey(),
       left: row * (unitSize.toDouble()),

@@ -34,9 +34,15 @@ class GridWidget extends StatelessWidget {
           columns: grid.columns,
           height: grid.height,
           onDragNode: (int i, int j, int newI, int newJ) {
+            if(Provider.of<AlgoVisualizerTools>(context, listen: false).isVisualizing) {
+              return;
+            }
             grid.onDragUpdate(i, j, Provider.of<AlgoVisualizerTools>(context, listen: false).curBrush);
           },
           onTapNode: (int i, int j) {
+            if(Provider.of<AlgoVisualizerTools>(context, listen: false).isVisualizing) {
+              return;
+            }
             grid.onTapNode(i, j, Provider.of<AlgoVisualizerTools>(context, listen: false).curBrush);
           },
           child: Stack(
@@ -122,7 +128,7 @@ class Grid extends ChangeNotifier{
         if(curNode.type == NodeType.wall) {
           curNode.changeNodeType(NodeType.empty);
         } else {
-          walls.addNodeWiget(row, col, unitSize, createNode, NodeType.wall);
+          walls.addNodeWidget(row, col, unitSize, createNode, NodeType.wall);
         }
         break;
       case Brush.weight:
@@ -172,7 +178,7 @@ class Grid extends ChangeNotifier{
       for(NodeModel node in list) {
         node.parent = null;
         node.visited = false;
-        if(node.type == NodeType.visiting || node.type == NodeType.pathing || node.type == NodeType.weight) {
+        if(node.type == NodeType.visiting || node.type == NodeType.pathing) {
           node.changeNodeType(NodeType.empty);
         }
       }
