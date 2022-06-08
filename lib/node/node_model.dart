@@ -16,8 +16,8 @@ enum NodeType {
 const Map<NodeType, Color> nodeColor = {
   NodeType.empty: Colors.white,
   NodeType.wall: Colors.black,
-  NodeType.end: Colors.red,
-  NodeType.start: Colors.green,
+  NodeType.end: Colors.white,
+  NodeType.start: Colors.white,
   NodeType.visiting: Colors.orangeAccent,
   NodeType.pathing: Colors.yellow,
   NodeType.weight: Colors.white,
@@ -26,7 +26,7 @@ const Map<NodeType, Color> nodeColor = {
 const Map<Brush, Color> brushColor = {
   Brush.wall: Colors.black,
   Brush.start: Colors.greenAccent,
-  Brush.end: Colors.red,
+  Brush.end: Colors.orange,
   Brush.weight: Colors.purple,
 };
 
@@ -66,6 +66,67 @@ class NodeModel extends ChangeNotifier {
 class Painter extends ChangeNotifier {
   Map<String, Widget> nodes = {};
   Map<String, Widget> weightNodes = {};
+  late Widget startNode;
+  late Widget endNode;
+
+  Painter(int startRow, int startCol, int endRow, int endCol, double unitSize) {
+    startNode = Positioned(
+      key: UniqueKey(),
+      left: startRow * (unitSize.toDouble()),
+      top: startCol * (unitSize.toDouble()),
+      child: RepaintBoundary(
+        child: StartPaintWidget(
+          column: startCol,
+          row: startRow,
+          unitSize: unitSize,
+        )
+      ),
+    );
+    endNode = Positioned(
+      key: UniqueKey(),
+      left: endRow * (unitSize.toDouble()),
+      top: endCol * (unitSize.toDouble()),
+      child: RepaintBoundary(
+        child: EndPaintWidget(
+          column: endCol,
+          row: endRow,
+          unitSize: unitSize,
+        )
+      ),
+    );
+  }
+
+  void changeStartWidget(int row, int col, double unitSize) {
+    startNode = Positioned(
+      key: UniqueKey(),
+      left: row * (unitSize.toDouble()),
+      top: col * (unitSize.toDouble()),
+      child: RepaintBoundary(
+        child: StartPaintWidget(
+          column: col,
+          row: row,
+          unitSize: unitSize,
+        )
+      ),
+    );
+    notifyListeners();
+  }
+
+  void changeEndWidget(int row, int col, double unitSize) {
+    endNode = Positioned(
+      key: UniqueKey(),
+      left: row * (unitSize.toDouble()),
+      top: col * (unitSize.toDouble()),
+      child: RepaintBoundary(
+        child: EndPaintWidget(
+          column: col,
+          row: row,
+          unitSize: unitSize,
+        )
+      ),
+    );
+    notifyListeners();
+  }
       
   void removeWall(int row, int column) {
     String key = '$row $column';

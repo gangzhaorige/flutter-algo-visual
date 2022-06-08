@@ -47,7 +47,6 @@ class HomeView extends StatelessWidget {
                   },
                 ),
               ),
-              // bottom bar
               Container(
                 height: 55,
                 color: Colors.blue,
@@ -56,50 +55,53 @@ class HomeView extends StatelessWidget {
                     selector: (_, AlgoVisualizerTools model) => model.isVisualizing,
                     builder: (BuildContext context, bool isVisualizing, Widget? child) {
                       print('rebuilding row...');
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          MaterialButton(
-                            onPressed: isVisualizing ? null : () {
-                              grid.resetPath();
-                            },
-                            child: const Text('Reset Path'),
-                          ),
-                          MaterialButton(
-                            onPressed: isVisualizing ? null : () {
-                              grid.resetPath();
-                              Algorithms algo = Algorithms(
-                                columns: grid.columns,
-                                endCol: grid.endCol,
-                                endRow: grid.endRow,
-                                nodes: grid.nodes,
-                                rows: grid.rows,
-                                startCol: grid.startCol,
-                                startRow: grid.startRow,
-                                grid: grid,
-                              );
-                              AlgoVisualizerTools tool = Provider.of<AlgoVisualizerTools>(context, listen: false);
-                              algo.visualizeAlgorithm(
-                                tool.curAlgorithm,
-                                tool.curSpeed.toInt(),
-                                tool.toggleVisualizing,
-                              );
-                            },
-                            child: Text(isVisualizing ? 'Visualizing' : 'Visualize'),
-                          ),
-                          MaterialButton(
-                            onPressed: isVisualizing ? null : () {
-                              grid.resetWalls();
-                            },
-                            child: const Text('Reset Wall'),
-                          ),
-                          MaterialButton(
-                            onPressed: isVisualizing ? null : () {
-                              grid.randomMaze();
-                            },
-                            child: const Text('Generate Maze'),
-                          ),
-                        ],
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            MaterialButton(
+                              onPressed: isVisualizing ? null : () {
+                                grid.resetPath();
+                              },
+                              child: const Text('Reset Path'),
+                            ),
+                            MaterialButton(
+                              onPressed: isVisualizing ? null : () {
+                                grid.resetPath();
+                                Algorithms algo = Algorithms(
+                                  columns: grid.columns,
+                                  endCol: grid.endCol,
+                                  endRow: grid.endRow,
+                                  nodes: grid.nodes,
+                                  rows: grid.rows,
+                                  startCol: grid.startCol,
+                                  startRow: grid.startRow,
+                                  grid: grid,
+                                );
+                                AlgoVisualizerTools tool = Provider.of<AlgoVisualizerTools>(context, listen: false);
+                                algo.visualizeAlgorithm(
+                                  tool.curAlgorithm,
+                                  tool.curSpeed.toInt(),
+                                  tool.toggleVisualizing,
+                                );
+                              },
+                              child: Text(isVisualizing ? 'Visualizing' : 'Visualize'),
+                            ),
+                            MaterialButton(
+                              onPressed: isVisualizing ? null : () {
+                                grid.resetWalls();
+                              },
+                              child: const Text('Reset Wall'),
+                            ),
+                            MaterialButton(
+                              onPressed: isVisualizing ? null : () {
+                                grid.randomMaze();
+                              },
+                              child: const Text('Generate Maze'),
+                            ),
+                          ],
+                        ),
                       );
                     }
                   ),

@@ -47,9 +47,11 @@ class GridWidget extends StatelessWidget {
           },
           child: Stack(
             children: <Widget>[
+              // node background
               StaticNodeGrid(
                 grid: grid,
               ),
+              // m x n static grid
               StaticGrid(
                 columns: grid.columns,
                 height: grid.height,
@@ -57,12 +59,13 @@ class GridWidget extends StatelessWidget {
                 unitSize: grid.unitSize,
                 width: grid.width,
               ),
+              // walls + paths
               ChangeNotifierProvider<Painter>.value(
                 value: grid.painter,
                 child: Selector<Painter, Map<String,Widget>>(
                   shouldRebuild: (Map<String, Widget> a, Map<String, Widget> b) => true,
                   selector: (_, Painter model) => model.nodes,
-                    builder: (BuildContext context, Map<String, Widget> walls, Widget? child) {
+                  builder: (BuildContext context, Map<String, Widget> walls, Widget? child) {
                     return Stack(
                       children: [
                         for(Widget wall in walls.values)...<Widget>[
@@ -73,6 +76,7 @@ class GridWidget extends StatelessWidget {
                   }
                 ),
               ),
+              // weight
               ChangeNotifierProvider<Painter>.value(
                 value: grid.painter,
                 child: Selector<Painter, Map<String,Widget>>(
@@ -86,6 +90,28 @@ class GridWidget extends StatelessWidget {
                         ]
                       ],
                     );
+                  }
+                ),
+              ),
+              // start node
+              ChangeNotifierProvider<Painter>.value(
+                value: grid.painter,
+                child: Selector<Painter, Widget>(
+                  shouldRebuild: (a, b) => true,
+                  selector: (_, Painter model) => model.startNode,
+                  builder: (BuildContext context, Widget startNode, Widget? child) {
+                    return startNode;
+                  }
+                ),
+              ),
+              // end Node
+              ChangeNotifierProvider<Painter>.value(
+                value: grid.painter,
+                child: Selector<Painter, Widget>(
+                  shouldRebuild: (a, b) => true,
+                  selector: (_, Painter model) => model.endNode,
+                  builder: (BuildContext context, Widget endNode, Widget? child) {
+                    return endNode;
                   }
                 ),
               ),
@@ -112,7 +138,7 @@ class Grid extends ChangeNotifier{
     nodes[endRow][endCol].type = NodeType.end;
     width = rows * unitSize;
     height = columns * unitSize;
-    painter = Painter();
+    painter = Painter(startRow, startCol, endRow, endCol, unitSize);
   }
 
   int startRow;
@@ -169,6 +195,7 @@ class Grid extends ChangeNotifier{
         curNode.weight = 1;
         curNode.changeNodeType(NodeType.start);
         painter.removeWeight(row, col);
+        painter.changeStartWidget(row, col, unitSize);
         break;
       case Brush.end:
         NodeModel prevStartNode = nodes[endRow][endCol];
@@ -178,6 +205,7 @@ class Grid extends ChangeNotifier{
         curNode.weight = 1;
         curNode.changeNodeType(NodeType.end);
         painter.removeWeight(row, col);
+        painter.changeEndWidget(row, col, unitSize);
         break;
     }
   }
@@ -209,7 +237,7 @@ class Grid extends ChangeNotifier{
   void resetWalls() {
     for(int i = 0; i < nodes.length; i++) {
       for(int j = 0; j < nodes[0].length; j++) {
-        nodes[i][j].weight = 0;
+        nodes[i][j].weight = 1;
         if(nodes[i][j].type == NodeType.wall || nodes[i][j].type == NodeType.weight) {
           nodes[i][j].changeNodeType(NodeType.empty);
         }
