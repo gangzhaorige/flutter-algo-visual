@@ -93,15 +93,17 @@ class Painter extends ChangeNotifier {
       key: UniqueKey(),
       left: row * (unitSize.toDouble()),
       top: column * (unitSize.toDouble()),
-      child: NodePaintWidget(
-        type: type,
-        unitSize: unitSize,
-        row: row,
-        column: column,
-        callback: (int row, int column, NodeType type) {
-          removeWall(row, column);
-          addNode(row, column, type);
-        },
+      child: RepaintBoundary(
+        child: NodePaintWidget(
+          type: type,
+          unitSize: unitSize,
+          row: row,
+          column: column,
+          callback: (int row, int column, NodeType type) {
+            removeWall(row, column);
+            addNode(row, column, type);
+          },
+        ),
       ),
     );
     notifyListeners();
@@ -112,10 +114,12 @@ class Painter extends ChangeNotifier {
       key: UniqueKey(),
       left: row * (unitSize.toDouble()),
       top: column * (unitSize.toDouble()),
-      child: WeightPaintWidget(
-        column: column,
-        row: row,
-        unitSize: unitSize,
+      child: RepaintBoundary(
+        child: WeightPaintWidget(
+          column: column,
+          row: row,
+          unitSize: unitSize,
+        ),
       )
     );
     notifyListeners();

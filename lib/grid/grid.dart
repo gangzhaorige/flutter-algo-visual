@@ -284,11 +284,13 @@ class StaticNodeGrid extends StatelessWidget {
                   return Positioned(
                     left: i * (grid.unitSize.toDouble()),
                     top:  j * (grid.unitSize.toDouble()),
-                    child: SquareWidget(
-                      type: type,
-                      row: i,
-                      col: j,
-                      unitSize: grid.unitSize,
+                    child: RepaintBoundary(
+                      child: SquareWidget(
+                        type: type,
+                        row: i,
+                        col: j,
+                        unitSize: grid.unitSize,
+                      ),
                     ),
                   );
                 }
