@@ -80,6 +80,12 @@ class AppDrawer extends StatelessWidget {
               Provider.of<AlgoVisualizerTools>(context, listen: false).changeAlgorithm(Algorithm.dfs);
             },
           ),
+          ListTile(
+            title: const Text('Change to BiBFS'),
+            onTap: () {
+              Provider.of<AlgoVisualizerTools>(context, listen: false).changeAlgorithm(Algorithm.biBfs);
+            },
+          ),
           Selector<AlgoVisualizerTools, double>(
             selector: (_, AlgoVisualizerTools model) => model.curSpeed,
             builder: (BuildContext context, double curSpeed, Widget? child) {
