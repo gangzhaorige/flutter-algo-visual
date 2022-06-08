@@ -30,13 +30,13 @@ class HomeView extends StatelessWidget {
                 child: LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraint) {
                     print('Rebuilding LayOutBuilder');
-                    int rows = constraint.maxWidth ~/ unitSize + 1;
-                    int columns = constraint.maxHeight ~/ unitSize + 1;
+                    int rows = constraint.maxWidth ~/ unitSize - 1;
+                    int columns = constraint.maxHeight ~/ unitSize - 1;
                     grid = Grid(
-                      startRow: 0,
-                      startCol: 0,
-                      endRow: rows - 1,
-                      endCol: columns - 1,
+                      startRow: rows ~/ 2 - rows ~/ 2.5,
+                      startCol: columns ~/ 2,
+                      endRow: rows ~/ 2 + rows ~/ 2.5,
+                      endCol: columns ~/ 2,
                       rows: rows,
                       columns: columns,
                       unitSize: unitSize,
@@ -92,6 +92,12 @@ class HomeView extends StatelessWidget {
                               grid.resetWalls();
                             },
                             child: const Text('Reset Wall'),
+                          ),
+                          MaterialButton(
+                            onPressed: isVisualizing ? null : () {
+                              grid.randomMaze();
+                            },
+                            child: const Text('Generate Maze'),
                           ),
                         ],
                       );
