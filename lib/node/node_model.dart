@@ -35,18 +35,26 @@ class NodeModel extends ChangeNotifier {
     required this.row,
     required this.col,
     this.visited = false,
+    this.visited2 = false,
     required this.type,
   });
 
   int row;
   int col;
   bool visited;
+  bool visited2;
   NodeType type;
   NodeModel? parent;
+  NodeModel? parent2;
 
   void changeNodeType(NodeType type) {
     this.type = type;
     notifyListeners();
+  }
+
+  @override
+  String toString() {
+    return '$row $col';
   }
 }
 
