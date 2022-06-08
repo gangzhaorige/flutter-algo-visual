@@ -191,19 +191,6 @@ class Grid extends ChangeNotifier{
     onTapNode(row, col, brush);
   }
 
-  void resetGrid() {
-    for(List<NodeModel> list in nodes) {
-      for(NodeModel node in list) {
-        node.parent = null;
-        node.visited = false;
-        if(isStartOrEnd(node.row, node.col)) {
-          continue;
-        }
-        node.changeNodeType(NodeType.empty);
-      }
-    }
-  }
-
   void resetPath() {
     for(List<NodeModel> list in nodes) {
       for(NodeModel node in list) {
@@ -222,14 +209,13 @@ class Grid extends ChangeNotifier{
   void resetWalls() {
     for(int i = 0; i < nodes.length; i++) {
       for(int j = 0; j < nodes[0].length; j++) {
-        NodeModel node = nodes[i][j];
-        if(!isStartOrEnd(i, j)) {
-          walls.removeWeight(i, j);
-          node.weight = 0;
-          node.changeNodeType(NodeType.empty);
+        nodes[i][j].weight = 0;
+        if(nodes[i][j].type == NodeType.wall || nodes[i][j].type == NodeType.weight) {
+          nodes[i][j].changeNodeType(NodeType.empty);
         }
       }
     }
+    walls.removeAllWeightNodes();
   }
 
   void randomMaze() {

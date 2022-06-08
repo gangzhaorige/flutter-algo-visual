@@ -83,6 +83,11 @@ class Painter extends ChangeNotifier {
     }
   }
 
+  void removeAllWeightNodes() {
+    weightNodes.clear();
+    notifyListeners();
+  }
+
   void addNodeWidget(int row, int column, double unitSize, Function(int i, int j, NodeType type) addNode, NodeType type) {
     nodes['$row $column'] = Positioned(
       key: UniqueKey(),
