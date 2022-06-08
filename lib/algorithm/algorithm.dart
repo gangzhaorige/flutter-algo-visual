@@ -160,8 +160,8 @@ class Algorithms {
           continue;
         }
         if(nodes[dx][dy].type != NodeType.wall && !nodes[dx][dy].visited) {
-          if(nodes[dx][dy].distance > curNode.distance + nodes[dx][dy].weight + 1) {
-            nodes[dx][dy].distance = curNode.distance + nodes[dx][dy].weight + 1;
+          if(nodes[dx][dy].distance > curNode.distance + nodes[dx][dy].weight) {
+            nodes[dx][dy].distance = curNode.distance + nodes[dx][dy].weight;
             nodes[dx][dy].parent = curNode;
             queue.add(nodes[dx][dy]);
           }

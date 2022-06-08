@@ -38,7 +38,7 @@ class NodeModel extends ChangeNotifier {
     this.visited = false,
     this.visited2 = false,
     required this.type,
-    this.weight = 0,
+    this.weight = 1,
     this.distance = 10000,
   });
 
