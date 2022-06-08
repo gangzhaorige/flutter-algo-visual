@@ -93,35 +93,30 @@ class Painter extends ChangeNotifier {
       key: UniqueKey(),
       left: row * (unitSize.toDouble()),
       top: column * (unitSize.toDouble()),
-      child: RepaintBoundary(
-        child: NodePaintWidget(
-          type: type,
-          unitSize: unitSize,
-          row: row,
-          column: column,
-          callback: (int row, int column, NodeType type) {
-            removeWall(row, column);
-            addNode(row, column, type);
-          },
-        ),
+      child: NodePaintWidget(
+        type: type,
+        unitSize: unitSize,
+        row: row,
+        column: column,
+        callback: (int row, int column, NodeType type) {
+          removeWall(row, column);
+          addNode(row, column, type);
+        },
       ),
     );
     notifyListeners();
   }
 
-  void addWeightWidget(int row, int column, double unitSize, NodeType type) {
+  void addWeightWidget(int row, int column, double unitSize) {
     weightNodes['$row $column'] = Positioned(
       key: UniqueKey(),
       left: row * (unitSize.toDouble()),
       top: column * (unitSize.toDouble()),
-      child: RepaintBoundary(
-        child: WeightPaintWidget(
-          type: type,
-          unitSize: unitSize,
-          row: row,
-          column: column,
-        ),
-      ),
+      child: WeightPaintWidget(
+        column: column,
+        row: row,
+        unitSize: unitSize,
+      )
     );
     notifyListeners();
   }

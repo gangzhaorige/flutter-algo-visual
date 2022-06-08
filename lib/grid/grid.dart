@@ -58,7 +58,7 @@ class GridWidget extends StatelessWidget {
                 width: grid.width,
               ),
               ChangeNotifierProvider<Painter>.value(
-                value: grid.walls,
+                value: grid.painter,
                 child: Selector<Painter, Map<String,Widget>>(
                   shouldRebuild: (Map<String, Widget> a, Map<String, Widget> b) => true,
                   selector: (_, Painter model) => model.nodes,
@@ -74,7 +74,7 @@ class GridWidget extends StatelessWidget {
                 ),
               ),
               ChangeNotifierProvider<Painter>.value(
-                value: grid.walls,
+                value: grid.painter,
                 child: Selector<Painter, Map<String,Widget>>(
                   shouldRebuild: (Map<String, Widget> a, Map<String, Widget> b) => true,
                   selector: (_, Painter model) => model.weightNodes,
@@ -112,7 +112,7 @@ class Grid extends ChangeNotifier{
     nodes[endRow][endCol].type = NodeType.end;
     width = rows * unitSize;
     height = columns * unitSize;
-    walls = Painter();
+    painter = Painter();
   }
 
   int startRow;
@@ -125,7 +125,7 @@ class Grid extends ChangeNotifier{
   late int rows;
   late int columns;
   late List<List<NodeModel>> nodes;
-  late Painter walls;
+  late Painter painter;
   
 
   bool isStartOrEnd(int row, int col) {
@@ -145,20 +145,20 @@ class Grid extends ChangeNotifier{
         if(curNode.type == NodeType.wall) {
           curNode.changeNodeType(NodeType.empty);
         } else {
-          walls.addNodeWidget(row, col, unitSize, createNode, NodeType.wall);
+          painter.addNodeWidget(row, col, unitSize, createNode, NodeType.wall);
         }
         curNode.weight = 0;
-        walls.removeWeight(row, col);
+        painter.removeWeight(row, col);
         break;
       case Brush.weight:
         if(curNode.type == NodeType.weight) {
           curNode.weight = 0;
           curNode.changeNodeType(NodeType.empty);
-          walls.removeWeight(row, col);
+          painter.removeWeight(row, col);
         } else {
           curNode.weight = 5;
           curNode.changeNodeType(NodeType.weight);
-          walls.addWeightWidget(row, col, unitSize, NodeType.weight);
+          painter.addWeightWidget(row, col, unitSize);
         }
         break;
       case Brush.start:
@@ -168,7 +168,7 @@ class Grid extends ChangeNotifier{
         startCol = col;
         curNode.weight = 0;
         curNode.changeNodeType(NodeType.start);
-        walls.removeWeight(row, col);
+        painter.removeWeight(row, col);
         break;
       case Brush.end:
         NodeModel prevStartNode = nodes[endRow][endCol];
@@ -177,7 +177,7 @@ class Grid extends ChangeNotifier{
         endCol = col;
         curNode.weight = 0;
         curNode.changeNodeType(NodeType.end);
-        walls.removeWeight(row, col);
+        painter.removeWeight(row, col);
         break;
     }
   }
@@ -215,7 +215,7 @@ class Grid extends ChangeNotifier{
         }
       }
     }
-    walls.removeAllWeightNodes();
+    painter.removeAllWeightNodes();
   }
 
   void randomMaze() {
@@ -225,7 +225,7 @@ class Grid extends ChangeNotifier{
         if(nodes[i][j].type == NodeType.empty) {
           int random = rng.nextInt(5);
           if(random > 3) {
-            walls.addNodeWidget(i, j, unitSize, createNode, NodeType.wall);
+            painter.addNodeWidget(i, j, unitSize, createNode, NodeType.wall);
           }
         }
       }
@@ -284,13 +284,11 @@ class StaticNodeGrid extends StatelessWidget {
                   return Positioned(
                     left: i * (grid.unitSize.toDouble()),
                     top:  j * (grid.unitSize.toDouble()),
-                    child: RepaintBoundary(
-                      child: SquareWidget(
-                        type: type,
-                        row: i,
-                        col: j,
-                        unitSize: grid.unitSize,
-                      ),
+                    child: SquareWidget(
+                      type: type,
+                      row: i,
+                      col: j,
+                      unitSize: grid.unitSize,
                     ),
                   );
                 }

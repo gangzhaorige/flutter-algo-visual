@@ -39,94 +39,58 @@ class WeightPainter extends CustomPainter {
   WeightPainter({
     required this.unitSize,
     required this.fraction,
-    required this.type,
   });
 
   final double unitSize;
   final double fraction;
-  final NodeType type;
 
   @override
   void paint(Canvas canvas, Size size) {
-    Rect rectl = Rect.fromCenter(
-      center: Offset(unitSize / 2, unitSize / 2),
-      width: 0.5 * (unitSize),
-      height: 0.5 * (unitSize),
-    );
-    Paint paint = Paint();
-    paint.color = Colors.purple;
-    canvas.drawRect(rectl, paint);
-  }
 
+    Paint paint = Paint();
+    paint.style = PaintingStyle.stroke;
+    paint.color = Colors.pink;
+    paint.strokeWidth = 2;
+    canvas.drawCircle(
+      Offset(
+        unitSize / 2,
+        unitSize / 2,
+      ),
+      unitSize / 2 * fraction,
+      paint,
+    );
+    canvas.drawLine(
+      Offset(
+        unitSize / 4,
+        unitSize / 4,
+      ),
+      Offset(
+        unitSize - unitSize / 4,
+        unitSize - unitSize / 4,
+      ),
+      paint,
+    );
+    canvas.drawLine(
+      Offset(
+        unitSize - unitSize / 4,
+        unitSize / 4,
+      ),
+      Offset(
+        unitSize / 4,
+        unitSize - unitSize / 4,
+      ), 
+      paint,
+    );
+  }
+  
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+  bool shouldRepaint(WeightPainter oldDelegate) {
+    if(fraction != oldDelegate.fraction) {
+      return true;
+    }
     return false;
   }
 }
-
-class WeightPaintWidget extends StatefulWidget {
-  const WeightPaintWidget({
-    Key? key,
-    required this.unitSize,
-    required this.row,
-    required this.column,
-    required this.type,
-  }) : super(key:key);
-
-  final double unitSize;
-  final int row;
-  final int column;
-  final NodeType type;
-  @override
-  State<WeightPaintWidget> createState() => _WeightPaintWidgetState();
-}
-
-class _WeightPaintWidgetState extends State<WeightPaintWidget> with SingleTickerProviderStateMixin{
-  double fraction = 0;
-  late Animation<double> animation;
-  late AnimationController controller;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = AnimationController(
-      animationBehavior: AnimationBehavior.preserve,
-      duration: const Duration(milliseconds: 500),
-      vsync: this,
-    )
-    ..addStatusListener((AnimationStatus status) {
-    });
-
-    animation = Tween<double>(begin: 0.0, end: 0.96).animate(CurvedAnimation(
-      parent: controller,
-      curve: Curves.elasticOut,
-    ))
-    ..addListener((){
-      setState(() {
-        fraction = animation.value;
-      });
-    });
-    controller.forward();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: WeightPainter(
-        unitSize: widget.unitSize,
-        fraction: fraction, 
-        type: widget.type,
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-}
-
 
 class NodePaintWidget extends StatefulWidget {
   const NodePaintWidget({
@@ -171,7 +135,7 @@ class _NodePaintWidgetState extends State<NodePaintWidget> with SingleTickerProv
       }
     });
 
-    animation = Tween<double>(begin: 0.0, end: 0.96).animate(CurvedAnimation(
+    animation = Tween<double>(begin: 0.0, end: 0.95).animate(CurvedAnimation(
       parent: controller,
       curve: Curves.elasticOut,
     ))
@@ -190,6 +154,65 @@ class _NodePaintWidgetState extends State<NodePaintWidget> with SingleTickerProv
         unitSize: widget.unitSize,
         fraction: fraction, 
         type: widget.type,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+}
+
+class WeightPaintWidget extends StatefulWidget {
+  const WeightPaintWidget({
+    Key? key,
+    required this.unitSize,
+    required this.row,
+    required this.column,
+  }) : super(key:key);
+
+  final double unitSize;
+  final int row;
+  final int column;
+
+  @override
+  State<WeightPaintWidget> createState() => _WeightPaintWidgetState();
+}
+
+class _WeightPaintWidgetState extends State<WeightPaintWidget> with SingleTickerProviderStateMixin{
+  double fraction = 0;
+  late Animation<double> animation;
+  late AnimationController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+      animationBehavior: AnimationBehavior.preserve,
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+
+    animation = Tween<double>(begin: 0.0, end: 0.85).animate(CurvedAnimation(
+      parent: controller,
+      curve: Curves.elasticOut,
+    ))
+    ..addListener((){
+      setState(() {
+        fraction = animation.value;
+      });
+    });
+    controller.forward();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      painter: WeightPainter(
+        unitSize: widget.unitSize,
+        fraction: fraction, 
       ),
     );
   }

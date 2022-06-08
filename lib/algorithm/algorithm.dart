@@ -282,7 +282,7 @@ class Algorithms {
             NodeModel cur = pathingOrder[j];
             Future<dynamic>.delayed(Duration(milliseconds: index * speed)).then((_) {
               if(!isStartOrEnd(cur.row, cur.col)) {
-                grid.walls.addNodeWidget(cur.row, cur.col, grid.unitSize, (int i, int j, NodeType k) => grid.createNode(i, j, k), NodeType.pathing);
+                grid.painter.addNodeWidget(cur.row, cur.col, grid.unitSize, (int i, int j, NodeType k) => grid.createNode(i, j, k), NodeType.pathing);
               }
             });
             index++;
@@ -295,7 +295,7 @@ class Algorithms {
       }
       Future<dynamic>.delayed(Duration(milliseconds: speed * i)).then((_) {
         if(!isStartOrEnd(orderOfVisit[i].row, orderOfVisit[i].col)) {
-          grid.walls.addNodeWidget(orderOfVisit[i].row, orderOfVisit[i].col, grid.unitSize, (int i, int j, NodeType k) => grid.createNode(i, j, k), NodeType.visiting);
+          grid.painter.addNodeWidget(orderOfVisit[i].row, orderOfVisit[i].col, grid.unitSize, (int i, int j, NodeType k) => grid.createNode(i, j, k), NodeType.visiting);
         }
       });
     }
