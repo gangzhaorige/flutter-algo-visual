@@ -68,13 +68,19 @@ class Painter extends ChangeNotifier {
   Map<String, Widget> weightNodes = {};
       
   void removeWall(int row, int column) {
-    nodes.remove('$row $column');
-    notifyListeners();
+    String key = '$row $column';
+    if(nodes.containsKey(key)){
+      nodes.remove('$row $column');
+      notifyListeners();
+    }
   }
 
   void removeWeight(int row, int column) {
-    weightNodes.remove('$row $column');
-    notifyListeners();
+    String key = '$row $column';
+    if(weightNodes.containsKey(key)) {
+      weightNodes.remove('$row $column');
+      notifyListeners();
+    }
   }
 
   void addNodeWidget(int row, int column, double unitSize, Function(int i, int j, NodeType type) addNode, NodeType type) {

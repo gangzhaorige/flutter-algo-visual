@@ -147,6 +147,8 @@ class Grid extends ChangeNotifier{
         } else {
           walls.addNodeWidget(row, col, unitSize, createNode, NodeType.wall);
         }
+        curNode.weight = 0;
+        walls.removeWeight(row, col);
         break;
       case Brush.weight:
         if(curNode.type == NodeType.weight) {
@@ -164,14 +166,18 @@ class Grid extends ChangeNotifier{
         prevStartNode.changeNodeType(NodeType.empty);
         startRow = row;
         startCol = col;
+        curNode.weight = 0;
         curNode.changeNodeType(NodeType.start);
+        walls.removeWeight(row, col);
         break;
       case Brush.end:
         NodeModel prevStartNode = nodes[endRow][endCol];
         prevStartNode.changeNodeType(NodeType.empty);
         endRow = row;
         endCol = col;
+        curNode.weight = 0;
         curNode.changeNodeType(NodeType.end);
+        walls.removeWeight(row, col);
         break;
     }
   }
