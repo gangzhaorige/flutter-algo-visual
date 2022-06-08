@@ -15,12 +15,13 @@ const List<List<int>> directions = <List<int>>[
 enum Algorithm {
   dfs,
   bfs,
+  biBfs,
 }
 
 class AlgoVisualizerTools extends ChangeNotifier {
   Brush curBrush = Brush.wall;
   double curSpeed = 15;
-  Algorithm curAlgorithm = Algorithm.bfs;
+  Algorithm curAlgorithm = Algorithm.biBfs;
   bool isVisualizing = false;
 
   void toggleVisualizing() {
@@ -92,6 +93,45 @@ class Algorithms {
     return list;
   }
 
+  List<NodeModel> bidirectional() {
+    List<NodeModel> list = [];
+    Queue<NodeModel> queue1 = Queue<NodeModel>();
+    Queue<NodeModel> queue2 = Queue<NodeModel>();
+    queue1.add(nodes[startRow][startCol]);
+    nodes[startRow][startCol].visited = true;
+    queue2.add(nodes[endRow][endCol]);
+    nodes[endRow][endCol].visited2 = true;
+    while(queue1.isNotEmpty && queue2.isNotEmpty) {
+      NodeModel nodeFirst = queue1.removeFirst();
+      NodeModel nodeSecond = queue2.removeFirst();
+      if(nodeFirst.parent != null && nodeFirst.parent2 != null) {
+        list.add(nodeFirst);
+        return list;
+      }
+      list.add(nodeFirst);
+      list.add(nodeSecond);
+      for(List<int> direction in directions) {
+        int dx = nodeFirst.row + direction[0];
+        int dy = nodeFirst.col + direction[1];
+        if(!isOutOfBound(dx, dy) && !nodes[dx][dy].visited && nodes[dx][dy].type != NodeType.wall) {
+          nodes[dx][dy].visited = true;
+          queue1.add(nodes[dx][dy]);
+          nodes[dx][dy].parent = nodeFirst;
+        }
+      }
+      for(List<int> direction in directions) {
+        int dx = nodeSecond.row + direction[0];
+        int dy = nodeSecond.col + direction[1];
+        if(!isOutOfBound(dx, dy) && !nodes[dx][dy].visited2 && nodes[dx][dy].type != NodeType.wall) {
+          nodes[dx][dy].visited2 = true;
+          queue2.add(nodes[dx][dy]);
+          nodes[dx][dy].parent2 = nodeSecond;
+        }
+      }
+    }
+    return list;
+  }
+
   List<NodeModel> dfs() {
     List<NodeModel> list = [];
     dfsHelper(list, startRow, startCol);
@@ -148,10 +188,29 @@ class Algorithms {
 
   List<NodeModel> getPathFromStartToEnd() {
     List<NodeModel> list = [];
+    print('Called');
     NodeModel cur = nodes[endRow][endCol];
     while(cur.parent != null) {
       list.add(cur);
       cur = cur.parent!;
+    }
+    return list;
+  }
+
+  List<NodeModel> getPathFromStartToEndBidirectional(List<NodeModel> nodes) {
+    List<NodeModel> list = [];
+    NodeModel cur = nodes[nodes.length - 1];
+    if(cur.parent == null || cur.parent2 == null) {
+      return list;
+    }
+    while(cur.parent != null) {
+      list.add(cur);
+      cur = cur.parent!;
+    }
+    cur = nodes[nodes.length - 1].parent2!;
+    while(cur.parent2 != null) {
+      list.insert(0, cur);
+      cur = cur.parent2!;
     }
     return list;
   }
@@ -165,6 +224,8 @@ class Algorithms {
       case Algorithm.bfs:
         orderOfVisit = bfs();
         break;
+      case Algorithm.biBfs:
+        orderOfVisit = bidirectional();
     }
     return orderOfVisit;
   }
@@ -172,7 +233,12 @@ class Algorithms {
   Future<void> visualizeAlgorithm(Algorithm curAlgorithm, int speed, Function toggleVisualizing) {
     toggleVisualizing();
     List<NodeModel> orderOfVisit = executeAlgorithm(curAlgorithm);
-    List<NodeModel> pathingOrder = getPathFromStartToEnd();
+    List<NodeModel> pathingOrder;
+    if(curAlgorithm == Algorithm.biBfs) {
+      pathingOrder = getPathFromStartToEndBidirectional(orderOfVisit);
+    } else {
+      pathingOrder = getPathFromStartToEnd();
+    }
     for(int i = 0; i <= orderOfVisit.length; i++) {
       if(i == orderOfVisit.length) {
         Future<dynamic>.delayed(Duration(milliseconds: speed * i)).then((_) {
