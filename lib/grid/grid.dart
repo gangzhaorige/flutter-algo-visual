@@ -177,7 +177,9 @@ class Grid extends ChangeNotifier{
     for(List<NodeModel> list in nodes) {
       for(NodeModel node in list) {
         node.parent = null;
+        node.parent2 = null;
         node.visited = false;
+        node.visited2 = false;
         if(node.type == NodeType.visiting || node.type == NodeType.pathing) {
           node.changeNodeType(NodeType.empty);
         }
