@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -219,10 +218,8 @@ class Grid extends ChangeNotifier{
       for(int j = 0; j < nodes[0].length; j++) {
         NodeModel node = nodes[i][j];
         if(!isStartOrEnd(i, j)) {
-          if(node.type == NodeType.weight) {
-            walls.removeWeight(i, j);
-            node.weight = 0;
-          }
+          walls.removeWeight(i, j);
+          node.weight = 0;
           node.changeNodeType(NodeType.empty);
         }
       }
@@ -233,12 +230,11 @@ class Grid extends ChangeNotifier{
     Random rng = Random();
     for(int i = 0; i < nodes.length; i++) {
       for(int j = 0; j < nodes[0].length; j++) {
-        if(isStartOrEnd(i, j)) {
-          continue;
-        }
-        int random = rng.nextInt(5);
-        if(random > 3) {
-          walls.addNodeWidget(i, j, unitSize, createNode, NodeType.wall);
+        if(nodes[i][j].type == NodeType.empty) {
+          int random = rng.nextInt(5);
+          if(random > 3) {
+            walls.addNodeWidget(i, j, unitSize, createNode, NodeType.wall);
+          }
         }
       }
     }
