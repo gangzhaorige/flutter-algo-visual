@@ -1,7 +1,7 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:path_visualizer/main.dart';
-
+import 'package:collection/collection.dart';
 import '../grid/grid.dart';
 import '../node/node_model.dart';
 
@@ -16,16 +16,17 @@ enum Algorithm {
   dfs,
   bfs,
   biBfs,
+  dijkstra,
 }
 
 class AlgoVisualizerTools extends ChangeNotifier {
   Brush curBrush = Brush.wall;
   double curSpeed = 15;
-  Algorithm curAlgorithm = Algorithm.biBfs;
+  Algorithm curAlgorithm = Algorithm.dijkstra;
   bool isVisualizing = false;
 
   void toggleVisualizing() {
-    isVisualizing = !isVisualizing;;
+    isVisualizing = !isVisualizing;
     notifyListeners();
   }
 
@@ -34,6 +35,8 @@ class AlgoVisualizerTools extends ChangeNotifier {
       curBrush = Brush.end;
     } else if (curBrush == Brush.end) {
       curBrush = Brush.wall;
+    } else if(curBrush == Brush.wall){
+      curBrush = Brush.weight;
     } else {
       curBrush = Brush.start;
     }
@@ -138,6 +141,36 @@ class Algorithms {
     return list;
   }
 
+  List<NodeModel> dijkstra() {
+    List<NodeModel> list = [];
+    PriorityQueue<NodeModel> queue = PriorityQueue<NodeModel>((NodeModel a, NodeModel b) => a.distance - b.distance);
+    queue.add(nodes[startRow][startCol]);
+    nodes[startRow][startCol].distance = 0;
+    while(queue.isNotEmpty) {
+      NodeModel curNode = queue.removeFirst();
+      curNode.visited = true;
+      list.add(curNode);
+      if(curNode.row == endRow && curNode.col == endCol) {
+        return list;
+      }
+      for(List<int> direction in directions) {
+        int dx = curNode.row + direction[0];
+        int dy = curNode.col + direction[1];
+        if(isOutOfBound(dx, dy)) {
+          continue;
+        }
+        if(nodes[dx][dy].type != NodeType.wall && !nodes[dx][dy].visited) {
+          if(nodes[dx][dy].distance > curNode.distance + nodes[dx][dy].weight + 1) {
+            nodes[dx][dy].distance = curNode.distance + nodes[dx][dy].weight + 1;
+            nodes[dx][dy].parent = curNode;
+            queue.add(nodes[dx][dy]);
+          }
+        }
+      }
+    }
+    return list;
+  }
+
   void dfsHelper(List<NodeModel> list, int row, int col) {
     NodeModel curNode = nodes[row][col];
     if(curNode.visited || nodes[endRow][endCol].visited) {
@@ -165,7 +198,6 @@ class Algorithms {
     return false;
   }
 
-
   bool isStartOrEnd(int row, int col) {
     if(row == startRow && col == startCol || row == endRow && col == endCol) {
       return true;
@@ -188,7 +220,6 @@ class Algorithms {
 
   List<NodeModel> getPathFromStartToEnd() {
     List<NodeModel> list = [];
-    print('Called');
     NodeModel cur = nodes[endRow][endCol];
     while(cur.parent != null) {
       list.add(cur);
@@ -226,6 +257,10 @@ class Algorithms {
         break;
       case Algorithm.biBfs:
         orderOfVisit = bidirectional();
+        break;
+      case Algorithm.dijkstra:
+        orderOfVisit = dijkstra();
+        break;
     }
     return orderOfVisit;
   }

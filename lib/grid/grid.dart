@@ -62,12 +62,28 @@ class GridWidget extends StatelessWidget {
                 value: grid.walls,
                 child: Selector<Painter, Map<String,Widget>>(
                   shouldRebuild: (Map<String, Widget> a, Map<String, Widget> b) => true,
-                  selector: (_, Painter model) => model.map,
+                  selector: (_, Painter model) => model.nodes,
                     builder: (BuildContext context, Map<String, Widget> walls, Widget? child) {
                     return Stack(
                       children: [
                         for(Widget wall in walls.values)...<Widget>[
                           wall,
+                        ]
+                      ],
+                    );
+                  }
+                ),
+              ),
+              ChangeNotifierProvider<Painter>.value(
+                value: grid.walls,
+                child: Selector<Painter, Map<String,Widget>>(
+                  shouldRebuild: (Map<String, Widget> a, Map<String, Widget> b) => true,
+                  selector: (_, Painter model) => model.weightNodes,
+                    builder: (BuildContext context, Map<String, Widget> weights, Widget? child) {
+                    return Stack(
+                      children: [
+                        for(Widget weight in weights.values)...<Widget>[
+                          weight,
                         ]
                       ],
                     );
@@ -111,6 +127,7 @@ class Grid extends ChangeNotifier{
   late int columns;
   late List<List<NodeModel>> nodes;
   late Painter walls;
+  
 
   bool isStartOrEnd(int row, int col) {
     if(row == startRow && col == startCol || row == endRow && col == endCol) {
@@ -133,7 +150,15 @@ class Grid extends ChangeNotifier{
         }
         break;
       case Brush.weight:
-        // TODO: Handle this case.
+        if(curNode.type == NodeType.weight) {
+          curNode.weight = 0;
+          curNode.changeNodeType(NodeType.empty);
+          walls.removeWeight(row, col);
+        } else {
+          curNode.weight = 5;
+          curNode.changeNodeType(NodeType.weight);
+          walls.addWeightWidget(row, col, unitSize, NodeType.weight);
+        }
         break;
       case Brush.start:
         NodeModel prevStartNode = nodes[startRow][startCol];
@@ -181,6 +206,7 @@ class Grid extends ChangeNotifier{
         node.parent2 = null;
         node.visited = false;
         node.visited2 = false;
+        node.distance = 10000;
         if(node.type == NodeType.visiting || node.type == NodeType.pathing) {
           node.changeNodeType(NodeType.empty);
         }
@@ -189,9 +215,14 @@ class Grid extends ChangeNotifier{
   }
 
   void resetWalls() {
-    for(List<NodeModel> list in nodes) {
-      for(NodeModel node in list) {
-        if(node.type == NodeType.wall) {
+    for(int i = 0; i < nodes.length; i++) {
+      for(int j = 0; j < nodes[0].length; j++) {
+        NodeModel node = nodes[i][j];
+        if(!isStartOrEnd(i, j)) {
+          if(node.type == NodeType.weight) {
+            walls.removeWeight(i, j);
+            node.weight = 0;
+          }
           node.changeNodeType(NodeType.empty);
         }
       }

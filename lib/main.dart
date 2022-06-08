@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:path_visualizer/components/home/home_view.dart';
 import 'package:statsfl/statsfl.dart';

@@ -20,13 +20,14 @@ const Map<NodeType, Color> nodeColor = {
   NodeType.start: Colors.green,
   NodeType.visiting: Colors.orangeAccent,
   NodeType.pathing: Colors.yellow,
-  NodeType.weight: Colors.blue,
+  NodeType.weight: Colors.white,
 };
 
 const Map<Brush, Color> brushColor = {
   Brush.wall: Colors.black,
   Brush.start: Colors.greenAccent,
   Brush.end: Colors.red,
+  Brush.weight: Colors.purple,
 };
 
 class NodeModel extends ChangeNotifier {
@@ -37,10 +38,14 @@ class NodeModel extends ChangeNotifier {
     this.visited = false,
     this.visited2 = false,
     required this.type,
+    this.weight = 0,
+    this.distance = 10000,
   });
 
   int row;
   int col;
+  int weight;
+  int distance;
   bool visited;
   bool visited2;
   NodeType type;
@@ -59,15 +64,21 @@ class NodeModel extends ChangeNotifier {
 }
 
 class Painter extends ChangeNotifier {
-  Map<String, Widget> map = {};
+  Map<String, Widget> nodes = {};
+  Map<String, Widget> weightNodes = {};
       
   void removeWall(int row, int column) {
-    map.remove('$row $column');
+    nodes.remove('$row $column');
+    notifyListeners();
+  }
+
+  void removeWeight(int row, int column) {
+    weightNodes.remove('$row $column');
     notifyListeners();
   }
 
   void addNodeWidget(int row, int column, double unitSize, Function(int i, int j, NodeType type) addNode, NodeType type) {
-    map['$row $column'] = Positioned(
+    nodes['$row $column'] = Positioned(
       key: UniqueKey(),
       left: row * (unitSize.toDouble()),
       top: column * (unitSize.toDouble()),
@@ -82,7 +93,24 @@ class Painter extends ChangeNotifier {
             addNode(row, column, type);
           },
         ),
-      )
+      ),
+    );
+    notifyListeners();
+  }
+
+  void addWeightWidget(int row, int column, double unitSize, NodeType type) {
+    weightNodes['$row $column'] = Positioned(
+      key: UniqueKey(),
+      left: row * (unitSize.toDouble()),
+      top: column * (unitSize.toDouble()),
+      child: RepaintBoundary(
+        child: WeightPaintWidget(
+          type: type,
+          unitSize: unitSize,
+          row: row,
+          column: column,
+        ),
+      ),
     );
     notifyListeners();
   }
