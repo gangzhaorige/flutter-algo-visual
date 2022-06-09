@@ -123,7 +123,8 @@ class GridWidget extends StatelessWidget {
   }
 }
 
-class Grid extends ChangeNotifier{
+class Grid {
+  
   Grid({
     required this.startRow,
     required this.startCol,
