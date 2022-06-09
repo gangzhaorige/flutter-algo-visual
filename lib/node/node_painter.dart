@@ -384,7 +384,7 @@ class StartPainter extends CustomPainter {
     );
     textPainter.paint(canvas, Offset(
       unitSize / 2 - unitSize / 7,
-      unitSize / 4,
+      unitSize / 4.5,
     ),);
   }
   
@@ -502,7 +502,7 @@ class EndPainter extends CustomPainter {
     );
     textPainter.paint(canvas, Offset(
       unitSize / 2 - unitSize / 7,
-      unitSize / 4,
+      unitSize / 4.5,
     ),);
   }
   
