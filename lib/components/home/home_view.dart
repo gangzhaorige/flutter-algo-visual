@@ -8,6 +8,13 @@ import '../../grid/grid.dart';
 import '../drawer/drawer.dart';
 import '../topbar/top_bar.dart';
 
+const Map<Algorithm, String> algoName = {
+  Algorithm.bfs : 'Breadth First Search',
+  Algorithm.dfs : 'Depth First Search',
+  Algorithm.biBfs : 'Bidirectional BFS',
+  Algorithm.dijkstra : 'Dijkstra',
+};
+
 final AlgoVisualizerTools algo = AlgoVisualizerTools();
 
 class HomeView extends StatelessWidget {

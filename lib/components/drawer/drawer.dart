@@ -39,12 +39,15 @@ class AppDrawer extends StatelessWidget {
                       children: const <Widget>[
                         Icon(
                           Icons.alarm,
-                          size: 40,
+                          size: 20,
+                        ),
+                        SizedBox(
+                          width: 5,
                         ),
                         Text(
                           'Algorithm',
                           style: TextStyle(
-                            fontSize: 20
+                            fontSize: 14
                           ),
                         ),
                       ],
@@ -55,12 +58,17 @@ class AppDrawer extends StatelessWidget {
                       Selector<AlgoVisualizerTools, Algorithm>(
                         selector: (_, AlgoVisualizerTools model) => model.curAlgorithm,
                         builder: (BuildContext context, Algorithm algo, Widget? child) {
-                          return Text('$algo');
+                          return Text(
+                            '${algoName[algo]}',
+                            style: const TextStyle(
+                              fontSize: 14
+                            ),
+                          );
                         }
                       ),
                       const Icon(
                         Icons.chevron_right,
-                        size: 40,
+                        size: 20,
                       ),
                     ],
                   ),
