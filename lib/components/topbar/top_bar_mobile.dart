@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:path_visualizer/main.dart';
 import 'package:path_visualizer/node/node_model.dart';
 import 'package:provider/provider.dart';
-
 import '../../algorithm/algorithm.dart';
 import '../home/home_view.dart';
 
@@ -35,7 +34,6 @@ class TopBarMobile extends StatelessWidget {
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 18,
-                fontWeight: FontWeight.bold,
               ),
             );
           }

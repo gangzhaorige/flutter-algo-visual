@@ -237,6 +237,11 @@ class Grid {
     }
   }
 
+  void reset() {
+    resetPath();
+    resetWalls();
+  }
+
   void randomMaze() {
     Random rng = Random();
     for(int i = 0; i < nodes.length; i++) {

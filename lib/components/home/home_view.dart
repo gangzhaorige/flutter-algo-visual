@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../algorithm/algorithm.dart';
 import '../../grid/grid.dart';
+import '../bottom_nav/bottom_nav.dart';
 import '../drawer/drawer.dart';
 import '../topbar/top_bar.dart';
 
@@ -22,7 +23,15 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     print('Rebuilding HomeView');
     const double unitSize = 25; 
-    late Grid grid;
+    Grid grid = Grid(
+      startRow: 0,
+      startCol: 0,
+      endRow: 1,
+      endCol: 1,
+      rows: 2,
+      columns: 2,
+      unitSize: unitSize,
+    );
     return ChangeNotifierProvider<AlgoVisualizerTools>.value(
       builder: (BuildContext context, Widget? child) {
         return Scaffold(
@@ -30,13 +39,14 @@ class HomeView extends StatelessWidget {
           drawer: const AppDrawer(),
           body: Column(
             children: <Widget>[
+              // top bar
               const TopBar(),
               Expanded(
                 child: LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraint) {
                     print('Rebuilding LayOutBuilder');
                     int rows = constraint.maxWidth ~/ unitSize - 1;
-                    int columns = constraint.maxHeight ~/ unitSize - 1;
+                    int columns = (constraint.maxHeight - 70)  ~/ unitSize - 1;
                     grid = Grid(
                       startRow: rows ~/ 2 - rows ~/ 2.5,
                       startCol: columns ~/ 2,
@@ -46,70 +56,19 @@ class HomeView extends StatelessWidget {
                       columns: columns,
                       unitSize: unitSize,
                     );
-                    return GridWidget(
-                      grid: grid,
+                    return Column(
+                      children: [
+                        // main body
+                        Expanded(
+                          child: GridWidget(
+                            grid: grid,
+                          ),
+                        ),
+                        // navbar
+                        BottomNav(grid: grid),
+                      ],
                     );
                   },
-                ),
-              ),
-              Container(
-                height: 55,
-                color: Colors.blue,
-                child: Center(
-                  child: Selector<AlgoVisualizerTools, bool>(
-                    selector: (_, AlgoVisualizerTools model) => model.isVisualizing,
-                    builder: (BuildContext context, bool isVisualizing, Widget? child) {
-                      print('rebuilding row...');
-                      return SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            MaterialButton(
-                              onPressed: isVisualizing ? null : () {
-                                grid.resetPath();
-                              },
-                              child: const Text('Reset Path'),
-                            ),
-                            MaterialButton(
-                              onPressed: isVisualizing ? null : () {
-                                grid.resetPath();
-                                Algorithms algo = Algorithms(
-                                  columns: grid.columns,
-                                  endCol: grid.endCol,
-                                  endRow: grid.endRow,
-                                  nodes: grid.nodes,
-                                  rows: grid.rows,
-                                  startCol: grid.startCol,
-                                  startRow: grid.startRow,
-                                  grid: grid,
-                                );
-                                AlgoVisualizerTools tool = Provider.of<AlgoVisualizerTools>(context, listen: false);
-                                algo.visualizeAlgorithm(
-                                  tool.curAlgorithm,
-                                  tool.curSpeed.toInt(),
-                                  tool.toggleVisualizing,
-                                );
-                              },
-                              child: Text(isVisualizing ? 'Visualizing' : 'Visualize'),
-                            ),
-                            MaterialButton(
-                              onPressed: isVisualizing ? null : () {
-                                grid.resetWalls();
-                              },
-                              child: const Text('Reset Wall'),
-                            ),
-                            MaterialButton(
-                              onPressed: isVisualizing ? null : () {
-                                grid.randomMaze();
-                              },
-                              child: const Text('Generate Maze'),
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-                  ),
                 ),
               ),
             ],

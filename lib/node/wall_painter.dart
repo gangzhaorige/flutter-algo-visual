@@ -17,6 +17,7 @@ class WallPainter extends CustomPainter {
       height: fraction * (unitSize),
     );
     Paint paint = Paint();
+    paint.color = Colors.black;
     canvas.drawRect(rectl, paint);
   }
   
