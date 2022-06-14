@@ -42,33 +42,52 @@ class HomeView extends StatelessWidget {
               // top bar
               const TopBar(),
               Expanded(
-                child: LayoutBuilder(
-                  builder: (BuildContext context, BoxConstraints constraint) {
-                    print('Rebuilding LayOutBuilder');
-                    int rows = constraint.maxWidth ~/ unitSize - 1;
-                    int columns = (constraint.maxHeight - 70)  ~/ unitSize - 1;
-                    grid = Grid(
-                      startRow: rows ~/ 2 - rows ~/ 2.5,
-                      startCol: columns ~/ 2,
-                      endRow: rows ~/ 2 + rows ~/ 2.5,
-                      endCol: columns ~/ 2,
-                      rows: rows,
-                      columns: columns,
-                      unitSize: unitSize,
-                    );
-                    return Column(
-                      children: [
-                        // main body
-                        Expanded(
-                          child: GridWidget(
-                            grid: grid,
-                          ),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      child: Center(
+                        child: Selector<AlgoVisualizerTools, Algorithm>(
+                          selector: (_, AlgoVisualizerTools model) => model.curAlgorithm,
+                          builder: (BuildContext context, Algorithm algo, Widget? child) {
+                            return Text(
+                              '${algoDescription[algo]}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                              ),
+                              textAlign: TextAlign.center,
+                            );
+                          }
                         ),
-                        // navbar
-                        BottomNav(grid: grid),
-                      ],
-                    );
-                  },
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: LayoutBuilder(
+                          builder: (BuildContext context, BoxConstraints constraint) {
+                            print('Rebuilding LayOutBuilder');
+                            int rows = constraint.maxWidth ~/ unitSize;
+                            int columns = (constraint.maxHeight)  ~/ unitSize;
+                            grid = Grid(
+                              startRow: rows ~/ 2 - rows ~/ 2.5,
+                              startCol: columns ~/ 2,
+                              endRow: rows ~/ 2 + rows ~/ 2.5 - 1,
+                              endCol: columns ~/ 2,
+                              rows: rows,
+                              columns: columns,
+                              unitSize: unitSize,
+                            );
+                            return GridWidget(
+                              grid: grid,
+                            ); 
+                          },
+                        ),
+                      ),
+                    ),
+                    // navbar
+                    BottomNav(grid: grid),
+                  ],
                 ),
               ),
             ],

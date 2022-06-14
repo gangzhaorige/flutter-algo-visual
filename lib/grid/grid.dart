@@ -9,6 +9,13 @@ import '../algorithm/algorithm.dart';
 import 'grid_gesture.dart';
 import 'grid_painter.dart';
 
+Map<Algorithm, String> algoDescription = {
+  Algorithm.bfs : 'Unweighted. Guarantees the shortest path.',
+  Algorithm.dfs : 'Unweighted. Does not guarantee the shortest path.',
+  Algorithm.biBfs : 'Unweighted. Guarantees the shortest path.',
+  Algorithm.dijkstra : 'Weighted. Guarantees the shortest path.',
+};
+
 class GridWidget extends StatelessWidget {
 
   final Grid grid;
@@ -22,7 +29,7 @@ class GridWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     print('Rebuilding Grid Widget');
     return FittedBox(
-      fit: BoxFit.fill,
+      fit: BoxFit.cover,
       child: SizedBox(
         width: grid.width,
         height: grid.height,
