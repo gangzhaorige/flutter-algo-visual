@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../main.dart';
-import 'node_painter.dart';
 
 enum NodeType {
   empty,
@@ -12,16 +11,6 @@ enum NodeType {
   visiting,
   pathing,
 }
-
-const Map<NodeType, Color> nodeColor = {
-  NodeType.empty: Colors.white,
-  NodeType.wall: Colors.black,
-  NodeType.end: Colors.white,
-  NodeType.start: Colors.white,
-  NodeType.visiting: Colors.orangeAccent,
-  NodeType.pathing: Colors.yellow,
-  NodeType.weight: Colors.white,
-};
 
 const Map<Brush, Color> brushColor = {
   Brush.wall: Colors.black,
@@ -60,129 +49,5 @@ class NodeModel extends ChangeNotifier {
   @override
   String toString() {
     return '$row $col';
-  }
-}
-
-class Painter extends ChangeNotifier {
-  Map<String, Widget> nodes = {};
-  Map<String, Widget> weightNodes = {};
-  late Widget startNode;
-  late Widget endNode;
-
-  Painter(int startRow, int startCol, int endRow, int endCol, double unitSize) {
-    startNode = Positioned(
-      key: UniqueKey(),
-      left: startRow * (unitSize.toDouble()),
-      top: startCol * (unitSize.toDouble()),
-      child: RepaintBoundary(
-        child: StartPaintWidget(
-          column: startCol,
-          row: startRow,
-          unitSize: unitSize,
-        )
-      ),
-    );
-    endNode = Positioned(
-      key: UniqueKey(),
-      left: endRow * (unitSize.toDouble()),
-      top: endCol * (unitSize.toDouble()),
-      child: RepaintBoundary(
-        child: EndPaintWidget(
-          column: endCol,
-          row: endRow,
-          unitSize: unitSize,
-        )
-      ),
-    );
-  }
-
-  void changeStartWidget(int row, int col, double unitSize) {
-    startNode = Positioned(
-      key: UniqueKey(),
-      left: row * (unitSize.toDouble()),
-      top: col * (unitSize.toDouble()),
-      child: RepaintBoundary(
-        child: StartPaintWidget(
-          column: col,
-          row: row,
-          unitSize: unitSize,
-        )
-      ),
-    );
-    notifyListeners();
-  }
-
-  void changeEndWidget(int row, int col, double unitSize) {
-    endNode = Positioned(
-      key: UniqueKey(),
-      left: row * (unitSize.toDouble()),
-      top: col * (unitSize.toDouble()),
-      child: RepaintBoundary(
-        child: EndPaintWidget(
-          column: col,
-          row: row,
-          unitSize: unitSize,
-        )
-      ),
-    );
-    notifyListeners();
-  }
-      
-  void removeWall(int row, int column) {
-    String key = '$row $column';
-    if(nodes.containsKey(key)){
-      nodes.remove('$row $column');
-      notifyListeners();
-    }
-  }
-
-  void removeWeight(int row, int column) {
-    String key = '$row $column';
-    if(weightNodes.containsKey(key)) {
-      weightNodes.remove('$row $column');
-      notifyListeners();
-    }
-  }
-
-  void removeAllWeightNodes() {
-    weightNodes.clear();
-    notifyListeners();
-  }
-
-  void addNodeWidget(int row, int column, double unitSize, Function(int i, int j, NodeType type) addNode, NodeType type) {
-    nodes['$row $column'] = Positioned(
-      key: UniqueKey(),
-      left: row * (unitSize.toDouble()),
-      top: column * (unitSize.toDouble()),
-      child: RepaintBoundary(
-        child: NodePaintWidget(
-          type: type,
-          unitSize: unitSize,
-          row: row,
-          column: column,
-          callback: (int row, int column, NodeType type) {
-            removeWall(row, column);
-            addNode(row, column, type);
-          },
-        ),
-      ),
-    );
-    notifyListeners();
-  }
-
-  void addWeightWidget(int row, int column, double unitSize) {
-    weightNodes['$row $column'] = Positioned(
-      key: UniqueKey(),
-      left: row * (unitSize.toDouble()),
-      top: column * (unitSize.toDouble()),
-      child: RepaintBoundary(
-        child: WeightPaintWidget(
-          column: column,
-          row: row,
-          unitSize: unitSize,
-        ),
-      )
-    );
-    notifyListeners();
   }
 }

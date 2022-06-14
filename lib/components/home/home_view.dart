@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:path_visualizer/node/node_model.dart';
-import 'package:path_visualizer/node/node_painter.dart';
 import 'package:provider/provider.dart';
 
 import '../../algorithm/algorithm.dart';

@@ -265,7 +265,7 @@ class Algorithms {
     return orderOfVisit;
   }
 
-  Future<void> visualizeAlgorithm(Algorithm curAlgorithm, int speed, Function toggleVisualizing) {
+  Future<void> visualizeAlgorithm(Algorithm curAlgorithm, int speed, Function toggleVisualizing) async {
     toggleVisualizing();
     List<NodeModel> orderOfVisit = executeAlgorithm(curAlgorithm);
     List<NodeModel> pathingOrder;
@@ -274,31 +274,36 @@ class Algorithms {
     } else {
       pathingOrder = getPathFromStartToEnd();
     }
-    for(int i = 0; i <= orderOfVisit.length; i++) {
-      if(i == orderOfVisit.length) {
-        Future<dynamic>.delayed(Duration(milliseconds: speed * i)).then((_) {
-          int index = 0;
-          for(int j = pathingOrder.length - 1; j >= 0; j--) {
-            NodeModel cur = pathingOrder[j];
-            Future<dynamic>.delayed(Duration(milliseconds: index * speed)).then((_) {
-              if(!isStartOrEnd(cur.row, cur.col)) {
-                grid.painter.addNodeWidget(cur.row, cur.col, grid.unitSize, (int i, int j, NodeType k) => grid.createNode(i, j, k), NodeType.pathing);
-              }
-            });
-            index++;
-          }
-        });
-        Future<dynamic>.delayed(Duration(milliseconds: orderOfVisit.length * speed + pathingOrder.length * speed)).then((value) {
+    await visualizeVisitedNodes(orderOfVisit, speed).then((_) async {
+      await visualizePath(pathingOrder, speed, orderOfVisit.length).then((_) async {
+        await Future<dynamic>.delayed(Duration(milliseconds: orderOfVisit.length * speed + pathingOrder.length * speed + 500)).then((_) {
           toggleVisualizing();
         });
-        return Future<dynamic>.value(orderOfVisit.length * speed + pathingOrder.length * speed);
-      }
+      });
+    });
+  }
+
+  Future<void> visualizeVisitedNodes(List<NodeModel> orderOfVisit, int speed) async {
+    for(int i = 0; i < orderOfVisit.length; i++) {
       Future<dynamic>.delayed(Duration(milliseconds: speed * i)).then((_) {
         if(!isStartOrEnd(orderOfVisit[i].row, orderOfVisit[i].col)) {
-          grid.painter.addNodeWidget(orderOfVisit[i].row, orderOfVisit[i].col, grid.unitSize, (int i, int j, NodeType k) => grid.createNode(i, j, k), NodeType.visiting);
+          grid.painter.renderVisitedNode(orderOfVisit[i].row, orderOfVisit[i].col, grid.unitSize);
         }
       });
     }
-    return Future<dynamic>.value(orderOfVisit.length * speed + pathingOrder.length * speed);
+  }
+  Future<void> visualizePath(List<NodeModel> pathingOrder, int speed, int delay) async {
+    Future<dynamic>.delayed(Duration(milliseconds: speed * delay)).then((_) {
+      int index = 0;
+      for(int j = pathingOrder.length - 1; j >= 0; j--) {
+        NodeModel cur = pathingOrder[j];
+        Future<dynamic>.delayed(Duration(milliseconds: index * speed)).then((_) {
+          if(!isStartOrEnd(cur.row, cur.col)) {
+            grid.painter.renderPathNode(cur.row, cur.col, grid.unitSize);
+          }
+        });
+        index++;
+      }
+    });
   }
 }

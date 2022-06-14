@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../node/path_painter.dart';
+import '../node/start_end_painter.dart';
+import '../node/visited_painter.dart';
+import '../node/wall_painter.dart';
+import '../node/weight_painter.dart';
+
 class GridPainter extends CustomPainter {
   const GridPainter(this.rows, this.columns, this.unitSize, this.width, this.height);
   final int rows;
@@ -37,4 +43,107 @@ class GridPainter extends CustomPainter {
   }
   @override
   bool shouldRepaint(GridPainter oldDelegate) => false;
+}
+
+class NodeLocation extends StatelessWidget {
+  const NodeLocation(
+    Key? key,
+    this.row,
+    this.col,
+    this.unitSize,
+    this.child,
+  ) : super(key: key);
+
+  final int row;
+  final int col;
+  final double unitSize;
+  final Widget child;
+  
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      key: key,
+      left: row * (unitSize.toDouble()),
+      top: col * (unitSize.toDouble()),
+      child: RepaintBoundary(
+        child: child,
+      ),
+    );
+  }
+
+}
+
+class Painter extends ChangeNotifier {
+
+  late List<List<Widget?>> nodePainter;
+  Map<String, Widget> visitedNodePainter = {};
+  Map<String, Widget> pathNodePainter = {};
+  final double unitSize;
+
+  Painter(int startRow, int startCol, int endRow, int endCol, int rows, int columns, this.unitSize) {
+    nodePainter = List<List<Widget?>>.generate(rows, (int row) => List<Widget?>.generate(columns, (int col) => null));
+    nodePainter[startRow][startCol] = NodeLocation(UniqueKey(), startRow, startCol, unitSize, StartPaintWidget(unitSize: unitSize));
+    nodePainter[endRow][endCol] = NodeLocation(UniqueKey(), endRow, endCol, unitSize, EndPaintWidget(unitSize: unitSize));
+  }
+
+  void changeToStartWidget(int row, int col, int prevRow, int prevCol) {
+    nodePainter[prevRow][prevCol] = null;
+    nodePainter[row][col] = NodeLocation(UniqueKey(), row, col, unitSize, StartPaintWidget(unitSize: unitSize));
+    notifyListeners();
+  }
+
+  void changeToEndWidget(int row, int col, int prevRow, int prevCol) {
+    nodePainter[prevRow][prevCol] = null;
+    nodePainter[row][col] = NodeLocation(UniqueKey(), row, col, unitSize, EndPaintWidget(unitSize: unitSize));
+    notifyListeners();
+  }
+
+  void changeToWallWidget(int row, int col, ) {
+    nodePainter[row][col] = NodeLocation(UniqueKey(), row, col, unitSize, WallPaintWidget(unitSize: unitSize));
+    notifyListeners();
+  }
+
+  void changeToWeightWidget(int row, int col, ) {
+    nodePainter[row][col] = NodeLocation(UniqueKey(), row, col, unitSize, WeightPaintWidget(unitSize: unitSize));
+    notifyListeners();
+  }
+
+  void removeWidget(int row, int col) {
+    nodePainter[row][col] = null;
+    notifyListeners();
+  }
+
+  void renderVisitedNode(int row, int column, double unitSize) {
+    visitedNodePainter['$row $column'] = Positioned(
+      key: UniqueKey(),
+      left: row * (unitSize.toDouble()),
+      top: column * (unitSize.toDouble()),
+      child: RepaintBoundary(
+        child: VisitedNodePaintWidget(
+          unitSize: unitSize,
+        ),
+      )
+    );
+    notifyListeners();
+  }
+
+  void renderPathNode(int row, int column, double unitSize) {
+    pathNodePainter['$row $column'] = Positioned(
+      key: UniqueKey(),
+      left: row * (unitSize.toDouble()),
+      top: column * (unitSize.toDouble()),
+      child: RepaintBoundary(
+        child: PathNodePaintWidget(
+          unitSize: unitSize,
+        ),
+      )
+    );
+    notifyListeners();
+  }
+
+  void removePathAndVisited() {
+    visitedNodePainter = {};
+    pathNodePainter = {};
+    notifyListeners();
+  }
 }
