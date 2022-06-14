@@ -28,8 +28,8 @@ class HomeView extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraint) {
-        int rows = constraint.maxWidth ~/ unitSize;
-        int columns = (constraint.maxHeight - 70 - 55) ~/ unitSize;
+        int rows = constraint.maxWidth ~/ unitSize - 1;
+        int columns = (constraint.maxHeight - 70 - 55) ~/ unitSize - 4;
         Grid grid = Grid(
           startRow: rows ~/ 2 - rows ~/ 2.5,
           startCol: columns ~/ 2,

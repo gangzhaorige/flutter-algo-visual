@@ -29,7 +29,7 @@ class GridWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     print('Rebuilding Grid Widget');
     return FittedBox(
-      fit: BoxFit.cover,
+      fit: BoxFit.fill,
       child: SizedBox(
         width: grid.width,
         height: grid.height,
