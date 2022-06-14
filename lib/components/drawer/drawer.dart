@@ -100,6 +100,12 @@ class AppDrawer extends StatelessWidget {
               Provider.of<AlgoVisualizerTools>(context, listen: false).changeAlgorithm(Algorithm.dijkstra);
             },
           ),
+          ListTile(
+            title: const Text('Change to A*'),
+            onTap: () {
+              Provider.of<AlgoVisualizerTools>(context, listen: false).changeAlgorithm(Algorithm.aStar);
+            },
+          ),
           Selector<AlgoVisualizerTools, double>(
             selector: (_, AlgoVisualizerTools model) => model.curSpeed,
             builder: (BuildContext context, double curSpeed, Widget? child) {

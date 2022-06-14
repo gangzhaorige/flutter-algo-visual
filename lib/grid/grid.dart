@@ -104,9 +104,9 @@ class GridWidget extends StatelessWidget {
                           for(Widget? node in list)...[
                             if(node != null) ...[
                               node,
-                            ]
-                          ]
-                        ]
+                            ],
+                          ],
+                        ],
                       ],
                     );
                   }
@@ -151,7 +151,6 @@ class Grid {
   late List<List<NodeModel>> nodes;
   late Painter painter;
   
-
   bool isStartOrEnd(int row, int col) {
     if(row == startRow && col == startCol || row == endRow && col == endCol) {
       return true;

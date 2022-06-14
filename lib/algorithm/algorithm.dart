@@ -17,12 +17,13 @@ enum Algorithm {
   bfs,
   biBfs,
   dijkstra,
+  aStar,
 }
 
 class AlgoVisualizerTools extends ChangeNotifier {
   Brush curBrush = Brush.wall;
   double curSpeed = 15;
-  Algorithm curAlgorithm = Algorithm.dijkstra;
+  Algorithm curAlgorithm = Algorithm.aStar;
   bool isVisualizing = false;
 
   void toggleVisualizing() {
@@ -171,6 +172,52 @@ class Algorithms {
     return list;
   }
 
+  List<NodeModel> aStar() {
+    List<NodeModel> list = <NodeModel>[];
+    PriorityQueue<NodeModel> open = PriorityQueue<NodeModel>();
+    HashSet<NodeModel> closed = HashSet<NodeModel>();
+    NodeModel start = nodes[startRow][startCol];
+    start.distance = 0;
+    start.hCost = calculateHeuristic(start);
+    start.gCost = 0;
+    start.fCost = start.hCost + start.gCost;
+    open.add(nodes[startRow][startCol]);
+    while(open.isNotEmpty) {
+      NodeModel curNode = open.removeFirst();
+      closed.add(curNode);
+      list.add(curNode);
+      if(curNode.row == endRow && curNode.col == endCol) {
+        return list;
+      }
+      for(List<int> direction in directions) {
+        int dx = direction[0] + curNode.row;
+        int dy = direction[1] + curNode.col;
+        if(isOutOfBound(dx, dy) || nodes[dx][dy].type == NodeType.wall || closed.contains(nodes[dx][dy])) {
+          continue;
+        }
+        NodeModel neighbor = nodes[dx][dy];
+        int gCost = curNode.gCost + curNode.weight;
+        int hCost = calculateHeuristic(neighbor);
+        int fCost = gCost + hCost;
+        if(neighbor.fCost > fCost || !open.contains(neighbor)) {
+          neighbor.fCost = fCost;
+          neighbor.gCost = gCost;
+          neighbor.hCost = hCost;
+          neighbor.parent = curNode;
+          if(!open.contains(neighbor)) {
+            open.add(neighbor);
+          }
+        }
+      }
+    }
+    return list;
+  }
+
+  int calculateHeuristic(NodeModel node) {
+    NodeModel endNode = nodes[endRow][endCol];
+    return ((node.row - endNode.row).abs() + (node.col - endNode.col).abs());
+  }
+
   void dfsHelper(List<NodeModel> list, int row, int col) {
     NodeModel curNode = nodes[row][col];
     if(curNode.visited || nodes[endRow][endCol].visited) {
@@ -260,6 +307,9 @@ class Algorithms {
         break;
       case Algorithm.dijkstra:
         orderOfVisit = dijkstra();
+        break;
+      case Algorithm.aStar:
+        orderOfVisit = aStar();
         break;
     }
     return orderOfVisit;
