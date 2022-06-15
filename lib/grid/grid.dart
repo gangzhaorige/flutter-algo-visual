@@ -14,6 +14,7 @@ Map<Algorithm, String> algoDescription = {
   Algorithm.dfs : 'Unweighted. Does not guarantee the shortest path.',
   Algorithm.biBfs : 'Unweighted. Guarantees the shortest path.',
   Algorithm.dijkstra : 'Weighted. Guarantees the shortest path.',
+  Algorithm.aStar : 'Weighted. Guarantees the shortest path using heuristics.',
 };
 
 class GridWidget extends StatelessWidget {

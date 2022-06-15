@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:path_visualizer/main.dart';
 import 'package:collection/collection.dart';
@@ -174,7 +175,7 @@ class Algorithms {
 
   List<NodeModel> aStar() {
     List<NodeModel> list = <NodeModel>[];
-    PriorityQueue<NodeModel> open = PriorityQueue<NodeModel>();
+    List<NodeModel> open = [];
     HashSet<NodeModel> closed = HashSet<NodeModel>();
     NodeModel start = nodes[startRow][startCol];
     start.distance = 0;
@@ -183,7 +184,7 @@ class Algorithms {
     start.fCost = start.hCost + start.gCost;
     open.add(nodes[startRow][startCol]);
     while(open.isNotEmpty) {
-      NodeModel curNode = open.removeFirst();
+      NodeModel curNode = getSmallest(open);
       closed.add(curNode);
       list.add(curNode);
       if(curNode.row == endRow && curNode.col == endCol) {
@@ -211,6 +212,26 @@ class Algorithms {
       }
     }
     return list;
+  }
+
+  NodeModel getSmallest(List<NodeModel> list) {
+    int index = 0;
+    int fn = 10000000;
+    int hCost = 10000000;
+    for(int i = 0; i < list.length; i++) {
+      NodeModel curNode = list[i];
+      if(curNode.fCost < fn) {
+        index = i;
+        fn = curNode.fCost;
+        hCost = curNode.hCost;
+      } else if (curNode.fCost == fn) {
+        if(curNode.hCost < hCost) {
+          index = i;
+          hCost = curNode.hCost;
+        }
+      }
+    }
+    return list.removeAt(index);
   }
 
   int calculateHeuristic(NodeModel node) {
