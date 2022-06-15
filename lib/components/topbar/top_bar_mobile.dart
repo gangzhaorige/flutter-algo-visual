@@ -48,8 +48,9 @@ class TopBarMobile extends StatelessWidget {
               selector: (_, AlgoVisualizerTools model) => model.curBrush,
               builder: (BuildContext context, Brush brush, Widget? child) {
                 return Icon(
-                  Icons.brush,
+                  Icons.palette_outlined,
                   color: brushColor[brush],
+                  size: 30,
                 );
               }
             ),

@@ -236,7 +236,7 @@ class Algorithms {
 
   int calculateHeuristic(NodeModel node) {
     NodeModel endNode = nodes[endRow][endCol];
-    return ((node.row - endNode.row).abs() + (node.col - endNode.col).abs());
+    return ((node.row - endNode.row).abs() + (node.col - endNode.col).abs()) * 10;
   }
 
   void dfsHelper(List<NodeModel> list, int row, int col) {
