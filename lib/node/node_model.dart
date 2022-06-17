@@ -19,7 +19,7 @@ const Map<Brush, Color> brushColor = {
   Brush.weight: Colors.purple,
 };
 
-class NodeModel extends ChangeNotifier implements Comparable {
+class NodeModel extends ChangeNotifier {
   NodeModel({
     Key? key,
     required this.row,
@@ -29,7 +29,6 @@ class NodeModel extends ChangeNotifier implements Comparable {
     required this.type,
     this.weight = 1,
     this.distance = 10000,
-    this.fCost = 0,
     this.gCost = 0,
     this.hCost = 0,
   });
@@ -41,7 +40,6 @@ class NodeModel extends ChangeNotifier implements Comparable {
   bool visited;
   bool visited2;
   NodeType type;
-  int fCost;
   int gCost;
   int hCost;
   NodeModel? parent;
@@ -64,22 +62,4 @@ class NodeModel extends ChangeNotifier implements Comparable {
   bool operator ==(Object other) {
     return other is NodeModel && row == other.row && col == other.col;
   }
-  
-  @override
-  int compareTo(other) {
-    if(fCost > other.fCost) {
-      return 1;
-    } else if(fCost < other.fCost) {
-      return -1;
-    } else {
-      if(hCost < other.hCost) {
-        return - 1;
-      } else if(hCost > other.hCost){
-        return 1;
-      } else {
-        return other.gCost - gCost;
-      }
-    }
-  }
- 
 }

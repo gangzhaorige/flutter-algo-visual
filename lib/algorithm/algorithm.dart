@@ -178,10 +178,9 @@ class Algorithms {
     List<NodeModel> open = [];
     HashSet<NodeModel> closed = HashSet<NodeModel>();
     NodeModel start = nodes[startRow][startCol];
-    start.distance = 0;
     start.hCost = calculateHeuristic(start);
     start.gCost = 0;
-    start.fCost = start.hCost + start.gCost;
+    start.distance = start.hCost + start.gCost;
     open.add(nodes[startRow][startCol]);
     while(open.isNotEmpty) {
       NodeModel curNode = getSmallest(open);
@@ -197,11 +196,11 @@ class Algorithms {
           continue;
         }
         NodeModel neighbor = nodes[dx][dy];
-        int gCost = curNode.gCost + curNode.weight;
+        int gCost = curNode.gCost + neighbor.weight;
         int hCost = calculateHeuristic(neighbor);
-        int fCost = gCost + hCost;
-        if(neighbor.fCost > fCost || !open.contains(neighbor)) {
-          neighbor.fCost = fCost;
+        int distance = gCost + hCost;
+        if(neighbor.distance > distance || !open.contains(neighbor)) {
+          neighbor.distance = distance;
           neighbor.gCost = gCost;
           neighbor.hCost = hCost;
           neighbor.parent = curNode;
@@ -216,15 +215,15 @@ class Algorithms {
 
   NodeModel getSmallest(List<NodeModel> list) {
     int index = 0;
-    int fn = 10000000;
+    int distance = 10000000;
     int hCost = 10000000;
     for(int i = 0; i < list.length; i++) {
       NodeModel curNode = list[i];
-      if(curNode.fCost < fn) {
+      if(curNode.distance < distance) {
         index = i;
-        fn = curNode.fCost;
+        distance = curNode.distance;
         hCost = curNode.hCost;
-      } else if (curNode.fCost == fn) {
+      } else if (curNode.distance == distance) {
         if(curNode.hCost < hCost) {
           index = i;
           hCost = curNode.hCost;
@@ -236,7 +235,7 @@ class Algorithms {
 
   int calculateHeuristic(NodeModel node) {
     NodeModel endNode = nodes[endRow][endCol];
-    return ((node.row - endNode.row).abs() + (node.col - endNode.col).abs()) * 10;
+    return ((node.row - endNode.row).abs() + (node.col - endNode.col).abs());
   }
 
   void dfsHelper(List<NodeModel> list, int row, int col) {
