@@ -12,7 +12,7 @@ const Map<Algorithm, String> algoName = {
   Algorithm.dfs : 'Depth First Search',
   Algorithm.biBfs : 'Bidirectional BFS',
   Algorithm.dijkstra : 'Dijkstra',
-  Algorithm.aStar : 'A*',
+  Algorithm.aStar : 'A* Search',
 };
 
 final AlgoVisualizerTools algo = AlgoVisualizerTools();
@@ -53,7 +53,7 @@ class HomeView extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 15),
                           child: Center(
                             child: Selector<AlgoVisualizerTools, Algorithm>(
-                              selector: (_, AlgoVisualizerTools model) => model.curAlgorithm,
+                              selector: (_, AlgoVisualizerTools model) => model.getCurAlgorithm(),
                               builder: (BuildContext context, Algorithm algo, Widget? child) {
                                 return Text(
                                   '${algoDescription[algo]}',
@@ -86,42 +86,6 @@ class HomeView extends StatelessWidget {
           value: algo,
         );
       },
-    );
-  }
-}
-
-class SecondRoute extends StatelessWidget {
-  const SecondRoute({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Second Route'),
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                Provider.of<AlgoVisualizerTools>(context, listen: false).changeAlgorithm(Algorithm.dfs);
-                Navigator.pop(context);
-              },
-              child: const Text('DFS'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // Navigator.pop(context);
-                Provider.of<AlgoVisualizerTools>(context, listen: false).changeAlgorithm(Algorithm.bfs);
-                Navigator.pop(context);
-              },
-              child: const Text('BFS'),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

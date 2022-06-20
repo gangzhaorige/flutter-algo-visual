@@ -1,5 +1,4 @@
 import 'dart:collection';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:path_visualizer/main.dart';
 import 'package:collection/collection.dart';
@@ -23,9 +22,27 @@ enum Algorithm {
 
 class AlgoVisualizerTools extends ChangeNotifier {
   Brush curBrush = Brush.wall;
-  double curSpeed = 15;
-  Algorithm curAlgorithm = Algorithm.aStar;
+  double curSpeed = 10;
   bool isVisualizing = false;
+
+  List<Algorithm> algos = <Algorithm>[
+    Algorithm.bfs,
+    Algorithm.dfs,
+    Algorithm.biBfs,
+    Algorithm.dijkstra,
+    Algorithm.aStar,
+  ];
+  
+  int selectedAlgorithm = 0;
+
+  Algorithm getCurAlgorithm() {
+    return algos[selectedAlgorithm];
+  }
+
+  void changeAlgorithm(int index) {
+    selectedAlgorithm = index;
+    notifyListeners();
+  }
 
   void toggleVisualizing() {
     isVisualizing = !isVisualizing;
@@ -47,11 +64,6 @@ class AlgoVisualizerTools extends ChangeNotifier {
 
   void changeSpeed(double speed) {
     curSpeed = speed;
-    notifyListeners();
-  }
-
-  void changeAlgorithm(Algorithm algorithm) {
-    curAlgorithm = algorithm;
     notifyListeners();
   }
 }

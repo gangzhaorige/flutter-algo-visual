@@ -74,7 +74,7 @@ class BottomNav extends StatelessWidget {
               );
               AlgoVisualizerTools tool = Provider.of<AlgoVisualizerTools>(context, listen: false);
               algo.visualizeAlgorithm(
-                tool.curAlgorithm,
+                tool.getCurAlgorithm(),
                 tool.curSpeed.toInt(),
                 tool.toggleVisualizing,
               );
@@ -155,7 +155,6 @@ class BottomNav extends StatelessWidget {
               children: [
                 Container(
                   height: 35,
-                  color: Colors.transparent,
                 ),
                 Container(
                   height: 35,
