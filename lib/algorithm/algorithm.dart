@@ -18,7 +18,6 @@ enum Algorithm {
   biBfs,
   dijkstra,
   aStar,
-  biDijkstra,
 }
 
 class AlgoVisualizerTools extends ChangeNotifier {
@@ -31,7 +30,6 @@ class AlgoVisualizerTools extends ChangeNotifier {
     Algorithm.biBfs,
     Algorithm.dijkstra,
     Algorithm.aStar,
-    Algorithm.biDijkstra,
   ];
 
   List<Brush> brushes = <Brush>[
@@ -184,60 +182,6 @@ class Algorithms {
             nodes[dx][dy].distance = curNode.distance + nodes[dx][dy].weight;
             nodes[dx][dy].parent = curNode;
             queue.add(nodes[dx][dy]);
-          }
-        }
-      }
-    }
-    return list;
-  }
-
-  List<NodeModel> bidirectionalDijkstra() {
-    List<NodeModel> list = [];
-    PriorityQueue<NodeModel> queue = PriorityQueue<NodeModel>((NodeModel a, NodeModel b) => a.distance - b.distance);
-    PriorityQueue<NodeModel> queue2 = PriorityQueue<NodeModel>((NodeModel a, NodeModel b) => a.distance2 - b.distance2);
-    nodes[startRow][startCol].distance = 0;
-    nodes[endRow][endCol].distance2 = 0;
-    nodes[startRow][startCol].visited = true;
-    nodes[endRow][endCol].visited2 = true;
-    queue.add(nodes[startRow][startCol]);
-    queue2.add(nodes[endRow][endCol]);
-    
-    while(queue.isNotEmpty && queue2.isNotEmpty) {
-      NodeModel curNode = queue.removeFirst();
-      NodeModel curNode2 = queue2.removeFirst();
-      if(curNode.parent != null && curNode.parent2 != null) {
-        list.add(curNode);
-        return list;
-      }
-      list.add(curNode);
-      list.add(curNode2);
-      for(List<int> direction in directions) {
-        int dx = curNode.row + direction[0];
-        int dy = curNode.col + direction[1];
-        if(isOutOfBound(dx, dy)) {
-          continue;
-        }
-        if(nodes[dx][dy].type != NodeType.wall && !nodes[dx][dy].visited) {
-          if(nodes[dx][dy].distance > curNode.distance + nodes[dx][dy].weight) {
-            nodes[dx][dy].distance = curNode.distance + nodes[dx][dy].weight;
-            nodes[dx][dy].parent = curNode;
-            nodes[dx][dy].visited = true;
-            queue.add(nodes[dx][dy]);
-          }
-        }
-      }
-      for(List<int> direction in directions) {
-        int dx = curNode2.row + direction[0];
-        int dy = curNode2.col + direction[1];
-        if(isOutOfBound(dx, dy)) {
-          continue;
-        }
-        if(nodes[dx][dy].type != NodeType.wall && !nodes[dx][dy].visited2) {
-          if(nodes[dx][dy].distance2 > curNode2.distance2 + nodes[dx][dy].weight) {
-            nodes[dx][dy].distance2 = curNode2.distance2 + nodes[dx][dy].weight;
-            nodes[dx][dy].parent2 = curNode2;
-            nodes[dx][dy].visited2 = true;
-            queue2.add(nodes[dx][dy]);
           }
         }
       }
@@ -403,9 +347,6 @@ class Algorithms {
       case Algorithm.aStar:
         orderOfVisit = aStar();
         break;
-      case Algorithm.biDijkstra:
-        orderOfVisit = bidirectionalDijkstra();
-        break;
     }
     return orderOfVisit;
   }
@@ -414,7 +355,7 @@ class Algorithms {
     toggleVisualizing();
     List<NodeModel> orderOfVisit = executeAlgorithm(curAlgorithm);
     List<NodeModel> pathingOrder;
-    if(curAlgorithm == Algorithm.biBfs || curAlgorithm == Algorithm.biDijkstra) {
+    if(curAlgorithm == Algorithm.biBfs) {
       pathingOrder = getPathFromStartToEndBidirectional(orderOfVisit);
     } else {
       pathingOrder = getPathFromStartToEnd();

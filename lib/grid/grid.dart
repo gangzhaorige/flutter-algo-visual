@@ -14,7 +14,6 @@ Map<Algorithm, String> algoDescription = {
   Algorithm.dfs : 'Unweighted. Does not guarantee the shortest path.',
   Algorithm.biBfs : 'Unweighted. Guarantees the shortest path.',
   Algorithm.dijkstra : 'Weighted. Guarantees the shortest path.',
-  Algorithm.biDijkstra : 'Weighted. Guarantees the shortest path.',
   Algorithm.aStar : 'Weighted. Guarantees the shortest path using heuristics.',
 };
 
@@ -225,7 +224,6 @@ class Grid {
         node.visited = false;
         node.visited2 = false;
         node.distance = 10000;
-        node.distance2 = 10000;
         if(node.type == NodeType.visiting || node.type == NodeType.pathing) {
           node.changeNodeType(NodeType.empty);
         }
