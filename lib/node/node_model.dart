@@ -29,6 +29,7 @@ class NodeModel extends ChangeNotifier {
     required this.type,
     this.weight = 1,
     this.distance = 10000,
+    this.distance2 = 10000,
     this.gCost = 0,
     this.hCost = 0,
   });
@@ -37,6 +38,7 @@ class NodeModel extends ChangeNotifier {
   int col;
   int weight;
   int distance;
+  int distance2;
   bool visited;
   bool visited2;
   NodeType type;

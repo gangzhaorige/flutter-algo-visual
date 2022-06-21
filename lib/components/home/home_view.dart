@@ -13,6 +13,7 @@ const Map<Algorithm, String> algoName = {
   Algorithm.biBfs : 'Bidirectional BFS',
   Algorithm.dijkstra : 'Dijkstra',
   Algorithm.aStar : 'A* Search',
+  Algorithm.biDijkstra : 'Bidirectional Dijkstra',
 };
 
 final AlgoVisualizerTools algo = AlgoVisualizerTools();
