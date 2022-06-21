@@ -91,14 +91,14 @@ class StartPainter extends CustomPainter {
       text: textSpan,
       textDirection: TextDirection.ltr,
     );
-    textPainter.layout(
-      minWidth: unitSize,
-      maxWidth: unitSize
+    textPainter.layout();
+    textPainter.paint(
+      canvas,
+      Offset(
+        (unitSize - textPainter.width) / 2,
+        (unitSize - textPainter.height) / 2,
+      ),
     );
-    textPainter.paint(canvas, Offset(
-      unitSize / 2 - unitSize / 7,
-      unitSize / 4.5,
-    ),);
   }
   
   @override
@@ -200,14 +200,14 @@ class EndPainter extends CustomPainter {
       text: textSpan,
       textDirection: TextDirection.ltr,
     );
-    textPainter.layout(
-      minWidth: unitSize,
-      maxWidth: unitSize
+    textPainter.layout();
+    textPainter.paint(
+      canvas,
+      Offset(
+        (unitSize - textPainter.width) / 2,
+        (unitSize - textPainter.height) / 2,
+      ),
     );
-    textPainter.paint(canvas, Offset(
-      unitSize / 2 - unitSize / 7,
-      unitSize / 4.5,
-    ),);
   }
   
   @override
