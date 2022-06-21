@@ -24,7 +24,7 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('Rebuilding HomeView');
-    const double unitSize = 25; 
+    const double unitSize = 30; 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraint) {
         int rows = constraint.maxWidth ~/ unitSize - 1;

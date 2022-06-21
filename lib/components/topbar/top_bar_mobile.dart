@@ -43,10 +43,10 @@ class TopBarMobile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: GestureDetector(
             onTap: () {
-              Provider.of<AlgoVisualizerTools>(context, listen: false).changeBrush();
+              // Provider.of<AlgoVisualizerTools>(context, listen: false).changeBrush();
             },
             child: Selector<AlgoVisualizerTools, Brush>(
-              selector: (_, AlgoVisualizerTools model) => model.curBrush,
+              selector: (_, AlgoVisualizerTools model) => model.getCurBrush(),
               builder: (BuildContext context, Brush brush, Widget? child) {
                 return Icon(
                   Icons.palette_outlined,

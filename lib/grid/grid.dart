@@ -45,13 +45,13 @@ class GridWidget extends StatelessWidget {
             if(Provider.of<AlgoVisualizerTools>(context, listen: false).isVisualizing) {
               return;
             }
-            grid.onDragUpdate(i, j, Provider.of<AlgoVisualizerTools>(context, listen: false).curBrush);
+            grid.onDragUpdate(i, j, Provider.of<AlgoVisualizerTools>(context, listen: false).getCurBrush());
           },
           onTapNode: (int i, int j) {
             if(Provider.of<AlgoVisualizerTools>(context, listen: false).isVisualizing) {
               return;
             }
-            grid.onTapNode(i, j, Provider.of<AlgoVisualizerTools>(context, listen: false).curBrush);
+            grid.onTapNode(i, j, Provider.of<AlgoVisualizerTools>(context, listen: false).getCurBrush());
           },
           child: Stack(
             children: <Widget>[

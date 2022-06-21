@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'widgets/algorithm_changer.dart';
+import 'widgets/brush_changer.dart';
 import 'widgets/speed_changer.dart';
 
 
@@ -24,6 +25,7 @@ class AppDrawer extends StatelessWidget {
             thickness: 1,
             color: Colors.blue,
           ),
+          BrushChanger(),
         ],
       ),
     );

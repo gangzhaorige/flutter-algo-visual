@@ -22,7 +22,6 @@ enum Algorithm {
 }
 
 class AlgoVisualizerTools extends ChangeNotifier {
-  Brush curBrush = Brush.wall;
   double curSpeed = 10;
   bool isVisualizing = false;
 
@@ -35,7 +34,20 @@ class AlgoVisualizerTools extends ChangeNotifier {
     Algorithm.biDijkstra,
   ];
 
+  List<Brush> brushes = <Brush>[
+    Brush.start,
+    Brush.end,
+    Brush.wall,
+    Brush.weight,
+  ];
+
   int selectedAlgorithm = 0;
+
+  int selectedBrush = 0;
+
+  Brush getCurBrush() {
+    return brushes[selectedBrush];
+  }
 
   Algorithm getCurAlgorithm() {
     return algos[selectedAlgorithm];
@@ -51,16 +63,8 @@ class AlgoVisualizerTools extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeBrush() {
-    if(curBrush == Brush.start) {
-      curBrush = Brush.end;
-    } else if (curBrush == Brush.end) {
-      curBrush = Brush.wall;
-    } else if(curBrush == Brush.wall){
-      curBrush = Brush.weight;
-    } else {
-      curBrush = Brush.start;
-    }
+  void changeBrush(int index) {
+    selectedBrush = index;
     notifyListeners();
   }
 
