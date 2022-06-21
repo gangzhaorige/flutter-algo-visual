@@ -26,6 +26,10 @@ class AppDrawer extends StatelessWidget {
             color: Colors.blue,
           ),
           BrushChanger(),
+          Divider(
+            thickness: 1,
+            color: Colors.blue,
+          ),
         ],
       ),
     );

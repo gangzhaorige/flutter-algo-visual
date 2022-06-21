@@ -26,8 +26,8 @@ class HomeView extends StatelessWidget {
     const double unitSize = 30; 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraint) {
-        int rows = constraint.maxWidth ~/ unitSize - 1;
-        int columns = (constraint.maxHeight - 70 - 55) ~/ unitSize - 4;
+        int rows = constraint.maxWidth ~/ unitSize;
+        int columns = (constraint.maxHeight - 70 - 55 - 50) ~/ unitSize;
         Grid grid = Grid(
           startRow: rows ~/ 2 - rows ~/ 2.5,
           startCol: columns ~/ 2,
@@ -49,8 +49,8 @@ class HomeView extends StatelessWidget {
                   Expanded(
                     child: Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 15),
+                        SizedBox(
+                          height: 50,
                           child: Center(
                             child: Selector<AlgoVisualizerTools, Algorithm>(
                               selector: (_, AlgoVisualizerTools model) => model.getCurAlgorithm(),
