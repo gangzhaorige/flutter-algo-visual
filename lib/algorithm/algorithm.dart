@@ -37,11 +37,24 @@ class AlgoVisualizerTools extends ChangeNotifier {
     Brush.end,
     Brush.wall,
     Brush.weight,
+    Brush.coin,
   ];
 
   int selectedAlgorithm = 0;
 
   int selectedBrush = 0;
+
+  bool hasCoin = false;
+
+  void toggleCoin() {
+    hasCoin = !hasCoin;
+    notifyListeners();
+  }
+
+  void setCoin(bool value) {
+    hasCoin = value;
+    notifyListeners();
+  }
 
   Brush getCurBrush() {
     return brushes[selectedBrush];
@@ -78,6 +91,8 @@ class Algorithms {
   final int startCol;
   final int endRow;
   final int endCol;
+  final int coinRow;
+  final int coinCol;
   final int rows;
   final int columns;
   List<List<NodeModel>> nodes;
@@ -92,9 +107,11 @@ class Algorithms {
     required this.columns,
     required this.nodes,
     required this.grid,
+    required this.coinRow,
+    required this.coinCol,
   });
 
-  List<NodeModel> bfs() {
+  List<NodeModel> bfs(int startRow, int startCol, int endRow, int endCol) {
     List<NodeModel> list = [];
     Queue<NodeModel> queue = Queue<NodeModel>();
     queue.add(nodes[startRow][startCol]);
@@ -114,7 +131,7 @@ class Algorithms {
     return list;
   }
 
-  List<NodeModel> bidirectionalBFS() {
+  List<NodeModel> bidirectionalBFS(int startRow, int startCol, int endRow, int endCol) {
     List<NodeModel> list = [];
     Queue<NodeModel> queue1 = Queue<NodeModel>();
     Queue<NodeModel> queue2 = Queue<NodeModel>();
@@ -153,13 +170,13 @@ class Algorithms {
     return list;
   }
 
-  List<NodeModel> dfs() {
+  List<NodeModel> dfs(int startRow, int startCol, int endRow, int endCol) {
     List<NodeModel> list = [];
-    dfsHelper(list, startRow, startCol);
+    dfsHelper(list, startRow, startCol, endRow, endCol);
     return list;
   }
 
-  List<NodeModel> dijkstra() {
+  List<NodeModel> dijkstra(int startRow, int startCol, int endRow, int endCol) {
     List<NodeModel> list = [];
     PriorityQueue<NodeModel> queue = PriorityQueue<NodeModel>((NodeModel a, NodeModel b) => a.distance - b.distance);
     queue.add(nodes[startRow][startCol]);
@@ -189,12 +206,12 @@ class Algorithms {
     return list;
   }
 
-  List<NodeModel> aStar() {
+  List<NodeModel> aStar(int startRow, int startCol, int endRow, int endCol) {
     List<NodeModel> list = <NodeModel>[];
     List<NodeModel> open = [];
     HashSet<NodeModel> closed = HashSet<NodeModel>();
     NodeModel start = nodes[startRow][startCol];
-    start.hCost = calculateHeuristic(start);
+    start.hCost = calculateHeuristic(start, endRow, endCol);
     start.gCost = 0;
     start.distance = start.hCost + start.gCost;
     open.add(nodes[startRow][startCol]);
@@ -213,7 +230,7 @@ class Algorithms {
         }
         NodeModel neighbor = nodes[dx][dy];
         int gCost = curNode.gCost + neighbor.weight;
-        int hCost = calculateHeuristic(neighbor);
+        int hCost = calculateHeuristic(neighbor, endRow, endCol);
         int distance = gCost + hCost;
         if(neighbor.distance > distance || !open.contains(neighbor)) {
           neighbor.distance = distance;
@@ -249,12 +266,12 @@ class Algorithms {
     return list.removeAt(index);
   }
 
-  int calculateHeuristic(NodeModel node) {
+  int calculateHeuristic(NodeModel node, int endRow, int endCol) {
     NodeModel endNode = nodes[endRow][endCol];
     return ((node.row - endNode.row).abs() + (node.col - endNode.col).abs());
   }
 
-  void dfsHelper(List<NodeModel> list, int row, int col) {
+  void dfsHelper(List<NodeModel> list, int row, int col, int endRow, int endCol) {
     NodeModel curNode = nodes[row][col];
     if(curNode.visited || nodes[endRow][endCol].visited) {
       return;
@@ -269,7 +286,7 @@ class Algorithms {
       int dy = col + direction[1];
       if(!isOutOfBound(dx, dy) && nodes[dx][dy].type != NodeType.wall && !nodes[dx][dy].visited) {
         nodes[dx][dy].parent = curNode;
-        dfsHelper(list, dx, dy);
+        dfsHelper(list, dx, dy, endRow, endCol);
       }
     }
   }
@@ -288,6 +305,13 @@ class Algorithms {
     return false;
   }
 
+  bool isCoin(int row, int col) {
+    if(row == coinRow && col == coinCol) {
+      return true;
+    }
+    return false;
+  }
+
   List<NodeModel> getNeighbors(int row, int col) {
     List<NodeModel> neighbors = [];
     for(List<int> direction in directions) {
@@ -301,7 +325,7 @@ class Algorithms {
     return neighbors;
   }
 
-  List<NodeModel> getPathFromStartToEnd() {
+  List<NodeModel> getPathFromStartToEnd(int endRow, int endCol) {
     List<NodeModel> list = [];
     NodeModel cur = nodes[endRow][endCol];
     while(cur.parent != null) {
@@ -329,63 +353,87 @@ class Algorithms {
     return list;
   }
 
-  List<NodeModel> executeAlgorithm(Algorithm curAlgorithm) {
+  List<NodeModel> executeAlgorithm(Algorithm curAlgorithm, int startRow, int startCol, int endRow, int endCol) {
     List<NodeModel> orderOfVisit;
     switch(curAlgorithm) {
       case Algorithm.dfs:
-        orderOfVisit = dfs();
+        orderOfVisit = dfs(startRow, startCol, endRow, endCol);
         break;
       case Algorithm.bfs:
-        orderOfVisit = bfs();
+        orderOfVisit = bfs(startRow, startCol, endRow, endCol);
         break;
       case Algorithm.biBfs:
-        orderOfVisit = bidirectionalBFS();
+        orderOfVisit = bidirectionalBFS(startRow, startCol, endRow, endCol);
         break;
       case Algorithm.dijkstra:
-        orderOfVisit = dijkstra();
+        orderOfVisit = dijkstra(startRow, startCol, endRow, endCol);
         break;
       case Algorithm.aStar:
-        orderOfVisit = aStar();
+        orderOfVisit = aStar(startRow, startCol, endRow, endCol);
         break;
     }
     return orderOfVisit;
   }
 
-  Future<void> visualizeAlgorithm(Algorithm curAlgorithm, int speed, Function toggleVisualizing) async {
+  Future<void> visualizeAlgorithm(Algorithm curAlgorithm, int speed, Function toggleVisualizing, bool hasCoin) async {
     toggleVisualizing();
-    List<NodeModel> orderOfVisit = executeAlgorithm(curAlgorithm);
-    List<NodeModel> pathingOrder;
-    if(curAlgorithm == Algorithm.biBfs) {
-      pathingOrder = getPathFromStartToEndBidirectional(orderOfVisit);
-    } else {
-      pathingOrder = getPathFromStartToEnd();
+    int endRow = this.endRow;
+    int endCol = this.endCol;
+    if(hasCoin) {
+      endRow = coinRow;
+      endCol = coinCol;
     }
-    await visualizeVisitedNodes(orderOfVisit, speed).then((_) async {
-      await visualizePath(pathingOrder, speed, orderOfVisit.length).then((_) async {
-        await Future<dynamic>.delayed(Duration(milliseconds: orderOfVisit.length * speed + pathingOrder.length * speed + 500)).then((_) {
-          toggleVisualizing();
+    List<NodeModel> orderOfVisit = executeAlgorithm(curAlgorithm, startRow, startCol, endRow, endCol);
+    List<NodeModel> pathingOrder = curAlgorithm == Algorithm.biBfs ? getPathFromStartToEndBidirectional(orderOfVisit) : getPathFromStartToEnd(endRow, endCol);
+    await visualizeVisitedNodes(orderOfVisit, speed, Colors.blue, hasCoin).then((_) async {
+      await visualizePath(pathingOrder, speed, orderOfVisit.length, Colors.yellow, hasCoin).then((_) async {
+        await Future<dynamic>.delayed(Duration(milliseconds: orderOfVisit.length * speed + pathingOrder.length * speed)).then((_) async {
+          if(!hasCoin) {
+            toggleVisualizing();
+          } else {
+            grid.resetPath(false);
+            orderOfVisit = executeAlgorithm(curAlgorithm, coinRow, coinCol, this.endRow, this.endCol);
+            pathingOrder = curAlgorithm == Algorithm.biBfs ? getPathFromStartToEndBidirectional(orderOfVisit) : getPathFromStartToEnd(this.endRow, this.endCol);
+            // pathingOrder = getPathFromStartToEnd(this.endRow, this.endCol);
+            await visualizeVisitedNodes(orderOfVisit, speed, Colors.redAccent, hasCoin).then((_) async {
+              Color color = curAlgorithm == Algorithm.dfs ? Colors.green : Colors.yellow;
+              await visualizePath(pathingOrder, speed, orderOfVisit.length, color, hasCoin).then((_) async {
+                await Future<dynamic>.delayed(Duration(milliseconds: orderOfVisit.length * speed + pathingOrder.length * speed + 500)).then((_) async {
+                  toggleVisualizing();
+                });
+              });
+            });
+          }
         });
       });
     });
   }
 
-  Future<void> visualizeVisitedNodes(List<NodeModel> orderOfVisit, int speed) async {
+  Future<void> visualizeVisitedNodes(List<NodeModel> orderOfVisit, int speed, Color color, bool hasCoin) async {
     for(int i = 0; i < orderOfVisit.length; i++) {
+      int row = orderOfVisit[i].row;
+      int col = orderOfVisit[i].col;
       Future<dynamic>.delayed(Duration(milliseconds: speed * i)).then((_) {
-        if(!isStartOrEnd(orderOfVisit[i].row, orderOfVisit[i].col)) {
-          grid.painter.renderVisitedNode(orderOfVisit[i].row, orderOfVisit[i].col, grid.unitSize);
+        if(!isStartOrEnd(row, col)) {
+          if(hasCoin && isCoin(row, col)){
+            return;
+          }
+          grid.painter.renderVisitedNode(row, col, grid.unitSize, color);
         }
       });
     }
   }
-  Future<void> visualizePath(List<NodeModel> pathingOrder, int speed, int delay) async {
+  Future<void> visualizePath(List<NodeModel> pathingOrder, int speed, int delay, Color color, bool hasCoin) async {
     Future<dynamic>.delayed(Duration(milliseconds: speed * delay)).then((_) {
       int index = 0;
       for(int j = pathingOrder.length - 1; j >= 0; j--) {
         NodeModel cur = pathingOrder[j];
         Future<dynamic>.delayed(Duration(milliseconds: index * speed)).then((_) {
           if(!isStartOrEnd(cur.row, cur.col)) {
-            grid.painter.renderPathNode(cur.row, cur.col, grid.unitSize);
+            if(hasCoin && isCoin(cur.row, cur.col)){
+              return;
+            }
+            grid.painter.renderPathNode(cur.row, cur.col, grid.unitSize, color);
           }
         });
         index++;

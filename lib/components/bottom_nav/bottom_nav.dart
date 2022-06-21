@@ -61,7 +61,7 @@ class BottomNav extends StatelessWidget {
         builder: (BuildContext context, AlgoVisualizerTools tool, Widget? child) {
           return GestureDetector(
             onTap: tool.isVisualizing ? null : () {
-              grid.resetPath();
+              grid.resetPath(true);
               Algorithms algo = Algorithms(
                 columns: grid.columns,
                 endCol: grid.endCol,
@@ -70,6 +70,8 @@ class BottomNav extends StatelessWidget {
                 rows: grid.rows,
                 startCol: grid.startCol,
                 startRow: grid.startRow,
+                coinRow: grid.coinRow,
+                coinCol: grid.coinCol,
                 grid: grid,
               );
               AlgoVisualizerTools tool = Provider.of<AlgoVisualizerTools>(context, listen: false);
@@ -77,6 +79,7 @@ class BottomNav extends StatelessWidget {
                 tool.getCurAlgorithm(),
                 tool.curSpeed.toInt(),
                 tool.toggleVisualizing,
+                tool.hasCoin,
               );
             },
             child: Container(
@@ -103,7 +106,7 @@ class BottomNav extends StatelessWidget {
       Consumer<AlgoVisualizerTools>(
         builder: (BuildContext context, AlgoVisualizerTools tool, Widget? child) {
           return GestureDetector(
-            onTap: tool.isVisualizing ? null : () => grid.resetPath(),
+            onTap: tool.isVisualizing ? null : () => grid.resetPath(true),
             child: Container(
               height: 50,
               width: 50,

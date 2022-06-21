@@ -21,6 +21,7 @@ enum Brush {
   weight,
   start,
   end,
+  coin,
 }
 
 class MyApp extends StatelessWidget {

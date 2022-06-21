@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../node/coin_painter.dart';
 import '../node/path_painter.dart';
 import '../node/start_end_painter.dart';
 import '../node/visited_painter.dart';
@@ -78,12 +79,14 @@ class Painter extends ChangeNotifier {
   late List<List<Widget?>> nodePainter;
   Map<String, Widget> visitedNodePainter = {};
   Map<String, Widget> pathNodePainter = {};
+  Widget? coinPainter;
   final double unitSize;
 
-  Painter(int startRow, int startCol, int endRow, int endCol, int rows, int columns, this.unitSize) {
+  Painter(int startRow, int startCol, int endRow, int endCol, int rows, int columns, this.unitSize, int coinRow, int coinCol) {
     nodePainter = List<List<Widget?>>.generate(rows, (int row) => List<Widget?>.generate(columns, (int col) => null));
     nodePainter[startRow][startCol] = NodeLocation(UniqueKey(), startRow, startCol, unitSize, StartPaintWidget(unitSize: unitSize));
     nodePainter[endRow][endCol] = NodeLocation(UniqueKey(), endRow, endCol, unitSize, EndPaintWidget(unitSize: unitSize));
+    coinPainter = NodeLocation(UniqueKey(), coinRow, coinCol, unitSize, CoinPaintWidget(unitSize: unitSize));
   }
 
   void changeToStartWidget(int row, int col, int prevRow, int prevCol) {
@@ -98,12 +101,17 @@ class Painter extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeToWallWidget(int row, int col, ) {
+  void changeToCoinWidget(int row, int col, int prevRow, int prevCol) {
+    coinPainter = NodeLocation(UniqueKey(), row, col, unitSize, CoinPaintWidget(unitSize: unitSize));
+    notifyListeners();
+  }
+
+  void changeToWallWidget(int row, int col) {
     nodePainter[row][col] = NodeLocation(UniqueKey(), row, col, unitSize, WallPaintWidget(unitSize: unitSize));
     notifyListeners();
   }
 
-  void changeToWeightWidget(int row, int col, ) {
+  void changeToWeightWidget(int row, int col) {
     nodePainter[row][col] = NodeLocation(UniqueKey(), row, col, unitSize, WeightPaintWidget(unitSize: unitSize));
     notifyListeners();
   }
@@ -113,7 +121,7 @@ class Painter extends ChangeNotifier {
     notifyListeners();
   }
 
-  void renderVisitedNode(int row, int column, double unitSize) {
+  void renderVisitedNode(int row, int column, double unitSize, Color color) {
     visitedNodePainter['$row $column'] = Positioned(
       key: UniqueKey(),
       left: row * (unitSize.toDouble()),
@@ -121,13 +129,14 @@ class Painter extends ChangeNotifier {
       child: RepaintBoundary(
         child: VisitedNodePaintWidget(
           unitSize: unitSize,
+          color: color,
         ),
       )
     );
     notifyListeners();
   }
 
-  void renderPathNode(int row, int column, double unitSize) {
+  void renderPathNode(int row, int column, double unitSize, Color color) {
     pathNodePainter['$row $column'] = Positioned(
       key: UniqueKey(),
       left: row * (unitSize.toDouble()),
@@ -135,6 +144,7 @@ class Painter extends ChangeNotifier {
       child: RepaintBoundary(
         child: PathNodePaintWidget(
           unitSize: unitSize,
+          color: color,
         ),
       )
     );

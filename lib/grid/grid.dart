@@ -44,13 +44,13 @@ class GridWidget extends StatelessWidget {
             if(Provider.of<AlgoVisualizerTools>(context, listen: false).isVisualizing) {
               return;
             }
-            grid.onDragUpdate(i, j, Provider.of<AlgoVisualizerTools>(context, listen: false).getCurBrush());
+            grid.onDragUpdate(i, j, Provider.of<AlgoVisualizerTools>(context, listen: false).getCurBrush(), Provider.of<AlgoVisualizerTools>(context, listen: false).toggleCoin);
           },
           onTapNode: (int i, int j) {
             if(Provider.of<AlgoVisualizerTools>(context, listen: false).isVisualizing) {
               return;
             }
-            grid.onTapNode(i, j, Provider.of<AlgoVisualizerTools>(context, listen: false).getCurBrush());
+            grid.onTapNode(i, j, Provider.of<AlgoVisualizerTools>(context, listen: false).getCurBrush(), Provider.of<AlgoVisualizerTools>(context, listen: false).toggleCoin);
           },
           child: Stack(
             children: <Widget>[
@@ -113,6 +113,27 @@ class GridWidget extends StatelessWidget {
                   }
                 ),
               ),
+              Selector<AlgoVisualizerTools, bool>(
+                selector: (_, AlgoVisualizerTools model) => model.hasCoin,
+                builder: (BuildContext context, bool hasCoin, Widget? child) {
+                  return ChangeNotifierProvider<Painter>.value(
+                    value: grid.painter,
+                    child: Selector<Painter, Widget?>(
+                      shouldRebuild: (Widget? a, Widget? b) => true,
+                      selector: (_, Painter model) => model.coinPainter,
+                      builder: (BuildContext context, Widget? coin, Widget? child) {
+                        return Stack(
+                          children: <Widget>[
+                            if(hasCoin)...[
+                              coin!
+                            ]
+                          ],
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),
@@ -130,14 +151,16 @@ class Grid {
     required this.endCol,
     required this.rows,
     required this.columns,
-    required this.unitSize
+    required this.unitSize,
   }) {
     nodes = List<List<NodeModel>>.generate(rows, (int row) => List<NodeModel>.generate(columns, (int col) => NodeModel(row: row, col: col, type: NodeType.empty)));
     nodes[startRow][startCol].type = NodeType.start;
     nodes[endRow][endCol].type = NodeType.end;
     width = rows * unitSize;
     height = columns * unitSize;
-    painter = Painter(startRow, startCol, endRow, endCol, rows, columns, unitSize);
+    coinRow = (startRow + endRow) ~/ 2;
+    coinCol = (startCol + endCol) ~/ 2;
+    painter = Painter(startRow, startCol, endRow, endCol, rows, columns, unitSize, coinRow, coinCol);
   }
 
   int startRow;
@@ -145,6 +168,8 @@ class Grid {
   int endRow;
   int endCol;
   double unitSize;
+  late int coinRow;
+  late int coinCol;
   late double width;
   late double height;
   late int rows;
@@ -159,7 +184,7 @@ class Grid {
     return false;
   }
 
-  void onTapNode(int row, int col, Brush brush) {
+  void onTapNode(int row, int col, Brush brush, Function toggleCoin) {
     if(isStartOrEnd(row, col)) {
       return;
     }
@@ -204,6 +229,17 @@ class Grid {
         endRow = row;
         endCol = col;
         break;
+      case Brush.coin:
+        toggleCoin();
+        NodeModel prevStartNode = nodes[coinRow][coinCol];
+        prevStartNode.changeNodeType(NodeType.empty);
+        curNode.weight = 1;
+        curNode.changeNodeType(NodeType.coin);
+        painter.removeWidget(row, col);
+        painter.changeToCoinWidget(row, col, coinRow, coinCol);
+        coinRow = row;
+        coinCol = col;
+        break;
     }
   }
 
@@ -212,11 +248,11 @@ class Grid {
     node.changeNodeType(type);
   }
 
-  void onDragUpdate(int row, int col, Brush brush) {
-    onTapNode(row, col, brush);
+  void onDragUpdate(int row, int col, Brush brush, Function func) {
+    onTapNode(row, col, brush, func);
   }
 
-  void resetPath() {
+  void resetPath(bool resetVisual) {
     for(List<NodeModel> list in nodes) {
       for(NodeModel node in list) {
         node.parent = null;
@@ -229,7 +265,9 @@ class Grid {
         }
       }
     }
-    painter.removePathAndVisited();
+    if(resetVisual) {
+      painter.removePathAndVisited();
+    }
   }
 
   void resetWalls() {
@@ -245,7 +283,7 @@ class Grid {
   }
 
   void reset() {
-    resetPath();
+    resetPath(true);
     resetWalls();
   }
 

@@ -8,11 +8,11 @@ import '../drawer_child.dart';
 class AlgoSelected extends StatelessWidget {
   const AlgoSelected({
     Key? key,
-    required this.algoName,
+    required this.algo,
     required this.index,
   }) : super(key: key);
 
-  final String algoName;
+  final Algorithm algo;
   final int index;
 
   @override
@@ -23,7 +23,9 @@ class AlgoSelected extends StatelessWidget {
         horizontal: 20,
       ),
       child: InkWell(
-        onTap: () => Provider.of<AlgoVisualizerTools>(context, listen: false).changeAlgorithm(index),
+        onTap: () {
+          Provider.of<AlgoVisualizerTools>(context, listen: false).changeAlgorithm(index);
+        },
         child: Padding(
           padding: const EdgeInsets.symmetric(
             vertical: 5,
@@ -32,7 +34,7 @@ class AlgoSelected extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(algoName),
+              Text(algoName[algo] as String),
               Selector<AlgoVisualizerTools, int>(
                 selector: (_, AlgoVisualizerTools model) => model.selectedAlgorithm,
                 builder: (BuildContext context, int selectedIndex, Widget? child) {
@@ -66,7 +68,10 @@ class AlgorithmChanger extends StatelessWidget {
           return Column(
             children: <Widget>[
               for(int i = 0; i < algo.length; i++) ...[
-                AlgoSelected(algoName: algoName[algo[i]] as String, index: i),
+                AlgoSelected(
+                  algo: algo[i],
+                  index: i,
+                ),
                 if(i != algo.length - 1) ...[
                   const Divider(
                     height: 1,

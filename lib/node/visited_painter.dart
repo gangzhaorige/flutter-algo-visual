@@ -4,10 +4,12 @@ class VisitedNodePainter extends CustomPainter {
   VisitedNodePainter({
     required this.unitSize,
     required this.fraction,
+    required this.color,
   });
 
   final double unitSize;
   final double fraction;
+  final Color color;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -17,7 +19,7 @@ class VisitedNodePainter extends CustomPainter {
       height: fraction * (unitSize),
     );
     Paint paint = Paint();
-    paint.color = Colors.orange;
+    paint.color = color;
     canvas.drawRect(rectl, paint);
   }
   
@@ -34,9 +36,11 @@ class VisitedNodePaintWidget extends StatefulWidget {
   const VisitedNodePaintWidget({
     Key? key,
     required this.unitSize,
+    required this.color,
   }) : super(key:key);
 
   final double unitSize;
+  final Color color;
 
   @override
   State<VisitedNodePaintWidget> createState() => _VisitedNodePaintWidgetState();
@@ -74,6 +78,7 @@ class _VisitedNodePaintWidgetState extends State<VisitedNodePaintWidget> with Si
       painter: VisitedNodePainter(
         unitSize: widget.unitSize,
         fraction: fraction, 
+        color: widget.color
       ),
     );
   }

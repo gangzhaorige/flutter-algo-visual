@@ -4,6 +4,7 @@ import 'package:path_visualizer/node/weight_painter.dart';
 import 'package:provider/provider.dart';
 
 import '../../../algorithm/algorithm.dart';
+import '../../../node/coin_painter.dart';
 import '../../../node/start_end_painter.dart';
 import '../../../node/wall_painter.dart';
 import '../drawer_child.dart';
@@ -12,7 +13,8 @@ const Map<Brush, String> brushName = {
   Brush.start : 'Source',
   Brush.end : 'Destination',
   Brush.wall : 'Wall',
-  Brush.weight : 'Obstacle'
+  Brush.weight : 'Obstacle',
+  Brush.coin : 'Golden Coin'
 };
 
 final Map<Brush, CustomPainter> brushWidget = {
@@ -26,6 +28,9 @@ final Map<Brush, CustomPainter> brushWidget = {
     unitSize: 20, fraction: 1
   ),
   Brush.wall : WallPainter(
+    unitSize: 20, fraction: 1
+  ),
+  Brush.coin : CoinPainter(
     unitSize: 20, fraction: 1
   ),
 };
@@ -48,7 +53,12 @@ class BrushSelected extends StatelessWidget {
         horizontal: 20,
       ),
       child: InkWell(
-        onTap: () => Provider.of<AlgoVisualizerTools>(context, listen: false).changeBrush(index),
+        onTap: () {
+          Provider.of<AlgoVisualizerTools>(context, listen: false).changeBrush(index);
+          if(brush == Brush.coin) {
+            Provider.of<AlgoVisualizerTools>(context, listen: false).setCoin(true);
+          }
+        },
         child: Padding(
           padding: const EdgeInsets.symmetric(
             vertical: 5,

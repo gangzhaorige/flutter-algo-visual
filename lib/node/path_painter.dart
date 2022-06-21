@@ -4,11 +4,12 @@ class PathNodePainter extends CustomPainter {
   PathNodePainter({
     required this.unitSize,
     required this.fraction,
+    required this.color,
   });
 
   final double unitSize;
   final double fraction;
-
+  final Color color;
   @override
   void paint(Canvas canvas, Size size) {
     Rect rectl = Rect.fromCenter(
@@ -17,7 +18,7 @@ class PathNodePainter extends CustomPainter {
       height: fraction * (unitSize),
     );
     Paint paint = Paint();
-    paint.color = const Color.fromARGB(255, 153, 0, 255);
+    paint.color = color;
     canvas.drawRect(rectl, paint);
   }
   
@@ -34,9 +35,11 @@ class PathNodePaintWidget extends StatefulWidget {
   const PathNodePaintWidget({
     Key? key,
     required this.unitSize,
+    required this.color,
   }) : super(key:key);
 
   final double unitSize;
+  final Color color;
 
   @override
   State<PathNodePaintWidget> createState() => _PathNodePaintWidgetState();
@@ -74,6 +77,7 @@ class _PathNodePaintWidgetState extends State<PathNodePaintWidget> with SingleTi
       painter: PathNodePainter(
         unitSize: widget.unitSize,
         fraction: fraction, 
+        color: widget.color,
       ),
     );
   }

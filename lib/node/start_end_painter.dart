@@ -179,7 +179,7 @@ class EndPainter extends CustomPainter {
 
     Paint paint = Paint();
     paint.style = PaintingStyle.stroke;
-    paint.color = Colors.orange;
+    paint.color = Colors.blue;
     paint.strokeWidth = 2;
     canvas.drawCircle(
       Offset(
@@ -192,7 +192,7 @@ class EndPainter extends CustomPainter {
     const TextSpan textSpan = TextSpan(
       text: 'D',
       style: TextStyle(
-        color: Colors.orange,
+        color: Colors.blue,
         fontSize: 12
       )
     );

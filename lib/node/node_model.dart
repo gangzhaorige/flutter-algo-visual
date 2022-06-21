@@ -10,13 +10,14 @@ enum NodeType {
   weight,
   visiting,
   pathing,
+  coin,
 }
 
 const Map<Brush, Color> brushColor = {
   Brush.wall: Colors.black,
   Brush.start: Colors.greenAccent,
   Brush.end: Colors.orange,
-  Brush.weight: Colors.purple,
+  Brush.weight: Colors.pink,
 };
 
 class NodeModel extends ChangeNotifier {
