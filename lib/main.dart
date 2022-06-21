@@ -1,17 +1,18 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_visualizer/components/home/home_view.dart';
-import 'package:statsfl/statsfl.dart';
 
 void main() {
-  // debugRepaintRainbowEnabled = true;
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
-    (value) => runApp(
-      StatsFl(
-        child: const MyApp(),
-      )
-    )
+  SystemChrome.setPreferredOrientations(
+    <DeviceOrientation>[
+      DeviceOrientation.portraitUp,
+    ],
+  ).then(
+    (_) => runApp(
+      const MyApp(),
+    ),
   );
 }
 
@@ -20,6 +21,7 @@ enum Brush {
   weight,
   start,
   end,
+  coin,
 }
 
 class MyApp extends StatelessWidget {
@@ -27,7 +29,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('Rebuilding entire App');
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      scrollBehavior: const MaterialScrollBehavior().copyWith(
+        dragDevices: {
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.touch,
+          PointerDeviceKind.stylus,
+          PointerDeviceKind.unknown,
+        },
+      ),
       home: Container(
         color: Colors.blue,
         child: const SafeArea(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'node_painter.dart';
+import '../main.dart';
 
 enum NodeType {
   empty,
@@ -10,16 +10,14 @@ enum NodeType {
   weight,
   visiting,
   pathing,
+  coin,
 }
 
-const Map<NodeType, Color> nodeColor = {
-  NodeType.empty: Colors.white,
-  NodeType.wall: Colors.black,
-  NodeType.end: Colors.red,
-  NodeType.start: Colors.green,
-  NodeType.visiting: Colors.orangeAccent,
-  NodeType.pathing: Colors.yellow,
-  NodeType.weight: Colors.blue,
+const Map<Brush, Color> brushColor = {
+  Brush.wall: Colors.black,
+  Brush.start: Colors.greenAccent,
+  Brush.end: Colors.orange,
+  Brush.weight: Colors.pink,
 };
 
 class NodeModel extends ChangeNotifier {
@@ -28,47 +26,41 @@ class NodeModel extends ChangeNotifier {
     required this.row,
     required this.col,
     this.visited = false,
+    this.visited2 = false,
     required this.type,
+    this.weight = 1,
+    this.distance = 10000,
+    this.gCost = 0,
+    this.hCost = 0,
   });
 
   int row;
   int col;
+  int weight;
+  int distance;
   bool visited;
+  bool visited2;
   NodeType type;
+  int gCost;
+  int hCost;
   NodeModel? parent;
+  NodeModel? parent2;
 
   void changeNodeType(NodeType type) {
     this.type = type;
     notifyListeners();
   }
-}
 
-class Painter extends ChangeNotifier {
-  Map<String, Widget> map = {};
-      
-  void removeWall(int row, int column) {
-    map.remove('$row $column');
-    notifyListeners();
+  @override
+  String toString() {
+    return '$row $col';
   }
 
-  void addNodeWiget(int row, int column, double unitSize, Function(int i, int j, NodeType type) addNode, NodeType type) {
-    map['$row $column'] = Positioned(
-      key: UniqueKey(),
-      left: row * (unitSize.toDouble()),
-      top: column * (unitSize.toDouble()),
-      child: RepaintBoundary(
-        child: WallNodePaintWidget(
-          type: type,
-          unitSize: unitSize,
-          row: row,
-          column: column,
-          callback: (int row, int column, NodeType type) {
-            removeWall(row, column);
-            addNode(row, column, type);
-          },
-        ),
-      )
-    );
-    notifyListeners();
+  @override
+  int get hashCode => Object.hash(row, col);
+  
+  @override
+  bool operator ==(Object other) {
+    return other is NodeModel && row == other.row && col == other.col;
   }
 }

@@ -1,14 +1,21 @@
-import 'dart:collection';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../main.dart';
 import '../../node/node_model.dart';
-import '../../node/node_painter.dart';
 import '../algorithm/algorithm.dart';
 import 'grid_gesture.dart';
 import 'grid_painter.dart';
+
+Map<Algorithm, String> algoDescription = {
+  Algorithm.bfs : 'Unweighted. Guarantees the shortest path.',
+  Algorithm.dfs : 'Unweighted. Does not guarantee the shortest path.',
+  Algorithm.biBfs : 'Unweighted. Guarantees the shortest path.',
+  Algorithm.dijkstra : 'Weighted. Guarantees the shortest path.',
+  Algorithm.aStar : 'Weighted. Guarantees the shortest path using heuristics.',
+};
 
 class GridWidget extends StatelessWidget {
 
@@ -21,6 +28,7 @@ class GridWidget extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+    print('Rebuilding Grid Widget');
     return FittedBox(
       fit: BoxFit.fill,
       child: SizedBox(
@@ -33,13 +41,19 @@ class GridWidget extends StatelessWidget {
           columns: grid.columns,
           height: grid.height,
           onDragNode: (int i, int j, int newI, int newJ) {
-            grid.onDragUpdate(i, j, Provider.of<AlgoVisualizerTools>(context, listen: false).curBrush);
+            if(Provider.of<AlgoVisualizerTools>(context, listen: false).isVisualizing) {
+              return;
+            }
+            grid.onDragUpdate(i, j, Provider.of<AlgoVisualizerTools>(context, listen: false).getCurBrush(), Provider.of<AlgoVisualizerTools>(context, listen: false).toggleCoin);
           },
           onTapNode: (int i, int j) {
-            grid.onTapNode(i, j, Provider.of<AlgoVisualizerTools>(context, listen: false).curBrush);
+            if(Provider.of<AlgoVisualizerTools>(context, listen: false).isVisualizing) {
+              return;
+            }
+            grid.onTapNode(i, j, Provider.of<AlgoVisualizerTools>(context, listen: false).getCurBrush(), Provider.of<AlgoVisualizerTools>(context, listen: false).toggleCoin);
           },
           child: Stack(
-            children: [
+            children: <Widget>[
               StaticGrid(
                 columns: grid.columns,
                 height: grid.height,
@@ -47,24 +61,78 @@ class GridWidget extends StatelessWidget {
                 unitSize: grid.unitSize,
                 width: grid.width,
               ),
-              StaticNodeGrid(
-                grid: grid,
-              ),
-              ChangeNotifierProvider.value(
-                value: grid.walls,
+              ChangeNotifierProvider<Painter>.value(
+                value: grid.painter,
                 child: Selector<Painter, Map<String,Widget>>(
-                  shouldRebuild: (a,b) => true,
-                  selector: (_, model) => model.map,
-                    builder: (context, walls, child) {
+                  shouldRebuild: (Map<String, Widget> a, Map<String, Widget> b) => true,
+                  selector: (_, Painter model) => model.visitedNodePainter,
+                  builder: (BuildContext context, Map<String, Widget> orders, Widget? child) {
                     return Stack(
-                      children: [
-                        for(Widget wall in walls.values) ...[
-                          wall,
+                      children: <Widget>[
+                        for(Widget order in orders.values)...<Widget>[
+                          order,
                         ]
                       ],
                     );
                   }
                 ),
+              ),
+              ChangeNotifierProvider<Painter>.value(
+                value: grid.painter,
+                child: Selector<Painter, Map<String,Widget>>(
+                  shouldRebuild: (Map<String, Widget> a, Map<String, Widget> b) => true,
+                  selector: (_, Painter model) => model.pathNodePainter,
+                  builder: (BuildContext context, Map<String, Widget> paths, Widget? child) {
+                    return Stack(
+                      children: <Widget>[
+                        for(Widget path in paths.values)...<Widget>[
+                          path,
+                        ]
+                      ],
+                    );
+                  }
+                ),
+              ),
+              ChangeNotifierProvider<Painter>.value(
+                value: grid.painter,
+                child: Selector<Painter, List<List<Widget?>> >(
+                  shouldRebuild: (List<List<Widget?>> a, List<List<Widget?>> b) => true,
+                  selector: (_, Painter model) => model.nodePainter,
+                  builder: (BuildContext context, List<List<Widget?>> nodes, Widget? child) {
+                    return Stack(
+                      children: [
+                        for(List<Widget?> list in nodes) ... [
+                          for(Widget? node in list)...[
+                            if(node != null) ...[
+                              node,
+                            ],
+                          ],
+                        ],
+                      ],
+                    );
+                  }
+                ),
+              ),
+              Selector<AlgoVisualizerTools, bool>(
+                selector: (_, AlgoVisualizerTools model) => model.hasCoin,
+                builder: (BuildContext context, bool hasCoin, Widget? child) {
+                  return ChangeNotifierProvider<Painter>.value(
+                    value: grid.painter,
+                    child: Selector<Painter, Widget?>(
+                      shouldRebuild: (Widget? a, Widget? b) => true,
+                      selector: (_, Painter model) => model.coinPainter,
+                      builder: (BuildContext context, Widget? coin, Widget? child) {
+                        return Stack(
+                          children: <Widget>[
+                            if(hasCoin)...[
+                              coin!
+                            ]
+                          ],
+                        );
+                      },
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -74,7 +142,8 @@ class GridWidget extends StatelessWidget {
   }
 }
 
-class Grid extends ChangeNotifier{
+class Grid {
+  
   Grid({
     required this.startRow,
     required this.startCol,
@@ -82,14 +151,16 @@ class Grid extends ChangeNotifier{
     required this.endCol,
     required this.rows,
     required this.columns,
-    required this.unitSize
+    required this.unitSize,
   }) {
-    nodes = List.generate(rows, (row) => List.generate(columns, (col) => NodeModel(row: row, col: col, type: NodeType.empty)));
+    nodes = List<List<NodeModel>>.generate(rows, (int row) => List<NodeModel>.generate(columns, (int col) => NodeModel(row: row, col: col, type: NodeType.empty)));
     nodes[startRow][startCol].type = NodeType.start;
     nodes[endRow][endCol].type = NodeType.end;
     width = rows * unitSize;
     height = columns * unitSize;
-    walls = Painter();
+    coinRow = (startRow + endRow) ~/ 2;
+    coinCol = (startCol + endCol) ~/ 2;
+    painter = Painter(startRow, startCol, endRow, endCol, rows, columns, unitSize, coinRow, coinCol);
   }
 
   int startRow;
@@ -97,13 +168,15 @@ class Grid extends ChangeNotifier{
   int endRow;
   int endCol;
   double unitSize;
+  late int coinRow;
+  late int coinCol;
   late double width;
   late double height;
   late int rows;
   late int columns;
   late List<List<NodeModel>> nodes;
-  late Painter walls;
-
+  late Painter painter;
+  
   bool isStartOrEnd(int row, int col) {
     if(row == startRow && col == startCol || row == endRow && col == endCol) {
       return true;
@@ -111,7 +184,7 @@ class Grid extends ChangeNotifier{
     return false;
   }
 
-  void onTapNode(int row, int col, Brush brush) {
+  void onTapNode(int row, int col, Brush brush, Function toggleCoin) {
     if(isStartOrEnd(row, col)) {
       return;
     }
@@ -120,26 +193,52 @@ class Grid extends ChangeNotifier{
       case Brush.wall:
         if(curNode.type == NodeType.wall) {
           curNode.changeNodeType(NodeType.empty);
+          painter.removeWidget(row, col);
         } else {
-          walls.addNodeWiget(row, col, unitSize, createNode, NodeType.wall);
+          curNode.changeNodeType(NodeType.wall);
+          painter.changeToWallWidget(row, col);
         }
+        curNode.weight = 1;
         break;
       case Brush.weight:
-        // TODO: Handle this case.
+        if(curNode.type == NodeType.weight) {
+          curNode.weight = 1;
+          curNode.changeNodeType(NodeType.empty);
+          painter.removeWidget(row, col);
+        } else {
+          curNode.weight = 5;
+          curNode.changeNodeType(NodeType.weight);
+          painter.changeToWeightWidget(row, col);
+        }
         break;
       case Brush.start:
         NodeModel prevStartNode = nodes[startRow][startCol];
         prevStartNode.changeNodeType(NodeType.empty);
+        curNode.weight = 1;
+        curNode.changeNodeType(NodeType.start);
+        painter.changeToStartWidget(row, col, startRow, startCol);
         startRow = row;
         startCol = col;
-        curNode.changeNodeType(NodeType.start);
         break;
       case Brush.end:
         NodeModel prevStartNode = nodes[endRow][endCol];
         prevStartNode.changeNodeType(NodeType.empty);
+        curNode.weight = 1;
+        curNode.changeNodeType(NodeType.end);
+        painter.changeToEndWidget(row, col, endRow, endCol);
         endRow = row;
         endCol = col;
-        curNode.changeNodeType(NodeType.end);
+        break;
+      case Brush.coin:
+        toggleCoin();
+        NodeModel prevStartNode = nodes[coinRow][coinCol];
+        prevStartNode.changeNodeType(NodeType.empty);
+        curNode.weight = 1;
+        curNode.changeNodeType(NodeType.coin);
+        painter.removeWidget(row, col);
+        painter.changeToCoinWidget(row, col, coinRow, coinCol);
+        coinRow = row;
+        coinCol = col;
         break;
     }
   }
@@ -149,52 +248,63 @@ class Grid extends ChangeNotifier{
     node.changeNodeType(type);
   }
 
-  void onDragUpdate(int row, int col, Brush brush) {
-    onTapNode(row, col, brush);
+  void onDragUpdate(int row, int col, Brush brush, Function func) {
+    onTapNode(row, col, brush, func);
   }
 
-  void reset() {
+  void resetPath(bool resetVisual) {
     for(List<NodeModel> list in nodes) {
       for(NodeModel node in list) {
         node.parent = null;
-        if(node.visited) {
-          node.visited = false;
-        }
-        if(isStartOrEnd(node.row, node.col)) {
-          continue;
-        }
-        node.changeNodeType(NodeType.empty);
-      }
-    }
-  }
-
-  void resetPath() {
-    for(List<NodeModel> list in nodes) {
-      for(NodeModel node in list) {
-        node.parent = null;
+        node.parent2 = null;
         node.visited = false;
-        if(isStartOrEnd(node.row, node.col)) {
-          continue;
-        }
-        if(node.type == NodeType.visiting || node.type == NodeType.pathing || node.type == NodeType.weight) {
+        node.visited2 = false;
+        node.distance = 10000;
+        if(node.type == NodeType.visiting || node.type == NodeType.pathing) {
           node.changeNodeType(NodeType.empty);
         }
       }
+    }
+    if(resetVisual) {
+      painter.removePathAndVisited();
     }
   }
 
   void resetWalls() {
-    for(List<NodeModel> list in nodes) {
-      for(NodeModel node in list) {
-        if(node.type == NodeType.wall) {
-          node.changeNodeType(NodeType.empty);
-        } else if(node.type == NodeType.empty && !isStartOrEnd(node.row, node.col)) {
-          if(node.type != NodeType.empty) {
-            node.changeNodeType(NodeType.empty);
+    for(int i = 0; i < nodes.length; i++) {
+      for(int j = 0; j < nodes[0].length; j++) {
+        nodes[i][j].weight = 1;
+        if(nodes[i][j].type == NodeType.wall || nodes[i][j].type == NodeType.weight) {
+          nodes[i][j].changeNodeType(NodeType.empty);
+          painter.removeWidget(i, j);
+        }
+      }
+    }
+  }
+
+  void reset() {
+    resetPath(true);
+    resetWalls();
+  }
+
+  void randomMaze() {
+    Random rng = Random();
+    for(int i = 0; i < nodes.length; i++) {
+      for(int j = 0; j < nodes[0].length; j++) {
+        if(nodes[i][j].type == NodeType.empty) {
+          int random = rng.nextInt(6);
+          if(random > 4) {
+            random = rng.nextInt(6);
+            if(random > 3) {
+              painter.changeToWallWidget(i, j);
+              nodes[i][j].changeNodeType(NodeType.wall);
+            } else {
+              painter.changeToWeightWidget(i, j);
+              nodes[i][j].changeNodeType(NodeType.weight);
+              nodes[i][j].weight = 5;
+            }
           }
         }
-        node.parent = null;
-        node.visited = false;
       }
     }
   }
@@ -218,52 +328,13 @@ class StaticGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('Rebuilding static Grid');
     return SizedBox(
       width: width,
       height: height,
       child: CustomPaint(
         painter: GridPainter(rows, columns, unitSize, width, height),
       ),
-    );
-  }
-}
-
-class StaticNodeGrid extends StatelessWidget {
-  const StaticNodeGrid({
-    Key? key,
-    required this.grid,
-  }) : super(key: key);
-
-  final Grid grid;
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        for(int i = 0; i < grid.nodes.length; i++)...[
-          for(int j = 0; j < grid.nodes[0].length; j++) ...[
-            ChangeNotifierProvider.value(
-              value: grid.nodes[i][j],
-              child: Selector<NodeModel, NodeType>(
-                selector: (_, type) => grid.nodes[i][j].type,
-                  builder: (context, type, child) {
-                  return Positioned(
-                    left: i * (grid.unitSize.toDouble()),
-                    top:  j * (grid.unitSize.toDouble()),
-                    child: RepaintBoundary(
-                      child: SquareWidget(
-                        type: type,
-                        row: i,
-                        col: j,
-                        unitSize: grid.unitSize,
-                      ),
-                    ),
-                  );
-                }
-              ),
-            ),
-          ],
-        ],
-      ],
     );
   }
 }
