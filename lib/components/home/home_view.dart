@@ -7,7 +7,7 @@ import '../bottom_nav/bottom_nav.dart';
 import '../drawer/drawer.dart';
 import '../topbar/top_bar.dart';
 
-const Map<Algorithm, String> algoName = {
+const Map<Algorithm, String> algoName = <Algorithm,String>{
   Algorithm.bfs : 'Breadth First Search',
   Algorithm.dfs : 'Depth First Search',
   Algorithm.biBfs : 'Bidirectional BFS',
@@ -48,7 +48,7 @@ class HomeView extends StatelessWidget {
                   const TopBar(),
                   Expanded(
                     child: Column(
-                      children: [
+                      children: <Widget>[
                         SizedBox(
                           height: 50,
                           child: Center(

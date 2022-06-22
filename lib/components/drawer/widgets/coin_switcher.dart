@@ -16,7 +16,7 @@ class CoinSwitcher extends StatelessWidget {
         builder: (BuildContext context, bool hasCoin, Widget? child) {
           return Switch(
             value: hasCoin,
-            onChanged: (value) => Provider.of<AlgoVisualizerTools>(context, listen: false).toggleCoin(),
+            onChanged: (bool value) => Provider.of<AlgoVisualizerTools>(context, listen: false).toggleCoin(),
           );
         }
       ),

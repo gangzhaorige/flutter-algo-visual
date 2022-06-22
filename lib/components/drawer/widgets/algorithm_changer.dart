@@ -33,7 +33,7 @@ class AlgoSelected extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+            children: <Widget>[
               Text(algoName[algo] as String),
               Selector<AlgoVisualizerTools, int>(
                 selector: (_, AlgoVisualizerTools model) => model.selectedAlgorithm,
@@ -67,12 +67,12 @@ class AlgorithmChanger extends StatelessWidget {
         builder: (BuildContext context, List<Algorithm> algo, Widget? child) {
           return Column(
             children: <Widget>[
-              for(int i = 0; i < algo.length; i++) ...[
+              for(int i = 0; i < algo.length; i++) ...<Widget>[
                 AlgoSelected(
                   algo: algo[i],
                   index: i,
                 ),
-                if(i != algo.length - 1) ...[
+                if(i != algo.length - 1) ...<Widget>[
                   const Divider(
                     height: 1,
                     thickness: 1,

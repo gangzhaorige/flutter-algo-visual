@@ -9,7 +9,7 @@ import '../algorithm/algorithm.dart';
 import 'grid_gesture.dart';
 import 'grid_painter.dart';
 
-Map<Algorithm, String> algoDescription = {
+final Map<Algorithm, String> algoDescription = <Algorithm, String>{
   Algorithm.bfs : 'Unweighted. Guarantees the shortest path.',
   Algorithm.dfs : 'Unweighted. Does not guarantee the shortest path.',
   Algorithm.biBfs : 'Unweighted. Guarantees the shortest path.',
@@ -100,10 +100,10 @@ class GridWidget extends StatelessWidget {
                   selector: (_, Painter model) => model.nodePainter,
                   builder: (BuildContext context, List<List<Widget?>> nodes, Widget? child) {
                     return Stack(
-                      children: [
-                        for(List<Widget?> list in nodes) ... [
-                          for(Widget? node in list)...[
-                            if(node != null) ...[
+                      children: <Widget>[
+                        for(List<Widget?> list in nodes) ... <Widget>[
+                          for(Widget? node in list)...<Widget>[
+                            if(node != null) ...<Widget>[
                               node,
                             ],
                           ],
@@ -124,7 +124,7 @@ class GridWidget extends StatelessWidget {
                       builder: (BuildContext context, Widget? coin, Widget? child) {
                         return Stack(
                           children: <Widget>[
-                            if(hasCoin)...[
+                            if(hasCoin)...<Widget>[
                               coin!
                             ]
                           ],
