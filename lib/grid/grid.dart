@@ -160,6 +160,7 @@ class Grid {
     height = columns * unitSize;
     coinRow = (startRow + endRow) ~/ 2;
     coinCol = (startCol + endCol) ~/ 2;
+    nodes[coinRow][coinCol].type = NodeType.coin;
     painter = Painter(startRow, startCol, endRow, endCol, rows, columns, unitSize, coinRow, coinCol);
   }
 
@@ -185,7 +186,7 @@ class Grid {
   }
 
   void onTapNode(int row, int col, Brush brush, Function toggleCoin) {
-    if(isStartOrEnd(row, col)) {
+    if(isStartOrEnd(row, col) || (row == coinRow && col == coinCol)) {
       return;
     }
     NodeModel curNode = nodes[row][col];
