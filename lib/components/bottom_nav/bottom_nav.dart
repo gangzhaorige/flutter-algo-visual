@@ -13,7 +13,7 @@ class BottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> list = [
+    List<Widget> list = <Widget>[
       Consumer<AlgoVisualizerTools>(
         builder: (BuildContext context, AlgoVisualizerTools tool, Widget? child) {
           return GestureDetector(
@@ -48,7 +48,7 @@ class BottomNav extends StatelessWidget {
               ),
               child: Center(
                 child: Icon(
-                  MyIcon.reset_wall,
+                  MyIcon.resetWall,
                   color: tool.isVisualizing ? Colors.red : Colors.white,
                   size: 30,
                 )
@@ -116,7 +116,7 @@ class BottomNav extends StatelessWidget {
               ),
               child: Center(
                 child: Icon(
-                  MyIcon.reset_path,
+                  MyIcon.resetPath,
                   color: tool.isVisualizing ? Colors.red : Colors.white,
                   size: 30,
                 )
@@ -153,9 +153,9 @@ class BottomNav extends StatelessWidget {
         height: 70,
         child: Stack(
           alignment: Alignment.center,
-          children: [
+          children: <Widget>[
             Column(
-              children: [
+              children: <Widget>[
                 Container(
                   height: 35,
                 ),
@@ -168,8 +168,8 @@ class BottomNav extends StatelessWidget {
             ScreenTypeLayout(
               mobile: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  for(Widget widget in list)...[
+                children: <Widget>[
+                  for(Widget widget in list)...<Widget>[
                     widget,
                   ]
                 ],
@@ -178,8 +178,8 @@ class BottomNav extends StatelessWidget {
                 alignment: WrapAlignment.center,
                 direction: Axis.vertical,
                 runSpacing: 50,
-                children: [
-                  for(Widget widget in list)...[
+                children: <Widget>[
+                  for(Widget widget in list)...<Widget>[
                     widget,
                   ]
                 ],

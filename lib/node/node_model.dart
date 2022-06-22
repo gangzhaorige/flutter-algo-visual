@@ -13,7 +13,7 @@ enum NodeType {
   coin,
 }
 
-const Map<Brush, Color> brushColor = {
+final Map<Brush, Color> brushColor = <Brush,Color>{
   Brush.wall: Colors.black,
   Brush.start: Colors.greenAccent,
   Brush.end: Colors.orange,

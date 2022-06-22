@@ -22,7 +22,7 @@ class DrawerChild extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
+            children: <Widget>[
               Row(
                 children: <Widget>[
                   Icon(
@@ -41,7 +41,7 @@ class DrawerChild extends StatelessWidget {
                 ],
               ),
               Row(
-                children: [
+                children: <Widget>[
                   if(child != null)...<Widget>[
                     child as Widget,
                   ],

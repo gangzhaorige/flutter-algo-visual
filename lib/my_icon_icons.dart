@@ -18,10 +18,10 @@ import 'package:flutter/widgets.dart';
 class MyIcon {
   MyIcon._();
 
-  static const _kFontFam = 'MyIcon';
+  static const String _kFontFam = 'MyIcon';
   static const String? _kFontPkg = null;
 
-  static const IconData reset_path = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData reset_wall = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData resetPath = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData resetWall = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData maze = IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

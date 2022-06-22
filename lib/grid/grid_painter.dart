@@ -77,8 +77,8 @@ class NodeLocation extends StatelessWidget {
 class Painter extends ChangeNotifier {
 
   late List<List<Widget?>> nodePainter;
-  Map<String, Widget> visitedNodePainter = {};
-  Map<String, Widget> pathNodePainter = {};
+  Map<String, Widget> visitedNodePainter = <String, Widget>{};
+  Map<String, Widget> pathNodePainter = <String, Widget>{};
   Widget? coinPainter;
   final double unitSize;
 
@@ -152,8 +152,8 @@ class Painter extends ChangeNotifier {
   }
 
   void removePathAndVisited() {
-    visitedNodePainter = {};
-    pathNodePainter = {};
+    visitedNodePainter = <String, Widget>{};
+    pathNodePainter = <String, Widget>{};
     notifyListeners();
   }
 }

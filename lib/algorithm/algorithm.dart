@@ -112,7 +112,7 @@ class Algorithms {
   });
 
   List<NodeModel> bfs(int startRow, int startCol, int endRow, int endCol) {
-    List<NodeModel> list = [];
+    List<NodeModel> list = <NodeModel>[];
     Queue<NodeModel> queue = Queue<NodeModel>();
     queue.add(nodes[startRow][startCol]);
     nodes[startRow][startCol].visited = true;
@@ -132,7 +132,7 @@ class Algorithms {
   }
 
   List<NodeModel> bidirectionalBFS(int startRow, int startCol, int endRow, int endCol) {
-    List<NodeModel> list = [];
+    List<NodeModel> list = <NodeModel>[];
     Queue<NodeModel> queue1 = Queue<NodeModel>();
     Queue<NodeModel> queue2 = Queue<NodeModel>();
     queue1.add(nodes[startRow][startCol]);
@@ -171,13 +171,13 @@ class Algorithms {
   }
 
   List<NodeModel> dfs(int startRow, int startCol, int endRow, int endCol) {
-    List<NodeModel> list = [];
+    List<NodeModel> list = <NodeModel>[];
     dfsHelper(list, startRow, startCol, endRow, endCol);
     return list;
   }
 
   List<NodeModel> dijkstra(int startRow, int startCol, int endRow, int endCol) {
-    List<NodeModel> list = [];
+    List<NodeModel> list = <NodeModel>[];
     PriorityQueue<NodeModel> queue = PriorityQueue<NodeModel>((NodeModel a, NodeModel b) => a.distance - b.distance);
     queue.add(nodes[startRow][startCol]);
     nodes[startRow][startCol].distance = 0;
@@ -208,7 +208,7 @@ class Algorithms {
 
   List<NodeModel> aStar(int startRow, int startCol, int endRow, int endCol) {
     List<NodeModel> list = <NodeModel>[];
-    List<NodeModel> open = [];
+    List<NodeModel> open = <NodeModel>[];
     HashSet<NodeModel> closed = HashSet<NodeModel>();
     NodeModel start = nodes[startRow][startCol];
     start.hCost = calculateHeuristic(start, endRow, endCol);
@@ -313,7 +313,7 @@ class Algorithms {
   }
 
   List<NodeModel> getNeighbors(int row, int col) {
-    List<NodeModel> neighbors = [];
+    List<NodeModel> neighbors = <NodeModel>[];
     for(List<int> direction in directions) {
       int dx = row + direction[0];
       int dy = col + direction[1];
@@ -326,7 +326,7 @@ class Algorithms {
   }
 
   List<NodeModel> getPathFromStartToEnd(int endRow, int endCol) {
-    List<NodeModel> list = [];
+    List<NodeModel> list = <NodeModel>[];
     NodeModel cur = nodes[endRow][endCol];
     while(cur.parent != null) {
       list.add(cur);
@@ -336,7 +336,7 @@ class Algorithms {
   }
 
   List<NodeModel> getPathFromStartToEndBidirectional(List<NodeModel> nodes) {
-    List<NodeModel> list = [];
+    List<NodeModel> list = <NodeModel>[];
     NodeModel cur = nodes[nodes.length - 1];
     if(cur.parent == null || cur.parent2 == null) {
       return list;
