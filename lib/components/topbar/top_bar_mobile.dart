@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:path_visualizer/components/drawer/widgets/brush_changer.dart';
 import 'package:path_visualizer/components/drawer/widgets/coin_switcher.dart';
 import 'package:path_visualizer/components/drawer/widgets/speed_changer.dart';
-import 'package:path_visualizer/main.dart';
 import 'package:path_visualizer/node/coin_painter.dart';
 import 'package:path_visualizer/node/start_end_painter.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 import 'package:tuple/tuple.dart';
 import '../../algorithm/algorithm.dart';
 import '../drawer/widgets/algorithm_changer.dart';
@@ -113,6 +113,8 @@ class InformationModel extends ChangeNotifier {
 
   int index = 0;
 
+  PageController controller = PageController();
+
   List<InformationChildWidget> widgets = [
     InformationChildWidget(
       title: 'Welcome to Algorithm Visualizer',
@@ -138,7 +140,7 @@ class InformationModel extends ChangeNotifier {
       ),
     ),
     InformationChildWidget(
-      title: 'Pick An Algorithm',
+      title: 'Pick An Algorithm.',
       content: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: const [
@@ -154,7 +156,7 @@ class InformationModel extends ChangeNotifier {
       ),
     ),
     InformationChildWidget(
-      title: 'Render Speed',
+      title: 'Render Speed.',
       content: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: const [
@@ -177,7 +179,7 @@ class InformationModel extends ChangeNotifier {
       ),
     ),
     InformationChildWidget(
-      title: 'Brush',
+      title: 'Brush.',
       content: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: const [
@@ -193,73 +195,25 @@ class InformationModel extends ChangeNotifier {
       ),
     ),
     InformationChildWidget(
-      title: 'Golden Coin Switcher',
+      title: 'Golden Coin Switcher.',
       content: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          const Text(
-            'Switch between On and Off',
+        children: const [
+          Text(
+            'Switch between On and Off.',
             style: TextStyle(
               fontSize: 15,
             ),
             textAlign: TextAlign.center,
           ),
-          const Text(
-            'Determine if the coin should be collected before reaching the destination',
+          Text(
+            'Determine if the coin should be collected before reaching the destination.',
             style: TextStyle(
               fontSize: 15,
             ),
             textAlign: TextAlign.center,
           ),
-          Selector<AlgoVisualizerTools, bool>(
-            selector: (_, AlgoVisualizerTools model) => model.hasCoin,
-            builder: (BuildContext context, bool hasCoin, Widget? child) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 30,
-                    width: 30,
-                    child: CustomPaint(
-                      painter: StartPainter(
-                        fraction: 1,
-                        unitSize: 30,
-                      ),
-                    )
-                  ),
-                  if(hasCoin) ...[
-                    const Icon(
-                      Icons.arrow_right
-                    ),
-                    SizedBox(
-                      height: 30,
-                      width: 30,
-                      child: CustomPaint(
-                        painter: CoinPainter(
-                          fraction: 1,
-                          unitSize: 30,
-                        ),
-                      )
-                    ),
-                  ],
-                  const Icon(
-                    Icons.arrow_right
-                  ),
-                  SizedBox(
-                    height: 30,
-                    width: 30,
-                    child: CustomPaint(
-                      painter: EndPainter(
-                        fraction: 1,
-                        unitSize: 30,
-                      ),
-                    )
-                  ),
-                ],
-              );
-            }
-          ),
-          const CoinSwitcher(),
+          CoinSwitcher(),
         ],
       ),
     ),
@@ -274,17 +228,17 @@ class InformationModel extends ChangeNotifier {
       closeDialog();
     } else {
       index++;
+      controller.animateToPage(index, duration: const Duration(milliseconds: 250), curve: Curves.linear);
     }
-    notifyListeners();
   }
 
   void prev() {
     if(index == 0) {
-      index = widgets.length -1;
+      return;
     } else {
       index--;
+      controller.animateToPage(index, duration: const Duration(milliseconds: 250), curve: Curves.linear);
     }
-    notifyListeners();
   }
 }
 
@@ -293,57 +247,88 @@ class InformationHelper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        height: MediaQuery.of(context).size.height / 1.5,
-        width: MediaQuery.of(context).size.width * 0.86,
-        padding: const EdgeInsets.all(20),
-        color: Colors.white,
-        child: Column(
-          children: [
-            Expanded(
-              // this is the custom Widget showing everything
-              child: Selector<InformationModel, Tuple2<int, List<Widget>>>(
-                selector: (_, InformationModel model) => Tuple2<int, List<Widget>>(model.index, model.widgets),
-                builder: (BuildContext context, Tuple2<int, List<Widget>> tuple2, Widget? child) {
-                  List<Widget> widgets = tuple2.item2;
-                  int index = tuple2.item1;
-                  return widgets[index];
-                }
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                MaterialButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Skip'),
-                ),
-                Row(
-                  children: [
-                    MaterialButton(
-                      onPressed: () {
-                        Provider.of<InformationModel>(context, listen: false).prev();
-                      },
-                      child: const Text('Previous'),
-                    ),
-                    MaterialButton(
-                      onPressed: () {
-                        Provider.of<InformationModel>(context, listen: false).next();
-                      },
-                      child: const Text('Next'),
+    return ResponsiveBuilder(
+      builder: (BuildContext context, SizingInformation sizingInformation) {
+        double width = MediaQuery.of(context).size.width;
+        return Center(
+          child: FittedBox(
+            fit: BoxFit.fill,
+            child: Center(
+              child: Container(
+                height: 400,
+                width: sizingInformation.isMobile ? width * 0.86 : 450,
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                    bottomLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10)
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3), // changes position of shadow
                     ),
                   ],
                 ),
-              ],
-            )
-          ],
-        ),
-      ),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Selector<InformationModel, Tuple2<List<Widget>, PageController>>(
+                        selector: (_, InformationModel model) => Tuple2<List<Widget>, PageController>(model.widgets, model.controller),
+                        builder: (BuildContext context, Tuple2<List<Widget>, PageController> tuple2, Widget? child) {
+                          List<Widget> widgets = tuple2.item1;
+                          PageController controller = tuple2.item2;
+                          return PageView(
+                            controller: controller,
+                            physics: const NeverScrollableScrollPhysics(),
+                            children: [
+                              for(Widget widget in widgets) ...[
+                                widget,
+                              ]
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        MaterialButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Skip'),
+                        ),
+                        Row(
+                          children: [
+                            MaterialButton(
+                              onPressed: () {
+                                Provider.of<InformationModel>(context, listen: false).prev();
+                              },
+                              child: const Text('Previous'),
+                            ),
+                            MaterialButton(
+                              onPressed: () {
+                                Provider.of<InformationModel>(context, listen: false).next();
+                              },
+                              child: const Text('Next'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
-
 }
-
