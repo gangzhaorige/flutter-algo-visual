@@ -22,7 +22,6 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('Rebuilding HomeView');
     const double unitSize = 30; 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraint) {
@@ -37,54 +36,48 @@ class HomeView extends StatelessWidget {
           columns: columns,
           unitSize: unitSize,
         );
-        return ChangeNotifierProvider<AlgoVisualizerTools>.value(
-          builder: (BuildContext context, Widget? child) {
-            return Scaffold(
-              drawerEnableOpenDragGesture: false,
-              drawer: const AppDrawer(),
-              body: Column(
-                children: <Widget>[
-                  // top bar
-                  const TopBar(),
-                  Expanded(
-                    child: Column(
-                      children: <Widget>[
-                        SizedBox(
-                          height: 50,
-                          child: Center(
-                            child: Selector<AlgoVisualizerTools, Algorithm>(
-                              selector: (_, AlgoVisualizerTools model) => model.getCurAlgorithm(),
-                              builder: (BuildContext context, Algorithm algo, Widget? child) {
-                                return Text(
-                                  '${algoDescription[algo]}',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                );
-                              }
-                            ),
-                          ),
+        return Scaffold(
+          drawerEnableOpenDragGesture: false,
+          drawer: const AppDrawer(),
+          body: Column(
+            children: <Widget>[
+              const TopBar(),
+              Expanded(
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 50,
+                      child: Center(
+                        child: Selector<AlgoVisualizerTools, Algorithm>(
+                          selector: (_, AlgoVisualizerTools model) => model.getCurAlgorithm(),
+                          builder: (BuildContext context, Algorithm algo, Widget? child) {
+                            return Text(
+                              '${algoDescription[algo]}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                              ),
+                              textAlign: TextAlign.center,
+                            );
+                          }
                         ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: GridWidget(
-                              grid: grid,
-                            ),
-                          ),
-                        ),
-                        // navbar
-                        BottomNav(grid: grid),
-                      ],
+                      ),
                     ),
-                  ),
-                ],
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: GridWidget(
+                          grid: grid,
+                        ),
+                      ),
+                    ),
+                    BottomNav(grid: grid),
+                  ],
+                ),
               ),
-            );
-          }, 
-          value: algo,
+            ],
+          ),
         );
+
       },
     );
   }
