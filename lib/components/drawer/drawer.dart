@@ -17,7 +17,6 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('Rebuilding AppDrawer');
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,

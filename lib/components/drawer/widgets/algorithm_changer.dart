@@ -17,35 +17,35 @@ class AlgoSelected extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('Rebuilding AlgoSelected');
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 20,
       ),
-      child: InkWell(
-        onTap: () {
-          Provider.of<AlgoVisualizerTools>(context, listen: false).changeAlgorithm(index);
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 5,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Text(algoName[algo] as String),
-              Selector<AlgoVisualizerTools, int>(
-                selector: (_, AlgoVisualizerTools model) => model.selectedAlgorithm,
-                builder: (BuildContext context, int selectedIndex, Widget? child) {
-                  print('Rebuilding AlgoSelected Icon');
-                  return Icon(
-                    index == selectedIndex ? Icons.check : null,
-                    color: Colors.blue,
-                  );
-                }
-              ),
-            ],
+      child: Material(
+        child: InkWell(
+          onTap: () {
+            Provider.of<AlgoVisualizerTools>(context, listen: false).changeAlgorithm(index);
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 5,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(algoName[algo] as String),
+                Selector<AlgoVisualizerTools, int>(
+                  selector: (_, AlgoVisualizerTools model) => model.selectedAlgorithm,
+                  builder: (BuildContext context, int selectedIndex, Widget? child) {
+                    return Icon(
+                      index == selectedIndex ? Icons.check : null,
+                      color: Colors.blue,
+                    );
+                  }
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -55,10 +55,10 @@ class AlgoSelected extends StatelessWidget {
 
 class AlgorithmChanger extends StatelessWidget {
   const AlgorithmChanger({Key? key}) : super(key: key);
+  
 
   @override
   Widget build(BuildContext context) {
-    print('Rebuilding AlgorithmChanger...');
     return DrawerChild(
       icon: Icons.alarm,
       category: 'Algorithm',

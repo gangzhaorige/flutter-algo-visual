@@ -31,15 +31,17 @@ class SpeedChanger extends StatelessWidget {
                   ],
                 ),
               ),
-              Slider(
-                min: min,
-                max: max,
-                onChanged: (double value) {
-                  double reverse = (value - max).abs() + min;
-                  Provider.of<AlgoVisualizerTools>(context, listen: false).changeSpeed(reverse);
-                },
-                value: (curSpeed - max).abs() + min,
-                divisions: 2,
+              Material(
+                child: Slider(
+                  min: min,
+                  max: max,
+                  onChanged: (double value) {
+                    double reverse = (value - max).abs() + min;
+                    Provider.of<AlgoVisualizerTools>(context, listen: false).changeSpeed(reverse);
+                  },
+                  value: (curSpeed - max).abs() + min,
+                  divisions: 2,
+                ),
               ),
             ],
           );
