@@ -140,6 +140,49 @@ class InformationModel extends ChangeNotifier {
       ),
     ),
     InformationChildWidget(
+      title: 'Algorighms!',
+      content: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: const [
+          Text(
+            'Dijkstra\'s Algorithm (weighted): the father of pathfinding algorithms; guarantees the shortest path.',
+            style: TextStyle(
+              fontSize: 13,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          Text(
+            'A* Search (weighted): arguably the best pathfinding algorithm; uses heuristics to guarantee the shortest path much faster than Dijkstra\'s Algorithm.',
+            style: TextStyle(
+              fontSize: 13,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          Text(
+            'Breath-first Search (unweighted): a great algorithm; guarantees the shortest path.',
+            style: TextStyle(
+              fontSize: 13,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          Text(
+            'Bidirectional Breath-first Search (unweighted): a better BFS if the end node is given; guarantees the shortest path.',
+            style: TextStyle(
+              fontSize: 13,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          Text(
+            'Depth-first Search (unweighted): a very bad algorithm for pathfinding; does not guarantee the shortest path.',
+            style: TextStyle(
+              fontSize: 13,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    ),
+    InformationChildWidget(
       title: 'Pick An Algorithm.',
       content: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -238,6 +281,31 @@ class InformationModel extends ChangeNotifier {
           ),
           Image.asset(
             'assets/gif/guide.gif',
+          ),
+        ],
+      ),
+    ),
+    InformationChildWidget(
+      title: 'Visualize and More',
+      content: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          const Text(
+            'Use the bottom navigation to help yourself!',
+            style: TextStyle(
+              fontSize: 15,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const Text(
+            'First: Reset All \n Second: Reset Wall \n Third: Visualize Algorithm \n Fourth: Reset Path \n Fifth: Generate Random Maze',
+            style: TextStyle(
+              fontSize: 15,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          Image.asset(
+            'assets/images/nav.png',
           ),
         ],
       ),
