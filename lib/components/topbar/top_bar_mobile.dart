@@ -340,6 +340,8 @@ class InformationHelper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    precacheImage(const AssetImage('assets/gif/guide.gif'), context);
+    precacheImage(const AssetImage('assets/images/nav.png'), context);
     return ResponsiveBuilder(
       builder: (BuildContext context, SizingInformation sizingInformation) {
         double width = MediaQuery.of(context).size.width;
