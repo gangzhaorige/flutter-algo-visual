@@ -28,7 +28,6 @@ class GridWidget extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    print('Rebuilding Grid Widget');
     return FittedBox(
       fit: BoxFit.fill,
       child: SizedBox(
@@ -329,7 +328,6 @@ class StaticGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('Rebuilding static Grid');
     return SizedBox(
       width: width,
       height: height,

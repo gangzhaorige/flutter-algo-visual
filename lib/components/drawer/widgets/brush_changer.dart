@@ -13,7 +13,7 @@ const Map<Brush, String> brushName = <Brush,String>{
   Brush.start : 'Source',
   Brush.end : 'Destination',
   Brush.wall : 'Wall',
-  Brush.weight : 'Obstacle',
+  Brush.weight : 'Obstacle / Weight',
   Brush.coin : 'Golden Coin'
 };
 
@@ -47,55 +47,55 @@ class BrushSelected extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('Rebuilding BrushSelected');
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 20,
       ),
-      child: InkWell(
-        onTap: () {
-          Provider.of<AlgoVisualizerTools>(context, listen: false).changeBrush(index);
-          if(brush == Brush.coin) {
-            Provider.of<AlgoVisualizerTools>(context, listen: false).setCoin(true);
-          }
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 5,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Text(brushName[brush] as String),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  FittedBox(
-                    fit: BoxFit.contain,
-                    child: SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CustomPaint(
-                        painter: brushWidget[brush],
+      child: Material(
+        child: InkWell(
+          onTap: () {
+            Provider.of<AlgoVisualizerTools>(context, listen: false).changeBrush(index);
+            if(brush == Brush.coin) {
+              Provider.of<AlgoVisualizerTools>(context, listen: false).setCoin(true);
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 5,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Text(brushName[brush] as String),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    FittedBox(
+                      fit: BoxFit.contain,
+                      child: SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CustomPaint(
+                          painter: brushWidget[brush],
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              Selector<AlgoVisualizerTools, int>(
-                selector: (_, AlgoVisualizerTools model) => model.selectedBrush,
-                builder: (BuildContext context, int selectedIndex, Widget? child) {
-                  print('Rebuilding AlgoSelected Icon');
-                  return Icon(
-                    index == selectedIndex ? Icons.check : null,
-                    color: Colors.blue,
-                  );
-                }
-              ),
-            ],
+                  ],
+                ),
+                Selector<AlgoVisualizerTools, int>(
+                  selector: (_, AlgoVisualizerTools model) => model.selectedBrush,
+                  builder: (BuildContext context, int selectedIndex, Widget? child) {
+                    return Icon(
+                      index == selectedIndex ? Icons.check : null,
+                      color: Colors.blue,
+                    );
+                  }
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -104,8 +104,10 @@ class BrushSelected extends StatelessWidget {
 }
 
 class BrushChanger extends StatelessWidget {
-  const BrushChanger({Key? key}) : super(key: key);
-
+  const BrushChanger({
+    Key? key,
+  }) : super(key: key);
+   
   @override
   Widget build(BuildContext context) {
     return DrawerChild(
@@ -117,7 +119,10 @@ class BrushChanger extends StatelessWidget {
           return Column(
             children: <Widget>[
               for(int i = 0; i < brush.length; i++) ...<Widget>[
-               BrushSelected(brush: brush[i], index: i),
+                BrushSelected(
+                  brush: brush[i],
+                  index: i,
+                ),
                 if(i != brush.length - 1) ...<Widget>[
                   const Divider(
                     height: 1,

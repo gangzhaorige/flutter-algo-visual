@@ -6,10 +6,10 @@ import '../grid/grid.dart';
 import '../node/node_model.dart';
 
 const List<List<int>> directions = <List<int>>[
-  <int>[0, 1],  // down
-  <int>[1, 0],  // right
-  <int>[0, -1], // up
-  <int>[-1, 0], // left
+  <int>[0, 1],
+  <int>[1, 0],
+  <int>[0, -1],
+  <int>[-1, 0],
 ];
 
 enum Algorithm {
@@ -142,10 +142,6 @@ class Algorithms {
     while(queue1.isNotEmpty && queue2.isNotEmpty) {
       NodeModel nodeFirst = queue1.removeFirst();
       NodeModel nodeSecond = queue2.removeFirst();
-      if(nodeFirst.parent != null && nodeFirst.parent2 != null) {
-        list.add(nodeFirst);
-        return list;
-      }
       list.add(nodeFirst);
       list.add(nodeSecond);
       for(List<int> direction in directions) {
@@ -155,6 +151,10 @@ class Algorithms {
           nodes[dx][dy].visited = true;
           queue1.add(nodes[dx][dy]);
           nodes[dx][dy].parent = nodeFirst;
+          if(nodes[dx][dy].parent != null && nodes[dx][dy].parent2 != null) {
+            list.add(nodes[dx][dy]);
+            return list;
+          }
         }
       }
       for(List<int> direction in directions) {
@@ -164,6 +164,10 @@ class Algorithms {
           nodes[dx][dy].visited2 = true;
           queue2.add(nodes[dx][dy]);
           nodes[dx][dy].parent2 = nodeSecond;
+          if(nodes[dx][dy].parent != null && nodes[dx][dy].parent2 != null) {
+            list.add(nodes[dx][dy]);
+            return list;
+          }
         }
       }
     }
@@ -394,10 +398,8 @@ class Algorithms {
             grid.resetPath(false);
             orderOfVisit = executeAlgorithm(curAlgorithm, coinRow, coinCol, this.endRow, this.endCol);
             pathingOrder = curAlgorithm == Algorithm.biBfs ? getPathFromStartToEndBidirectional(orderOfVisit) : getPathFromStartToEnd(this.endRow, this.endCol);
-            // pathingOrder = getPathFromStartToEnd(this.endRow, this.endCol);
             await visualizeVisitedNodes(orderOfVisit, speed, Colors.redAccent, hasCoin).then((_) async {
-              Color color = curAlgorithm == Algorithm.dfs ? Colors.green : Colors.yellow;
-              await visualizePath(pathingOrder, speed, orderOfVisit.length, color, hasCoin).then((_) async {
+              await visualizePath(pathingOrder, speed, orderOfVisit.length, Colors.green, hasCoin).then((_) async {
                 await Future<dynamic>.delayed(Duration(milliseconds: orderOfVisit.length * speed + pathingOrder.length * speed + 500)).then((_) async {
                   toggleVisualizing();
                 });
