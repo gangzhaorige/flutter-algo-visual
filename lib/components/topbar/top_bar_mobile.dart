@@ -217,6 +217,31 @@ class InformationModel extends ChangeNotifier {
         ],
       ),
     ),
+    InformationChildWidget(
+      title: 'Adding Walls and Weights',
+      content: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          const Text(
+            'Choose a brush to start painting! Click on the grid to paint the grid with the choosen brush.',
+            style: TextStyle(
+              fontSize: 15,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const Text(
+            'You cannot go through walls, but you can go through the weights at the cost of 5.\n Note: Only Dijkstra and A* supports weight.',
+            style: TextStyle(
+              fontSize: 15,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          Image.asset(
+            'assets/gif/guide.gif',
+          ),
+        ],
+      ),
+    ),
   ];
   
   InformationModel(this.closeDialog);
@@ -271,7 +296,7 @@ class InformationHelper extends StatelessWidget {
                       color: Colors.grey.withOpacity(0.5),
                       spreadRadius: 5,
                       blurRadius: 7,
-                      offset: Offset(0, 3), // changes position of shadow
+                      offset: const Offset(0, 3), // changes position of shadow
                     ),
                   ],
                 ),
