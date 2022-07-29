@@ -17,7 +17,7 @@ class BottomNav extends StatelessWidget {
       Consumer<AlgoVisualizerTools>(
         builder: (BuildContext context, AlgoVisualizerTools tool, Widget? child) {
           return GestureDetector(
-            onTap: tool.isVisualizing ? null : () => grid.reset(),
+            onTap: tool.getVisualizing() ? null : () => grid.reset(),
             child: Container(
               height: 40,
               width: 40,
@@ -28,7 +28,7 @@ class BottomNav extends StatelessWidget {
               child: Center(
                 child: Icon(
                   Icons.restart_alt,
-                  color: tool.isVisualizing ? Colors.red : Colors.white,
+                  color: tool.getVisualizing() ? Colors.red : Colors.white,
                 )
               ),
             ),
@@ -38,7 +38,7 @@ class BottomNav extends StatelessWidget {
       Consumer<AlgoVisualizerTools>(
         builder: (BuildContext context, AlgoVisualizerTools tool, Widget? child) {
           return GestureDetector(
-            onTap: tool.isVisualizing ? null : () => grid.resetWalls(),
+            onTap: tool.getVisualizing() ? null : () => grid.resetWalls(),
             child: Container(
               height: 50,
               width: 50,
@@ -49,7 +49,7 @@ class BottomNav extends StatelessWidget {
               child: Center(
                 child: Icon(
                   MyIcon.resetWall,
-                  color: tool.isVisualizing ? Colors.red : Colors.white,
+                  color: tool.getVisualizing() ? Colors.red : Colors.white,
                   size: 30,
                 )
               ),
@@ -60,7 +60,7 @@ class BottomNav extends StatelessWidget {
       Consumer<AlgoVisualizerTools>(
         builder: (BuildContext context, AlgoVisualizerTools tool, Widget? child) {
           return GestureDetector(
-            onTap: tool.isVisualizing ? null : () {
+            onTap: tool.getVisualizing() ? null : () {
               grid.resetPath(true);
               Algorithms algo = Algorithms(
                 columns: grid.columns,
@@ -76,10 +76,11 @@ class BottomNav extends StatelessWidget {
               );
               AlgoVisualizerTools tool = Provider.of<AlgoVisualizerTools>(context, listen: false);
               algo.visualizeAlgorithm(
-                tool.getCurAlgorithm(),
-                tool.curSpeed.toInt(),
+                tool.getAlgorithm(),
+                tool.getSpeed().toInt(),
                 tool.toggleVisualizing,
-                tool.hasCoin,
+                tool.getCoin(),
+                tool.getIsDiagonal()
               );
             },
             child: Container(
@@ -94,7 +95,7 @@ class BottomNav extends StatelessWidget {
                   'V',
                   style: TextStyle(
                     fontSize: 25,
-                    color: tool.isVisualizing ? Colors.red : Colors.white,
+                    color: tool.getVisualizing() ? Colors.red : Colors.white,
                     fontWeight: FontWeight.w500
                   ),
                 ),
@@ -106,7 +107,7 @@ class BottomNav extends StatelessWidget {
       Consumer<AlgoVisualizerTools>(
         builder: (BuildContext context, AlgoVisualizerTools tool, Widget? child) {
           return GestureDetector(
-            onTap: tool.isVisualizing ? null : () => grid.resetPath(true),
+            onTap: tool.getVisualizing() ? null : () => grid.resetPath(true),
             child: Container(
               height: 50,
               width: 50,
@@ -117,7 +118,7 @@ class BottomNav extends StatelessWidget {
               child: Center(
                 child: Icon(
                   MyIcon.resetPath,
-                  color: tool.isVisualizing ? Colors.red : Colors.white,
+                  color: tool.getVisualizing() ? Colors.red : Colors.white,
                   size: 30,
                 )
               ),
@@ -128,7 +129,7 @@ class BottomNav extends StatelessWidget {
       Consumer<AlgoVisualizerTools>(
         builder: (BuildContext context, AlgoVisualizerTools tool, Widget? child) {
           return GestureDetector(
-            onTap: tool.isVisualizing ? null : () => grid.randomMaze(),
+            onTap: tool.getVisualizing() ? null : () => grid.randomMaze(),
             child: Container(
               height: 40,
               width: 40,
@@ -139,7 +140,7 @@ class BottomNav extends StatelessWidget {
               child: Center(
                 child: Icon(
                   MyIcon.maze,
-                  color: tool.isVisualizing ? Colors.red : Colors.white,
+                  color: tool.getVisualizing() ? Colors.red : Colors.white,
                 )
               ),
             ),

@@ -36,7 +36,7 @@ class AlgoSelected extends StatelessWidget {
               children: <Widget>[
                 Text(algoName[algo] as String),
                 Selector<AlgoVisualizerTools, int>(
-                  selector: (_, AlgoVisualizerTools model) => model.selectedAlgorithm,
+                  selector: (_, AlgoVisualizerTools model) => model.getSelectedAlgorithm(),
                   builder: (BuildContext context, int selectedIndex, Widget? child) {
                     return Icon(
                       index == selectedIndex ? Icons.check : null,
@@ -63,7 +63,7 @@ class AlgorithmChanger extends StatelessWidget {
       icon: Icons.alarm,
       category: 'Algorithm',
       action: Selector<AlgoVisualizerTools, List<Algorithm>>(
-        selector: (_, AlgoVisualizerTools model) => model.algos,
+        selector: (_, AlgoVisualizerTools model) => model.getAlgos(),
         builder: (BuildContext context, List<Algorithm> algo, Widget? child) {
           return Column(
             children: <Widget>[
@@ -86,7 +86,7 @@ class AlgorithmChanger extends StatelessWidget {
         }
       ),
       child: Selector<AlgoVisualizerTools, Algorithm>(
-        selector: (_, AlgoVisualizerTools model) => model.getCurAlgorithm(),
+        selector: (_, AlgoVisualizerTools model) => model.getAlgorithm(),
         builder: (BuildContext context, Algorithm algo, Widget? child) {
           return Text(
             '${algoName[algo]}',

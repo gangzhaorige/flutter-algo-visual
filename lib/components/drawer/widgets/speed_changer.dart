@@ -16,7 +16,7 @@ class SpeedChanger extends StatelessWidget {
       icon: Icons.speed, 
       category: 'Speed',
       action: Selector<AlgoVisualizerTools, double>(
-        selector: (_, AlgoVisualizerTools model) => model.curSpeed,
+        selector: (_, AlgoVisualizerTools model) => model.getSpeed(),
         builder: (BuildContext context, double curSpeed, Widget? child) {
           return Column(
             children: <Widget>[

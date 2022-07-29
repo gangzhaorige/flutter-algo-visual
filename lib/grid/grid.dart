@@ -40,13 +40,13 @@ class GridWidget extends StatelessWidget {
           columns: grid.columns,
           height: grid.height,
           onDragNode: (int i, int j, int newI, int newJ) {
-            if(Provider.of<AlgoVisualizerTools>(context, listen: false).isVisualizing) {
+            if(Provider.of<AlgoVisualizerTools>(context, listen: false).getVisualizing()) {
               return;
             }
             grid.onDragUpdate(i, j, Provider.of<AlgoVisualizerTools>(context, listen: false).getCurBrush(), Provider.of<AlgoVisualizerTools>(context, listen: false).toggleCoin);
           },
           onTapNode: (int i, int j) {
-            if(Provider.of<AlgoVisualizerTools>(context, listen: false).isVisualizing) {
+            if(Provider.of<AlgoVisualizerTools>(context, listen: false).getVisualizing()) {
               return;
             }
             grid.onTapNode(i, j, Provider.of<AlgoVisualizerTools>(context, listen: false).getCurBrush(), Provider.of<AlgoVisualizerTools>(context, listen: false).toggleCoin);
@@ -113,7 +113,7 @@ class GridWidget extends StatelessWidget {
                 ),
               ),
               Selector<AlgoVisualizerTools, bool>(
-                selector: (_, AlgoVisualizerTools model) => model.hasCoin,
+                selector: (_, AlgoVisualizerTools model) => model.getCoin(),
                 builder: (BuildContext context, bool hasCoin, Widget? child) {
                   return ChangeNotifierProvider<Painter>.value(
                     value: grid.painter,

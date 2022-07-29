@@ -56,6 +56,62 @@ class _StartPaintWidgetState extends State<StartPaintWidget> with SingleTickerPr
   }
 }
 
+class TextCircularPainter extends CustomPainter {
+  TextCircularPainter({
+    required this.unitSize,
+    required this.fraction,
+    required this.text,
+  });
+
+  final double unitSize;
+  final double fraction;
+  final String text;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+
+    Paint paint = Paint();
+    paint.style = PaintingStyle.stroke;
+    paint.color = Colors.blue;
+    paint.strokeWidth = 2;
+    canvas.drawCircle(
+      Offset(
+        unitSize / 2,
+        unitSize / 2,
+      ),
+      unitSize / 2 * fraction,
+      paint,
+    );
+    TextSpan textSpan = TextSpan(
+      text: text,
+      style: const TextStyle(
+        color: Colors.blue,
+        fontSize: 12
+      )
+    );
+    final TextPainter textPainter = TextPainter(
+      text: textSpan,
+      textDirection: TextDirection.ltr,
+    );
+    textPainter.layout();
+    textPainter.paint(
+      canvas,
+      Offset(
+        (unitSize - textPainter.width) / 2,
+        (unitSize - textPainter.height) / 2,
+      ),
+    );
+  }
+  
+  @override
+  bool shouldRepaint(TextCircularPainter oldDelegate) {
+    if(fraction != oldDelegate.fraction) {
+      return true;
+    }
+    return false;
+  }
+}
+
 class StartPainter extends CustomPainter {
   StartPainter({
     required this.unitSize,

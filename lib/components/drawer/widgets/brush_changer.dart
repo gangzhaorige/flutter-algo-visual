@@ -86,7 +86,7 @@ class BrushSelected extends StatelessWidget {
                   ],
                 ),
                 Selector<AlgoVisualizerTools, int>(
-                  selector: (_, AlgoVisualizerTools model) => model.selectedBrush,
+                  selector: (_, AlgoVisualizerTools model) => model.getSelectedBrush(),
                   builder: (BuildContext context, int selectedIndex, Widget? child) {
                     return Icon(
                       index == selectedIndex ? Icons.check : null,
@@ -114,7 +114,7 @@ class BrushChanger extends StatelessWidget {
       icon: Icons.brush, 
       category: 'Brush',
       action: Selector<AlgoVisualizerTools, List<Brush>>(
-        selector: (_, AlgoVisualizerTools model) => model.brushes,
+        selector: (_, AlgoVisualizerTools model) => model.getBrushes(),
         builder: (BuildContext context, List<Brush> brush, Widget? child) {
           return Column(
             children: <Widget>[

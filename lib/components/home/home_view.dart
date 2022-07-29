@@ -49,7 +49,7 @@ class HomeView extends StatelessWidget {
                       height: 50,
                       child: Center(
                         child: Selector<AlgoVisualizerTools, Algorithm>(
-                          selector: (_, AlgoVisualizerTools model) => model.getCurAlgorithm(),
+                          selector: (_, AlgoVisualizerTools model) => model.getAlgorithm(),
                           builder: (BuildContext context, Algorithm algo, Widget? child) {
                             return Text(
                               '${algoDescription[algo]}',

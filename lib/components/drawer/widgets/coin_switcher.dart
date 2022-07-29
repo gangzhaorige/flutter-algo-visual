@@ -14,13 +14,13 @@ class CoinSwitcher extends StatelessWidget {
     return DrawerChild(
       category: 'Coin Switcher',
       action: Selector<AlgoVisualizerTools, bool>(
-        selector: (_, AlgoVisualizerTools model) => model.hasCoin,
+        selector: (_, AlgoVisualizerTools model) => model.getCoin(),
         builder: (BuildContext context, bool hasCoin, Widget? child) {
           return Material(
             child: Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(
+                  padding: const EdgeInsets.symmetric(
                     vertical: 10,
                   ),
                   child: Row(
