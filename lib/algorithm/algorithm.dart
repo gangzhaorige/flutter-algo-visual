@@ -249,8 +249,9 @@ class Algorithms {
           continue;
         }
         if(nodes[dx][dy].type != NodeType.wall && !nodes[dx][dy].visited) {
-          if(nodes[dx][dy].distance > curNode.distance + nodes[dx][dy].weight) {
-            nodes[dx][dy].distance = curNode.distance + nodes[dx][dy].weight;
+          int weight = ((isMovingDiagonal(direction[0], direction[1]) ? nodes[dx][dy].weight * 1.5 : nodes[dx][dy].weight) * 10).round();
+          if(nodes[dx][dy].distance > curNode.distance + weight) {
+            nodes[dx][dy].distance = curNode.distance + weight;
             nodes[dx][dy].parent = curNode;
             queue.add(nodes[dx][dy]);
           }
@@ -283,7 +284,8 @@ class Algorithms {
           continue;
         }
         NodeModel neighbor = nodes[dx][dy];
-        int gCost = curNode.gCost + neighbor.weight;
+        int weight = ((isMovingDiagonal(direction[0], direction[1]) ? neighbor.weight * 1.5 : neighbor.weight) * 10).round();
+        int gCost = curNode.gCost + weight;
         int hCost = calculateHeuristic(neighbor, endRow, endCol, isEightDirection);
         int distance = gCost + hCost;
         if(neighbor.distance > distance || !open.contains(neighbor)) {
@@ -298,6 +300,9 @@ class Algorithms {
       }
     }
     return list;
+  }
+  bool isMovingDiagonal(int a, int b) {
+    return a.abs() + b.abs() == 2;
   }
 
   NodeModel getSmallest(List<NodeModel> list) {
@@ -327,11 +332,11 @@ class Algorithms {
   }
 
   int calculateManhattanDistance(int startRow, int endRow, int startCol, int endCol) {
-    return ((startRow - endRow).abs() + (startCol - endCol).abs());
+    return ((startRow * 10 - endRow * 10).abs() + (startCol * 10 - endCol * 10).abs());
   }
 
   int calculateEuclideanDistance(int startRow, int endRow, int startCol, int endCol) {
-    return sqrt(((startRow - endRow) * (startRow - endRow) + (startCol - endCol) * (startCol - endCol))).round();
+    return sqrt(((startRow * 10 - endRow * 10) * (startRow * 10 - endRow * 10) + (startCol * 10 - endCol * 10) * (startCol * 10 - endCol * 10))).round();
   }
 
   void dfsHelper(List<NodeModel> list, int row, int col, int endRow, int endCol, List<List<int>> directions) {
