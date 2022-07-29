@@ -407,11 +407,16 @@ class Algorithms {
     return list;
   }
 
-  List<NodeModel> getPathFromStartToEndBidirectional(List<NodeModel> nodes) {
+  List<NodeModel> getPathFromStartToEndBidirectional(List<NodeModel> nodes, bool hasCoin) {
     List<NodeModel> list = <NodeModel>[];
     NodeModel cur = nodes[nodes.length - 1];
     if(cur.parent == null || cur.parent2 == null) {
       return list;
+    }
+    if(hasCoin) {
+      list.add(this.nodes[coinRow][coinCol]);
+    } else {
+      list.add(this.nodes[endRow][endCol]);
     }
     while(cur.parent != null) {
       list.add(cur);
@@ -422,6 +427,7 @@ class Algorithms {
       list.insert(0, cur);
       cur = cur.parent2!;
     }
+    list.add(this.nodes[startRow][startCol]);
     return list;
   }
 
@@ -458,19 +464,19 @@ class Algorithms {
       endCol = coinCol;
     }
     List<NodeModel> orderOfVisit = executeAlgorithm(curAlgorithm, startRow, startCol, endRow, endCol, hasDiagonal);
-    List<NodeModel> pathingOrder = curAlgorithm == Algorithm.biBfs ? getPathFromStartToEndBidirectional(orderOfVisit) : getPathFromStartToEnd(endRow, endCol, true);
+    List<NodeModel> pathingOrder = curAlgorithm == Algorithm.biBfs ? getPathFromStartToEndBidirectional(orderOfVisit, hasCoin) : getPathFromStartToEnd(endRow, endCol, true);
     await visualizeVisitedNodes(orderOfVisit, speed, Colors.blueGrey, hasCoin).then((_) async {
-      if(hasPathFromStartToDest(orderOfVisit, startRow, startCol, endRow, endCol)) {
-        await visualizePath(pathingOrder, speed, orderOfVisit.length, Colors.yellow, hasCoin).then((_) async {
+      if(hasPathFromStartToDest(orderOfVisit, startRow, startCol, endRow, endCol, curAlgorithm)) {
+        await visualizePath(pathingOrder, speed, orderOfVisit.length, Colors.yellowAccent, hasCoin).then((_) async {
           await Future<dynamic>.delayed(Duration(milliseconds: orderOfVisit.length * speed + pathingOrder.length * speed)).then((_) async {
             if(!hasCoin) {
               toggleVisualizing();
             } else {
               grid.resetPath(false);
               orderOfVisit = executeAlgorithm(curAlgorithm, coinRow, coinCol, this.endRow, this.endCol, hasDiagonal);
-              pathingOrder = curAlgorithm == Algorithm.biBfs ? getPathFromStartToEndBidirectional(orderOfVisit) : getPathFromStartToEnd(this.endRow, this.endCol, false);
+              pathingOrder = curAlgorithm == Algorithm.biBfs ? getPathFromStartToEndBidirectional(orderOfVisit, false) : getPathFromStartToEnd(this.endRow, this.endCol, false);
               await visualizeVisitedNodes(orderOfVisit, speed, Colors.redAccent, hasCoin).then((_) async {
-                await visualizePath(pathingOrder, speed, orderOfVisit.length, Colors.amber, hasCoin).then((_) async {
+                await visualizePath(pathingOrder, speed, orderOfVisit.length, Colors.yellowAccent, hasCoin).then((_) async {
                   await Future<dynamic>.delayed(Duration(milliseconds: orderOfVisit.length * speed + pathingOrder.length * speed + 500)).then((_) async {
                     toggleVisualizing();
                   });
@@ -487,7 +493,10 @@ class Algorithms {
     });
   }
 
-  bool hasPathFromStartToDest(List<NodeModel> orderOfVisit, int sourceRow, int sourceCol, int destRow, int destCol) {
+  bool hasPathFromStartToDest(List<NodeModel> orderOfVisit, int sourceRow, int sourceCol, int destRow, int destCol, Algorithm algo) {
+    if(algo == Algorithm.biBfs) {
+      return orderOfVisit[orderOfVisit.length - 1].visited && orderOfVisit[orderOfVisit.length - 1].visited2;
+    }
     NodeModel source = orderOfVisit[0];
     NodeModel dest = orderOfVisit[orderOfVisit.length - 1];
     return dest.row == destRow && dest.col == destCol && source.row == sourceRow && source.col == sourceCol;
@@ -498,9 +507,6 @@ class Algorithms {
       int row = orderOfVisit[i].row;
       int col = orderOfVisit[i].col;
       Future<dynamic>.delayed(Duration(milliseconds: speed * i)).then((_) {
-        if(hasCoin && isCoin(row, col)){
-          return;
-        }
         grid.painter.renderVisitedNode(row, col, grid.unitSize, color);
       });
     }
@@ -511,9 +517,6 @@ class Algorithms {
       for(int j = pathingOrder.length - 1; j >= 0; j--) {
         NodeModel cur = pathingOrder[j];
         Future<dynamic>.delayed(Duration(milliseconds: index * speed)).then((_) {
-          if(hasCoin && isCoin(cur.row, cur.col)){
-            return;
-          }
           grid.painter.renderPathNode(cur.row, cur.col, grid.unitSize, color);
         });
         index++;
