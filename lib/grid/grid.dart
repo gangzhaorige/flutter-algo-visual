@@ -206,7 +206,7 @@ class Grid {
           curNode.changeNodeType(NodeType.empty);
           painter.removeWidget(row, col);
         } else {
-          curNode.weight = 5;
+          curNode.weight = 3;
           curNode.changeNodeType(NodeType.weight);
           painter.changeToWeightWidget(row, col);
         }
@@ -301,7 +301,7 @@ class Grid {
             } else {
               painter.changeToWeightWidget(i, j);
               nodes[i][j].changeNodeType(NodeType.weight);
-              nodes[i][j].weight = 5;
+              nodes[i][j].weight = 3;
             }
           }
         }
