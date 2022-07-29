@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:path_visualizer/components/drawer/widgets/brush_changer.dart';
 import 'package:path_visualizer/components/drawer/widgets/coin_switcher.dart';
 import 'package:path_visualizer/components/drawer/widgets/speed_changer.dart';
-import 'package:path_visualizer/node/coin_painter.dart';
-import 'package:path_visualizer/node/start_end_painter.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:tuple/tuple.dart';
@@ -272,10 +270,15 @@ class InformationModel extends ChangeNotifier {
             ),
             textAlign: TextAlign.center,
           ),
-          const Text(
-            'You cannot go through walls, but you can go through the weights at the cost of 5.\n Note: Only Dijkstra and A* supports weight.',
-            style: TextStyle(
-              fontSize: 15,
+          RichText(
+            text: const TextSpan(
+              text: 'You cannot go through walls, but you can go through the weights at the cost of ',
+              children: <TextSpan>[
+                TextSpan(text: '3', style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text: '. Moving diagonally costs '),
+                TextSpan(text: '1.5 ', style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text: ' times more than usuaul.\n Note: Only Dijkstra and A* supports weight.')
+              ],
             ),
             textAlign: TextAlign.center,
           ),
