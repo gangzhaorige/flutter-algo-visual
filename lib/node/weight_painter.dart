@@ -15,7 +15,7 @@ class WeightPainter extends CustomPainter {
 
     Paint paint = Paint();
     paint.style = PaintingStyle.stroke;
-    paint.color = Colors.pink;
+    paint.color = Colors.purple;
     paint.strokeWidth = 2;
     canvas.drawCircle(
       Offset(
