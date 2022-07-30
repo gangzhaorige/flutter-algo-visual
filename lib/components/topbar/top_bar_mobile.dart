@@ -7,6 +7,7 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'package:tuple/tuple.dart';
 import '../../algorithm/algorithm.dart';
 import '../drawer/widgets/algorithm_changer.dart';
+import '../drawer/widgets/diagonal_switcher.dart';
 import '../home/home_view.dart';
 
 class TopBarMobile extends StatelessWidget {
@@ -274,10 +275,8 @@ class InformationModel extends ChangeNotifier {
             text: const TextSpan(
               text: 'You cannot go through walls, but you can go through the weights at the cost of ',
               children: <TextSpan>[
-                TextSpan(text: '3', style: TextStyle(fontWeight: FontWeight.bold)),
-                TextSpan(text: '. Moving diagonally costs '),
-                TextSpan(text: '1.5 ', style: TextStyle(fontWeight: FontWeight.bold)),
-                TextSpan(text: ' times more than usuaul.\n Note: Only Dijkstra and A* supports weight.')
+                TextSpan(text: '3.', style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text: ' Note: Only Dijkstra and A* supports weight.')
               ],
             ),
             textAlign: TextAlign.center,
@@ -285,6 +284,40 @@ class InformationModel extends ChangeNotifier {
           Image.asset(
             'assets/gif/guide.gif',
           ),
+        ],
+      ),
+    ),
+    InformationChildWidget(
+      title: 'Four & Eight movements.',
+      content: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          const Text(
+            'Toggle between 4 and 8 directional movement.',
+            style: TextStyle(
+              fontSize: 15,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          RichText(
+            text: const TextSpan(
+              children: <TextSpan>[
+                TextSpan(text: 'In a weighted algorithm moving diagonally costs '),
+                TextSpan(text: '1.5 ', style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text: 'times than usual. Which means '),
+                TextSpan(text: '1 ', style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text: 'to '),
+                TextSpan(text: '1.5. ', style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text: 'In a unweight algorithm it is '),
+                TextSpan(text: '1 ', style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text: 'to '),
+                TextSpan(text: '1 ', style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text: 'meaning moving diagonally is the same cost as moving horizontally or vertically.'),
+              ],
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const DirectionSwitcher(),
         ],
       ),
     ),
