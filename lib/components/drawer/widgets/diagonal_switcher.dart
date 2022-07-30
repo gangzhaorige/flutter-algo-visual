@@ -34,8 +34,8 @@ class DirectionSwitcher extends StatelessWidget {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 10,
+                  padding: const EdgeInsets.only(
+                    top: 10,
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -45,19 +45,16 @@ class DirectionSwitcher extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             for(int j = 0; j < 3; j++) ...[
-                              Padding(
-                                padding: const EdgeInsets.all(1.0),
-                                child: SizedBox(
-                                  height: 45,
-                                  width: 45,
-                                  child: list[i][j] != '' ? CustomPaint(
-                                    painter: TextCircularPainter(
-                                      fraction: 1,
-                                      unitSize: 30,
-                                      text: list[i][j],
-                                    ),
-                                  ) : null,
-                                ),
+                              SizedBox(
+                                height: 40,
+                                width: 40,
+                                child: list[i][j] != '' ? CustomPaint(
+                                  painter: TextCircularPainter(
+                                    fraction: 1,
+                                    unitSize: 30,
+                                    text: list[i][j],
+                                  ),
+                                ) : null,
                               ),
                             ],
                           ],
