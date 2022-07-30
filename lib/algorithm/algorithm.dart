@@ -301,8 +301,8 @@ class Algorithms {
   }
 
   int getDistance(NodeModel a, NodeModel b, int weight) {
-    int normal = weight;
-    int diagonal = (weight * 1.5).round();
+    int normal = weight * 10;
+    int diagonal = (weight * 1.4 * 10).round();
     int dstX = (a.row - b.row).abs();
 		int dstY = (a.col - b.col).abs();
 		if (dstX > dstY) {
