@@ -266,7 +266,7 @@ class Algorithms {
     List<NodeModel> open = <NodeModel>[];
     HashSet<NodeModel> closed = HashSet<NodeModel>();
     NodeModel start = nodes[startRow][startCol];
-    start.hCost = getDistance(start, nodes[endRow][endCol], 1);
+    start.hCost = getDistance(start, nodes[endRow][endCol], 1, isEightDirection);
     start.gCost = 0;
     start.distance = start.hCost + start.gCost;
     open.add(nodes[startRow][startCol]);
@@ -285,11 +285,11 @@ class Algorithms {
         }
         NodeModel neighbor = nodes[dx][dy];
         int gCost = curNode.gCost;
-        int hCost = getDistance(curNode, neighbor, neighbor.weight);
+        int hCost = getDistance(curNode, neighbor, neighbor.weight, isEightDirection);
         int distance = gCost + hCost;
         if(distance < neighbor.gCost || !open.contains(neighbor)) {
           neighbor.gCost = distance;
-          neighbor.hCost = getDistance(neighbor, nodes[endRow][endCol], 1);
+          neighbor.hCost = getDistance(neighbor, nodes[endRow][endCol], 1, isEightDirection);
           neighbor.parent = curNode;
           if(!open.contains(neighbor)) {
             open.add(neighbor);
@@ -300,7 +300,10 @@ class Algorithms {
     return list;
   }
 
-  int getDistance(NodeModel a, NodeModel b, int weight) {
+  int getDistance(NodeModel a, NodeModel b, int weight, bool isEightDirection) {
+    if(!isEightDirection) {
+      return ((a.row - b.row).abs() + (a.col - b.col).abs()) * weight;
+    }
     int normal = weight * 10;
     int diagonal = (weight * 1.4 * 10).round();
     int dstX = (a.row - b.row).abs();
