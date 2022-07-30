@@ -1,5 +1,4 @@
 import 'dart:collection';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:path_visualizer/main.dart';
 import 'package:collection/collection.dart';
@@ -267,7 +266,7 @@ class Algorithms {
     List<NodeModel> open = <NodeModel>[];
     HashSet<NodeModel> closed = HashSet<NodeModel>();
     NodeModel start = nodes[startRow][startCol];
-    start.hCost = calculateHeuristic(start, endRow, endCol, isEightDirection);
+    start.hCost = getDistance(start, nodes[endRow][endCol], 1);
     start.gCost = 0;
     start.distance = start.hCost + start.gCost;
     open.add(nodes[startRow][startCol]);
@@ -285,14 +284,12 @@ class Algorithms {
           continue;
         }
         NodeModel neighbor = nodes[dx][dy];
-        int weight = ((isMovingDiagonal(direction[0], direction[1]) ? neighbor.weight * 1.5 : neighbor.weight) * 10).round();
-        int gCost = curNode.gCost + weight;
-        int hCost = calculateHeuristic(neighbor, endRow, endCol, isEightDirection);
+        int gCost = curNode.gCost;
+        int hCost = getDistance(curNode, neighbor, neighbor.weight);
         int distance = gCost + hCost;
-        if(neighbor.distance > distance || !open.contains(neighbor)) {
-          neighbor.distance = distance;
-          neighbor.gCost = gCost;
-          neighbor.hCost = hCost;
+        if(distance < neighbor.gCost || !open.contains(neighbor)) {
+          neighbor.gCost = distance;
+          neighbor.hCost = getDistance(neighbor, nodes[endRow][endCol], 1);
           neighbor.parent = curNode;
           if(!open.contains(neighbor)) {
             open.add(neighbor);
@@ -302,43 +299,36 @@ class Algorithms {
     }
     return list;
   }
+
+  int getDistance(NodeModel a, NodeModel b, int weight) {
+    int normal = weight;
+    int diagonal = (weight * 1.5).round();
+    int dstX = (a.row - b.row).abs();
+		int dstY = (a.col - b.col).abs();
+		if (dstX > dstY) {
+      return diagonal * dstY + normal * (dstX - dstY);
+    }
+		return diagonal * dstX + normal * (dstY - dstX);
+  }
+
   bool isMovingDiagonal(int a, int b) {
     return a.abs() + b.abs() == 2;
   }
 
   NodeModel getSmallest(List<NodeModel> list) {
     int index = 0;
-    int distance = 10000000;
     int hCost = 10000000;
+    int fn = 10000000;
     for(int i = 0; i < list.length; i++) {
-      NodeModel curNode = list[i];
-      if(curNode.distance < distance) {
+      if(list[i].getFn() <= fn) {
+        hCost = list[i].hCost;
+        fn = list[i].getFn();
         index = i;
-        distance = curNode.distance;
-        hCost = curNode.hCost;
-      } else if (curNode.distance == distance) {
-        if(curNode.hCost < hCost) {
-          index = i;
-          hCost = curNode.hCost;
-        }
       }
     }
     return list.removeAt(index);
   }
 
-  int calculateHeuristic(NodeModel node, int endRow, int endCol, bool isEightDirection) {
-    int startRow = node.row;
-    int startCol = node.col;
-    return isEightDirection ? calculateEuclideanDistance(startRow, endRow, startCol, endCol) : calculateManhattanDistance(startRow, endRow, startCol, endCol);
-  }
-
-  int calculateManhattanDistance(int startRow, int endRow, int startCol, int endCol) {
-    return ((startRow * 10 - endRow * 10).abs() + (startCol * 10 - endCol * 10).abs());
-  }
-
-  int calculateEuclideanDistance(int startRow, int endRow, int startCol, int endCol) {
-    return sqrt(((startRow * 10 - endRow * 10) * (startRow * 10 - endRow * 10) + (startCol * 10 - endCol * 10) * (startCol * 10 - endCol * 10))).round();
-  }
 
   void dfsHelper(List<NodeModel> list, int row, int col, int endRow, int endCol, List<List<int>> directions) {
     NodeModel curNode = nodes[row][col];

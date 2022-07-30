@@ -46,6 +46,10 @@ class NodeModel extends ChangeNotifier {
   NodeModel? parent;
   NodeModel? parent2;
 
+  int getFn() {
+    return gCost + hCost;
+  }
+
   void changeNodeType(NodeType type) {
     this.type = type;
     notifyListeners();
