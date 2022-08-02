@@ -52,7 +52,7 @@ class _WallPaintWidgetState extends State<WallPaintWidget> with SingleTickerProv
     super.initState();
     controller = AnimationController(
       animationBehavior: AnimationBehavior.preserve,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 350),
       vsync: this,
     );
 
