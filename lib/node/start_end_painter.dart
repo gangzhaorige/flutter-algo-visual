@@ -61,18 +61,20 @@ class TextCircularPainter extends CustomPainter {
     required this.unitSize,
     required this.fraction,
     required this.text,
+    required this.color,
   });
 
   final double unitSize;
   final double fraction;
   final String text;
+  final Color color;
 
   @override
   void paint(Canvas canvas, Size size) {
 
     Paint paint = Paint();
     paint.style = PaintingStyle.stroke;
-    paint.color = Colors.blue;
+    paint.color = color;
     paint.strokeWidth = 2;
     canvas.drawCircle(
       Offset(
@@ -84,9 +86,9 @@ class TextCircularPainter extends CustomPainter {
     );
     TextSpan textSpan = TextSpan(
       text: text,
-      style: const TextStyle(
-        color: Colors.blue,
-        fontSize: 12
+      style: TextStyle(
+        color: color,
+        fontSize: 12,
       )
     );
     final TextPainter textPainter = TextPainter(

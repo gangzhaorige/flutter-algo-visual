@@ -7,20 +7,18 @@ import '../../../node/start_end_painter.dart';
 import '../drawer_child.dart';
 
 
-List<List<String>> textDirection = [
+final List<List<String>> textDirection = [
   ['UL', 'U', 'UR'],
   ['L','','R'],
   ['DL','D','DR'],
 ];
 
-List<List<String>> textDirection2 = [
-  ['', 'U', ''],
-  ['L','','R'],
-  ['','D',''],
-];
-
 class DirectionSwitcher extends StatelessWidget {
   const DirectionSwitcher({Key? key}) : super(key: key);
+
+  bool isDiagonalDirection(String str) {
+    return str == 'UL' || str == 'UR' || str == 'DL' || str == 'DR'; 
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +27,7 @@ class DirectionSwitcher extends StatelessWidget {
       action: Selector<AlgoVisualizerTools, bool>(
         selector: (_, AlgoVisualizerTools model) => model.getIsDiagonal(),
         builder: (BuildContext context, bool hasDiagonalDirection, Widget? child) {
-          List<List<String>> list = hasDiagonalDirection ? textDirection : textDirection2; 
+          List<List<String>> list = textDirection;
           return Material(
             child: Column(
               children: [
@@ -53,6 +51,20 @@ class DirectionSwitcher extends StatelessWidget {
                                     fraction: 1,
                                     unitSize: 30,
                                     text: list[i][j],
+                                    color: (() {
+                                      if(!isDiagonalDirection(list[i][j])) {
+                                        if(hasDiagonalDirection) {
+                                          return Colors.green;
+                                        }
+                                        return Colors.blue;
+                                      }
+                                      if(hasDiagonalDirection) {
+                                        if(isDiagonalDirection(list[i][j])) {
+                                          return Colors.blue;
+                                        }
+                                      }
+                                      return Colors.grey;
+                                    } ())
                                   ),
                                 ) : null,
                               ),
@@ -61,7 +73,7 @@ class DirectionSwitcher extends StatelessWidget {
                         ),
                       ]
                     ],
-                  )
+                  ),
                 ),
                 Switch(
                   value: hasDiagonalDirection,

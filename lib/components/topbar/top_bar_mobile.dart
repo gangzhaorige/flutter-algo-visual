@@ -273,6 +273,9 @@ class InformationModel extends ChangeNotifier {
           ),
           RichText(
             text: const TextSpan(
+              style: TextStyle(
+                color: Colors.black,
+              ),
               text: 'You cannot go through walls, but you can go through the weights at the cost of ',
               children: <TextSpan>[
                 TextSpan(text: '3.', style: TextStyle(fontWeight: FontWeight.bold)),
@@ -288,19 +291,15 @@ class InformationModel extends ChangeNotifier {
       ),
     ),
     InformationChildWidget(
-      title: 'Four & Eight movements.',
+      title: 'Toggle between 4 and 8 directional movement.',
       content: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          const Text(
-            'Toggle between 4 and 8 directional movement.',
-            style: TextStyle(
-              fontSize: 15,
-            ),
-            textAlign: TextAlign.center,
-          ),
           RichText(
             text: const TextSpan(
+              style: TextStyle(
+                color: Colors.black,
+              ),
               children: <TextSpan>[
                 TextSpan(text: 'In a weighted algorithm moving diagonally costs '),
                 TextSpan(text: '1.5 ', style: TextStyle(fontWeight: FontWeight.bold)),
@@ -386,11 +385,11 @@ class InformationHelper extends StatelessWidget {
             fit: BoxFit.fill,
             child: Center(
               child: Container(
-                height: 400,
+                height: 450,
                 width: sizingInformation.isMobile ? width * 0.86 : 450,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: const Color.fromARGB(255, 250, 250, 250),
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(10),
                     topRight: Radius.circular(10),
