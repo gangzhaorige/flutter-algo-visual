@@ -323,10 +323,15 @@ class Algorithms {
     int hCost = 10000000;
     int fn = 10000000;
     for(int i = 0; i < list.length; i++) {
-      if(list[i].getFn() <= fn) {
+      if(list[i].getFn() < fn) {
         hCost = list[i].hCost;
         fn = list[i].getFn();
         index = i;
+      } else if (list[i].getFn() == fn) {
+        if(list[i].hCost < hCost) {
+          hCost = list[i].hCost;
+          index = i;
+        }
       }
     }
     return list.removeAt(index);
