@@ -35,6 +35,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider<AlgoVisualizerTools>.value(
       builder: (BuildContext context, Widget? child) {
         return MaterialApp(
+          title: 'Path Finder', 
           debugShowCheckedModeBanner: false,
           scrollBehavior: const MaterialScrollBehavior().copyWith(
             dragDevices: <PointerDeviceKind>{
