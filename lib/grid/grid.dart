@@ -206,7 +206,7 @@ class Grid {
           curNode.changeNodeType(NodeType.empty);
           painter.removeWidget(row, col);
         } else {
-          curNode.weight = 3;
+          curNode.weight = 5;
           curNode.changeNodeType(NodeType.weight);
           painter.changeToWeightWidget(row, col);
         }
