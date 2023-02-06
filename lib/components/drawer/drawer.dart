@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:path_visualizer/components/drawer/widgets/coin_switcher.dart';
 import 'package:path_visualizer/components/drawer/widgets/diagonal_switcher.dart';
+import 'package:path_visualizer/components/drawer/widgets/tools.dart';
 
 import 'widgets/algorithm_changer.dart';
 import 'widgets/brush_changer.dart';
@@ -19,19 +20,8 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          for(Widget widget in drawerWidget) ...<Widget>[
-            widget,
-            const Divider(
-              thickness: 1,
-              color: Colors.blue,
-            ),
-          ],
-        ],
-      ),
+    return const Drawer(
+      child: ToolWidgets(),
     );
   }
 }

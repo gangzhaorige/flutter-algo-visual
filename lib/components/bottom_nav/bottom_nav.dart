@@ -150,32 +150,14 @@ class BottomNav extends StatelessWidget {
     ];
     return Padding(
       padding: const EdgeInsets.only(top: 8),
-      child: SizedBox(
-        height: 70,
-        child: Stack(
-          alignment: Alignment.center,
-          children: <Widget>[
-            Column(
-              children: <Widget>[
-                Container(
-                  height: 35,
-                ),
-                Container(
-                  height: 35,
-                  color: Colors.blue,
-                ),
-              ],
-            ),
-            ScreenTypeLayout(
-              mobile: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  for(Widget widget in list)...<Widget>[
-                    widget,
-                  ]
-                ],
-              ),
-              tablet: Wrap(
+      child: FittedBox(
+        fit: BoxFit.contain,
+        child: SizedBox(
+          height: 70,
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Wrap(
                 alignment: WrapAlignment.center,
                 direction: Axis.vertical,
                 runSpacing: 50,
@@ -185,8 +167,8 @@ class BottomNav extends StatelessWidget {
                   ]
                 ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -15,7 +15,6 @@ class TopBarMobile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future<dynamic>.delayed(const Duration(milliseconds: 500)).then((_) => showAlert(context));
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -44,20 +43,37 @@ class TopBarMobile extends StatelessWidget {
             );
           }
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: GestureDetector(
-            onTap: () {
-              showAlert(context);
-            },
-            child: const Icon(
-              Icons.info_outline_rounded,
-              color: Colors.white,
-              size: 30,
-            ),
-          ),
+        const Helper(
+          color: Colors.white
         ),
       ],
+    );
+  }
+}
+
+class Helper extends StatelessWidget {
+  const Helper({super.key, required this.color});
+
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    if(Provider.of<AlgoVisualizerTools>(context, listen: false).getFirstTime()) {
+      Provider.of<AlgoVisualizerTools>(context, listen: false).setFirstTime(false);
+      Future<dynamic>.delayed(const Duration(milliseconds: 500)).then((_) => showAlert(context));
+    }
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: GestureDetector(
+        onTap: () {
+          showAlert(context);
+        },
+        child: Icon(
+          Icons.info_outline_rounded,
+          color: color,
+          size: 30,
+        ),
+      ),
     );
   }
 

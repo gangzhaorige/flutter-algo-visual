@@ -35,6 +35,7 @@ class AlgoVisualizerTools extends ChangeNotifier {
   double _speed = 10;
   bool _isVisualizing = false;
   bool _isDiagonal = false;
+  bool _isFirstTime = true;
 
   final List<Algorithm> _algos = <Algorithm>[
     Algorithm.bfs,
@@ -131,6 +132,14 @@ class AlgoVisualizerTools extends ChangeNotifier {
   void changeSpeed(double speed) {
     _speed = speed;
     notifyListeners();
+  }
+
+  void setFirstTime(bool condition) {
+    _isFirstTime = condition;
+  }
+
+  bool getFirstTime() {
+    return _isFirstTime;
   }
 }
 

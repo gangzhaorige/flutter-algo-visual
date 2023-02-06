@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:path_visualizer/components/bottom_nav/bottom_nav.dart';
 import 'package:provider/provider.dart';
 
 import '../../main.dart';
@@ -28,115 +29,143 @@ class GridWidget extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return FittedBox(
-      fit: BoxFit.fill,
-      child: SizedBox(
-        width: grid.width,
-        height: grid.height,
-        child: GridGestureDetector(
-          width: grid.width,
-          unitSize: grid.unitSize,
-          rows: grid.rows,
-          columns: grid.columns,
-          height: grid.height,
-          onDragNode: (int i, int j, int newI, int newJ) {
-            if(Provider.of<AlgoVisualizerTools>(context, listen: false).getVisualizing()) {
-              return;
-            }
-            grid.onDragUpdate(i, j, Provider.of<AlgoVisualizerTools>(context, listen: false).getCurBrush(), Provider.of<AlgoVisualizerTools>(context, listen: false).toggleCoin);
-          },
-          onTapNode: (int i, int j) {
-            if(Provider.of<AlgoVisualizerTools>(context, listen: false).getVisualizing()) {
-              return;
-            }
-            grid.onTapNode(i, j, Provider.of<AlgoVisualizerTools>(context, listen: false).getCurBrush(), Provider.of<AlgoVisualizerTools>(context, listen: false).toggleCoin);
-          },
-          child: Stack(
-            children: <Widget>[
-              StaticGrid(
-                columns: grid.columns,
-                height: grid.height,
-                rows: grid.rows,
-                unitSize: grid.unitSize,
-                width: grid.width,
-              ),
-              ChangeNotifierProvider<Painter>.value(
-                value: grid.painter,
-                child: Selector<Painter, Map<String,Widget>>(
-                  shouldRebuild: (Map<String, Widget> a, Map<String, Widget> b) => true,
-                  selector: (_, Painter model) => model.visitedNodePainter,
-                  builder: (BuildContext context, Map<String, Widget> orders, Widget? child) {
-                    return Stack(
-                      children: <Widget>[
-                        for(Widget order in orders.values)...<Widget>[
-                          order,
-                        ]
-                      ],
-                    );
-                  }
-                ),
-              ),
-              ChangeNotifierProvider<Painter>.value(
-                value: grid.painter,
-                child: Selector<Painter, Map<String,Widget>>(
-                  shouldRebuild: (Map<String, Widget> a, Map<String, Widget> b) => true,
-                  selector: (_, Painter model) => model.pathNodePainter,
-                  builder: (BuildContext context, Map<String, Widget> paths, Widget? child) {
-                    return Stack(
-                      children: <Widget>[
-                        for(Widget path in paths.values)...<Widget>[
-                          path,
-                        ]
-                      ],
-                    );
-                  }
-                ),
-              ),
-              ChangeNotifierProvider<Painter>.value(
-                value: grid.painter,
-                child: Selector<Painter, List<List<Widget?>> >(
-                  shouldRebuild: (List<List<Widget?>> a, List<List<Widget?>> b) => true,
-                  selector: (_, Painter model) => model.nodePainter,
-                  builder: (BuildContext context, List<List<Widget?>> nodes, Widget? child) {
-                    return Stack(
-                      children: <Widget>[
-                        for(List<Widget?> list in nodes) ... <Widget>[
-                          for(Widget? node in list)...<Widget>[
-                            if(node != null) ...<Widget>[
-                              node,
-                            ],
-                          ],
+    return GridGestureDetector(
+      width: grid.width,
+      unitSize: grid.unitSize,
+      rows: grid.rows,
+      columns: grid.columns,
+      height: grid.height,
+      onDragNode: (int i, int j, int newI, int newJ) {
+        if(Provider.of<AlgoVisualizerTools>(context, listen: false).getVisualizing()) {
+          return;
+        }
+        grid.onDragUpdate(i, j, Provider.of<AlgoVisualizerTools>(context, listen: false).getCurBrush(), Provider.of<AlgoVisualizerTools>(context, listen: false).toggleCoin);
+      },
+      onTapNode: (int i, int j) {
+        if(Provider.of<AlgoVisualizerTools>(context, listen: false).getVisualizing()) {
+          return;
+        }
+        grid.onTapNode(i, j, Provider.of<AlgoVisualizerTools>(context, listen: false).getCurBrush(), Provider.of<AlgoVisualizerTools>(context, listen: false).toggleCoin);
+      },
+      child: Stack(
+        children: <Widget>[
+          StaticGrid(
+            columns: grid.columns,
+            height: grid.height,
+            rows: grid.rows,
+            unitSize: grid.unitSize,
+            width: grid.width,
+          ),
+          ChangeNotifierProvider<Painter>.value(
+            value: grid.painter,
+            child: Selector<Painter, Map<String,Widget>>(
+              shouldRebuild: (Map<String, Widget> a, Map<String, Widget> b) => true,
+              selector: (_, Painter model) => model.visitedNodePainter,
+              builder: (BuildContext context, Map<String, Widget> orders, Widget? child) {
+                return Stack(
+                  children: <Widget>[
+                    for(Widget order in orders.values)...<Widget>[
+                      order,
+                    ]
+                  ],
+                );
+              }
+            ),
+          ),
+          ChangeNotifierProvider<Painter>.value(
+            value: grid.painter,
+            child: Selector<Painter, Map<String,Widget>>(
+              shouldRebuild: (Map<String, Widget> a, Map<String, Widget> b) => true,
+              selector: (_, Painter model) => model.pathNodePainter,
+              builder: (BuildContext context, Map<String, Widget> paths, Widget? child) {
+                return Stack(
+                  children: <Widget>[
+                    for(Widget path in paths.values)...<Widget>[
+                      path,
+                    ]
+                  ],
+                );
+              }
+            ),
+          ),
+          ChangeNotifierProvider<Painter>.value(
+            value: grid.painter,
+            child: Selector<Painter, List<List<Widget?>> >(
+              shouldRebuild: (List<List<Widget?>> a, List<List<Widget?>> b) => true,
+              selector: (_, Painter model) => model.nodePainter,
+              builder: (BuildContext context, List<List<Widget?>> nodes, Widget? child) {
+                return Stack(
+                  children: <Widget>[
+                    for(List<Widget?> list in nodes) ... <Widget>[
+                      for(Widget? node in list)...<Widget>[
+                        if(node != null) ...<Widget>[
+                          node,
                         ],
                       ],
-                    );
-                  }
-                ),
-              ),
-              Selector<AlgoVisualizerTools, bool>(
-                selector: (_, AlgoVisualizerTools model) => model.getCoin(),
-                builder: (BuildContext context, bool hasCoin, Widget? child) {
-                  return ChangeNotifierProvider<Painter>.value(
-                    value: grid.painter,
-                    child: Selector<Painter, Widget?>(
-                      shouldRebuild: (Widget? a, Widget? b) => true,
-                      selector: (_, Painter model) => model.coinPainter,
-                      builder: (BuildContext context, Widget? coin, Widget? child) {
-                        return Stack(
-                          children: <Widget>[
-                            if(hasCoin)...<Widget>[
-                              coin!
-                            ]
-                          ],
-                        );
-                      },
-                    ),
-                  );
-                },
-              ),
-            ],
+                    ],
+                  ],
+                );
+              }
+            ),
           ),
-        ),
+          Selector<AlgoVisualizerTools, bool>(
+            selector: (_, AlgoVisualizerTools model) => model.getCoin(),
+            builder: (BuildContext context, bool hasCoin, Widget? child) {
+              return ChangeNotifierProvider<Painter>.value(
+                value: grid.painter,
+                child: Selector<Painter, Widget?>(
+                  shouldRebuild: (Widget? a, Widget? b) => true,
+                  selector: (_, Painter model) => model.coinPainter,
+                  builder: (BuildContext context, Widget? coin, Widget? child) {
+                    return Stack(
+                      children: <Widget>[
+                        if(hasCoin)...<Widget>[
+                          coin!
+                        ]
+                      ],
+                    );
+                  },
+                ),
+              );
+            },
+          ),
+        ],
       ),
+    );
+  }
+}
+
+class GridWrapper extends StatelessWidget {
+  const GridWrapper({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraint) {
+        const double unitSize = 25; 
+        int rows = constraint.maxWidth ~/ unitSize;
+        int columns = (constraint.maxHeight - 50) ~/ unitSize - 1;
+        Grid grid = Grid(
+          startRow: rows ~/ 2 - rows ~/ 2.5,
+          startCol: columns ~/ 2,
+          endRow: rows ~/ 2 + rows ~/ 2.5 - 1,
+          endCol: columns ~/ 2,
+          rows: rows,
+          columns: columns,
+          unitSize: unitSize,
+        );
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: GridWidget(
+                grid: grid,
+              ),
+            ),
+            BottomNav(grid: grid),
+          ],
+        );
+      },
     );
   }
 }
