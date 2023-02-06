@@ -31,6 +31,14 @@ enum Algorithm {
   aStar,
 }
 
+const Map<Algorithm, String> algoName = <Algorithm,String>{
+  Algorithm.bfs : 'Breadth First Search',
+  Algorithm.dfs : 'Depth First Search',
+  Algorithm.biBfs : 'Bidirectional BFS',
+  Algorithm.dijkstra : 'Dijkstra',
+  Algorithm.aStar : 'A* Search',
+};
+
 class AlgoVisualizerTools extends ChangeNotifier {
   double _speed = 10;
   bool _isVisualizing = false;

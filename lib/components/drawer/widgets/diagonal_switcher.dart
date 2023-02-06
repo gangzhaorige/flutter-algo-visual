@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../algorithm/algorithm.dart';
-import '../../../node/coin_painter.dart';
 import '../../../node/start_end_painter.dart';
 import '../drawer_child.dart';
 

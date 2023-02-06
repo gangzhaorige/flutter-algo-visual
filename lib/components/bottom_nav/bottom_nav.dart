@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:path_visualizer/my_icon_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_builder/responsive_builder.dart';
 
 import '../../algorithm/algorithm.dart';
 import '../../grid/grid.dart';
