@@ -32,7 +32,7 @@ class GridWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: FittedBox(
-        fit: BoxFit.fitHeight,
+        fit: BoxFit.fill,
         child: SizedBox(
           width: grid.width,
           height: grid.height,
