@@ -31,6 +31,14 @@ enum Algorithm {
   aStar,
 }
 
+enum Brush {
+  wall,
+  weight,
+  start,
+  end,
+  coin,
+}
+
 const Map<Algorithm, String> algoName = <Algorithm,String>{
   Algorithm.bfs : 'Breadth First Search',
   Algorithm.dfs : 'Depth First Search',

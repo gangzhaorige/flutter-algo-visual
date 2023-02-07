@@ -62,6 +62,7 @@ class Helper extends StatelessWidget {
       Provider.of<AlgoVisualizerTools>(context, listen: false).setFirstTime(false);
       Future<dynamic>.delayed(const Duration(milliseconds: 500)).then((_) => showAlert(context));
     }
+    
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: GestureDetector(
@@ -391,14 +392,12 @@ class InformationHelper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    precacheImage(const AssetImage('assets/gif/guide.gif'), context);
-    precacheImage(const AssetImage('assets/images/nav.png'), context);
     return ResponsiveBuilder(
       builder: (BuildContext context, SizingInformation sizingInformation) {
         double width = MediaQuery.of(context).size.width;
         return Center(
           child: FittedBox(
-            fit: BoxFit.fill,
+            fit: BoxFit.contain,
             child: Center(
               child: Container(
                 height: 450,

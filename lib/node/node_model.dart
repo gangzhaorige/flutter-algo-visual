@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../main.dart';
+import 'package:path_visualizer/algorithm/algorithm.dart';
 
 enum NodeType {
   empty,

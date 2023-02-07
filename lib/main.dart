@@ -19,14 +19,6 @@ void main() {
   );
 }
 
-enum Brush {
-  wall,
-  weight,
-  start,
-  end,
-  coin,
-}
-
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 

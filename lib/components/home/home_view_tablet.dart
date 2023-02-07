@@ -18,6 +18,13 @@ class HomeViewTablet extends StatelessWidget {
           constraints: const BoxConstraints(
             maxWidth: 300,
           ),
+          decoration: const BoxDecoration(
+            border: Border(
+              right: BorderSide(
+                color: Colors.blue,
+              ),
+            )
+          ),
           child: const ToolWidgets(),
         ),
         Expanded(
