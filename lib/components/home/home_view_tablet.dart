@@ -39,17 +39,19 @@ class HomeViewTablet extends StatelessWidget {
                       height: 15,
                       width: 15,
                     ),
-                    Selector<AlgoVisualizerTools, Algorithm>(
-                      selector: (_, AlgoVisualizerTools model) => model.getAlgorithm(),
-                      builder: (BuildContext context, Algorithm algo, Widget? child) {
-                        return Text(
-                          '${algoDescription[algo]}',
-                          style: const TextStyle(
-                            fontSize: 16,
-                          ),
-                          textAlign: TextAlign.center,
-                        );
-                      }
+                    Flexible(
+                      child: Selector<AlgoVisualizerTools, Algorithm>(
+                        selector: (_, AlgoVisualizerTools model) => model.getAlgorithm(),
+                        builder: (BuildContext context, Algorithm algo, Widget? child) {
+                          return Text(
+                            '${algoDescription[algo]}',
+                            style: const TextStyle(
+                              fontSize: 16,
+                            ),
+                            textAlign: TextAlign.center,
+                          );
+                        }
+                      ),
                     ),
                     const Helper(
                       color: Colors.blue,

@@ -152,24 +152,19 @@ class BottomNav extends StatelessWidget {
       ),
     ];
     return Padding(
-      padding: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       child: FittedBox(
         fit: BoxFit.contain,
         child: SizedBox(
           height: 70,
-          child: Stack(
-            alignment: Alignment.center,
+          child: Wrap(
+            alignment: WrapAlignment.center,
+            direction: Axis.vertical,
+            runSpacing: 35,
             children: <Widget>[
-              Wrap(
-                alignment: WrapAlignment.center,
-                direction: Axis.vertical,
-                runSpacing: 50,
-                children: <Widget>[
-                  for(Widget widget in list)...<Widget>[
-                    widget,
-                  ]
-                ],
-              ),
+              for(Widget widget in list)...<Widget>[
+                widget,
+              ]
             ],
           ),
         ),

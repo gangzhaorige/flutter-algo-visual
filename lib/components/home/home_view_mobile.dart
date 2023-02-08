@@ -28,7 +28,7 @@ class HomeViewMobile extends StatelessWidget {
                         ),
                         textAlign: TextAlign.center,
                       );
-                    }
+                    },
                   ),
                 ),
               ),
