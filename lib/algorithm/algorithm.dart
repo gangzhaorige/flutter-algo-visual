@@ -73,7 +73,17 @@ class AlgoVisualizerTools extends ChangeNotifier {
 
   int _selectedBrush = 0;
 
+  int _lengthPath = 0;
+
   bool _hasCoin = false;
+
+  int getLengthPath() {
+    return _lengthPath;
+  }
+
+  void setLengthPath(int size) {
+    _lengthPath = size;
+  }
 
   int getSelectedBrush() {
     return _selectedBrush;
@@ -478,7 +488,7 @@ class Algorithms {
     return orderOfVisit;
   }
 
-  Future<void> visualizeAlgorithm(Algorithm curAlgorithm, int speed, Function toggleVisualizing, bool hasCoin, bool hasDiagonal) async {
+  Future<void> visualizeAlgorithm(Algorithm curAlgorithm, int speed, Function toggleVisualizing, bool hasCoin, bool hasDiagonal, Function setLengthPath) async {
     toggleVisualizing();
     int endRow = this.endRow;
     int endCol = this.endCol;
@@ -492,6 +502,8 @@ class Algorithms {
       if(hasPathFromStartToDest(orderOfVisit, startRow, startCol, endRow, endCol, curAlgorithm)) {
         await visualizePath(pathingOrder, speed, orderOfVisit.length, Colors.yellowAccent, hasCoin).then((_) async {
           await Future<dynamic>.delayed(Duration(milliseconds: orderOfVisit.length * speed + pathingOrder.length * speed)).then((_) async {
+            int firstPath = pathingOrder.length;
+            setLengthPath(firstPath);
             if(!hasCoin) {
               toggleVisualizing();
             } else {
@@ -502,6 +514,7 @@ class Algorithms {
                 await visualizePath(pathingOrder, speed, orderOfVisit.length, Colors.yellowAccent, hasCoin).then((_) async {
                   await Future<dynamic>.delayed(Duration(milliseconds: orderOfVisit.length * speed + pathingOrder.length * speed + 500)).then((_) async {
                     toggleVisualizing();
+                    setLengthPath(firstPath + pathingOrder.length - 1);
                   });
                 });
               });

@@ -153,7 +153,7 @@ class GridWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraint) {
-        const double unitSize = 25; 
+        const double unitSize = 30; 
         int rows = constraint.maxWidth ~/ unitSize - 2;
         int columns = (constraint.maxHeight - 50) ~/ unitSize - 1;
         Grid grid = Grid(

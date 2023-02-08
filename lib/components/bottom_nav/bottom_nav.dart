@@ -79,8 +79,12 @@ class BottomNav extends StatelessWidget {
                 tool.getSpeed().toInt(),
                 tool.toggleVisualizing,
                 tool.getCoin(),
-                tool.getIsDiagonal()
-              );
+                tool.getIsDiagonal(),
+                tool.setLengthPath,
+              ).then((_) => {
+                showAlert(context, tool.getLengthPath()),
+                tool.setLengthPath(0),
+              });
             },
             child: Container(
               height: 60,
@@ -170,6 +174,41 @@ class BottomNav extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  void showAlert(BuildContext context, int shortestPath) {
+    showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (_) {
+        bool isVisible = true;
+        Future<dynamic>.delayed(const Duration(seconds: 3)).then((value) {
+          if (isVisible) {
+            Navigator.of(context).pop();
+          }
+        });
+        return Dialog(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text('The Length of the shortest path is $shortestPath blocks.'),
+                const SizedBox(height: 15),
+                TextButton(
+                  onPressed: () {
+                    isVisible = false;
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Close'),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
     );
   }
 }
