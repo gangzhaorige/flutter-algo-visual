@@ -191,7 +191,7 @@ class BottomNav extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Text('The Length of the shortest path is $shortestPath block(s).'),
+                Text('The shortest distance from source to target is $shortestPath.'),
                 const SizedBox(height: 10),
                 TextButton(
                   onPressed: () {
