@@ -133,12 +133,13 @@ class InformationModel extends ChangeNotifier {
 
   List<InformationChildWidget> widgets = [
     InformationChildWidget(
-      title: 'Welcome to Algorithm Visualizer',
+      title: 'Welcome to Path Visualizer',
       content: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: const [
           Text(
-            'This short tutorial will walk you through all of the features of this application',
+            'This short tutorial will walk you through all of the features of this application.',
             style: TextStyle(
               fontSize: 15,
             ),
@@ -149,8 +150,9 @@ class InformationModel extends ChangeNotifier {
             textAlign: TextAlign.center,
           ),
           Icon(
-            Icons.pattern_sharp,
+            Icons.flag_circle,
             size: 100,
+            color: Colors.blue,
           ),
         ],
       ),
@@ -227,7 +229,7 @@ class InformationModel extends ChangeNotifier {
             textAlign: TextAlign.center,
           ),
           Text(
-            'The faster it is the faster it renders the nodes. Gotta Go Fast!',
+            'Path rendering speed. Gotta Go Fast!',
             style: TextStyle(
               fontSize: 15,
             ),
@@ -295,8 +297,8 @@ class InformationModel extends ChangeNotifier {
               ),
               text: 'You cannot go through walls, but you can go through the weights at the cost of ',
               children: <TextSpan>[
-                TextSpan(text: '3.', style: TextStyle(fontWeight: FontWeight.bold)),
-                TextSpan(text: ' Note: Only Dijkstra and A* supports weight.')
+                TextSpan(text: '5', style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text: '. Note: Only Dijkstra and A* supports weight.')
               ],
             ),
             textAlign: TextAlign.center,
@@ -443,7 +445,7 @@ class InformationHelper extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        MaterialButton(
+                        TextButton(
                           onPressed: () {
                             Navigator.pop(context);
                           },
@@ -451,13 +453,13 @@ class InformationHelper extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            MaterialButton(
+                            TextButton(
                               onPressed: () {
                                 Provider.of<InformationModel>(context, listen: false).prev();
                               },
                               child: const Text('Previous'),
                             ),
-                            MaterialButton(
+                            TextButton(
                               onPressed: () {
                                 Provider.of<InformationModel>(context, listen: false).next();
                               },
