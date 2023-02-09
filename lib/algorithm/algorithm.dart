@@ -503,6 +503,11 @@ class Algorithms {
         await visualizePath(pathingOrder, speed, orderOfVisit.length, Colors.yellowAccent, hasCoin).then((_) async {
           await Future<dynamic>.delayed(Duration(milliseconds: orderOfVisit.length * speed + pathingOrder.length * speed)).then((_) async {
             int firstPath = pathingOrder.length;
+            for(NodeModel node in pathingOrder) {
+              if(node.type == NodeType.wall) {
+                firstPath += 4;
+              }
+            }
             setLengthPath(firstPath);
             if(!hasCoin) {
               toggleVisualizing();
@@ -514,6 +519,11 @@ class Algorithms {
                 await visualizePath(pathingOrder, speed, orderOfVisit.length, Colors.yellowAccent, hasCoin).then((_) async {
                   await Future<dynamic>.delayed(Duration(milliseconds: orderOfVisit.length * speed + pathingOrder.length * speed + 500)).then((_) async {
                     toggleVisualizing();
+                    for(NodeModel node in pathingOrder) {
+                      if(node.type == NodeType.wall) {
+                        firstPath += 4;
+                      }
+                    }
                     setLengthPath(firstPath + pathingOrder.length - 1);
                   });
                 });
