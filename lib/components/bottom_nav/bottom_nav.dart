@@ -174,7 +174,7 @@ class BottomNav extends StatelessWidget {
 
   void showAlert(BuildContext context, int shortestPath) {
     showDialog(
-      barrierDismissible: true,
+      barrierDismissible: false,
       context: context,
       builder: (_) {
         bool isVisible = true;
