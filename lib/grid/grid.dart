@@ -341,7 +341,7 @@ class Grid {
             } else {
               painter.changeToWeightWidget(i, j);
               nodes[i][j].changeNodeType(NodeType.weight);
-              nodes[i][j].weight = 3;
+              nodes[i][j].weight = 5;
             }
           }
         }
