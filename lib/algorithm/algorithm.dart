@@ -337,7 +337,7 @@ class Algorithms {
 
   int getDistance(NodeModel a, NodeModel b, int weight, bool isEightDirection) {
     if(!isEightDirection) {
-      return ((a.row - b.row).abs() + (a.col - b.col).abs()) * weight;
+      return ((a.row - b.row).abs() + (a.col - b.col).abs()) * weight * 10;
     }
     int normal = weight * 10;
     int diagonal = (weight * 1.4 * 10).round();
