@@ -82,7 +82,7 @@ class BottomNav extends StatelessWidget {
                 tool.getIsDiagonal(),
                 tool.setLengthPath,
               ).then((_) => {
-                showAlert(context, tool.getLengthPath()),
+                showAlert(context, tool.getLengthPath(), tool.getAlgorithm()),
                 tool.setLengthPath(0),
               });
             },
@@ -172,7 +172,12 @@ class BottomNav extends StatelessWidget {
     );
   }
 
-  void showAlert(BuildContext context, int shortestPath) {
+  void showAlert(BuildContext context, int path, Algorithm curAlgorithm) {
+    String text = 'The ';
+    if(curAlgorithm != Algorithm.dfs) {
+      text += 'shortes ';
+    }
+    text += 'distance from source to target is $path.';
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -191,7 +196,16 @@ class BottomNav extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Text('The shortest distance from source to target is $shortestPath.'),
+                Text(
+                  algoName[curAlgorithm]!,
+                  style: const TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Text(text),
                 const SizedBox(height: 10),
                 TextButton(
                   onPressed: () {
