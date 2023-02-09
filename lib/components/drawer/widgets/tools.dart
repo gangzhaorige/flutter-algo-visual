@@ -9,6 +9,7 @@ class ToolWidgets extends StatelessWidget {
     return CustomScrollView(
       slivers: [
         const SliverAppBar(
+          toolbarHeight: 45,
           automaticallyImplyLeading: false,
           title: Text(
             'Path Finder',
