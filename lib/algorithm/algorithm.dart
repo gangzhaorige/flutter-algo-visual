@@ -503,9 +503,11 @@ class Algorithms {
         await visualizePath(pathingOrder, speed, orderOfVisit.length, Colors.yellowAccent, hasCoin).then((_) async {
           await Future<dynamic>.delayed(Duration(milliseconds: orderOfVisit.length * speed + pathingOrder.length * speed)).then((_) async {
             int firstPath = pathingOrder.length;
-            for(NodeModel node in pathingOrder) {
-              if(node.type == NodeType.wall) {
-                firstPath += 4;
+            if(curAlgorithm == Algorithm.aStar || curAlgorithm == Algorithm.dijkstra) {
+              for(int i = 0; i < pathingOrder.length; i++) {
+                if(pathingOrder[i].type == NodeType.weight) {
+                  firstPath += 4;
+                }
               }
             }
             setLengthPath(firstPath);
@@ -519,9 +521,11 @@ class Algorithms {
                 await visualizePath(pathingOrder, speed, orderOfVisit.length, Colors.yellowAccent, hasCoin).then((_) async {
                   await Future<dynamic>.delayed(Duration(milliseconds: orderOfVisit.length * speed + pathingOrder.length * speed + 500)).then((_) async {
                     toggleVisualizing();
-                    for(NodeModel node in pathingOrder) {
-                      if(node.type == NodeType.wall) {
-                        firstPath += 4;
+                    if(curAlgorithm == Algorithm.aStar || curAlgorithm == Algorithm.dijkstra) {
+                      for(int i = 0; i < pathingOrder.length; i++) {
+                        if(pathingOrder[i].type == NodeType.weight) {
+                          firstPath += 4;
+                        }
                       }
                     }
                     setLengthPath(firstPath + pathingOrder.length - 1);
