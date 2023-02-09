@@ -185,13 +185,14 @@ class BottomNav extends StatelessWidget {
         });
         return Dialog(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Text('The Length of the shortest path is $shortestPath blocks.'),
-                const SizedBox(height: 15),
+                Text('The Length of the shortest path is $shortestPath block(s).'),
+                const SizedBox(height: 10),
                 TextButton(
                   onPressed: () {
                     isVisible = false;
