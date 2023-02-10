@@ -44,7 +44,7 @@ class TopBarMobile extends StatelessWidget {
           }
         ),
         const Helper(
-          color: Colors.white
+          // color: Colors.white
         ),
       ],
     );
@@ -52,9 +52,7 @@ class TopBarMobile extends StatelessWidget {
 }
 
 class Helper extends StatelessWidget {
-  const Helper({super.key, required this.color});
-
-  final Color color;
+  const Helper({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +69,7 @@ class Helper extends StatelessWidget {
         },
         child: Icon(
           Icons.info_outline_rounded,
-          color: color,
+          // color: color,
           size: 30,
         ),
       ),
@@ -406,7 +404,7 @@ class InformationHelper extends StatelessWidget {
                 width: sizingInformation.isMobile ? width * 0.86 : 450,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 250, 250, 250),
+                  color: Theme.of(context).scaffoldBackgroundColor,
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(10),
                     topRight: Radius.circular(10),
@@ -415,7 +413,7 @@ class InformationHelper extends StatelessWidget {
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
+                      color: Colors.black.withOpacity(0.2),
                       spreadRadius: 5,
                       blurRadius: 7,
                       offset: const Offset(0, 3), // changes position of shadow

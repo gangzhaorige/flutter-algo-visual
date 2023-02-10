@@ -16,7 +16,7 @@ class TopBar extends StatelessWidget {
       ],
       child: Container(
         height: 55,
-        color: Colors.blue,
+        color: Theme.of(context).primaryColor,
         child: ScreenTypeLayout.builder(
           mobile: (BuildContext context) => const TopBarMobile(),
         ),

@@ -189,6 +189,7 @@ class BottomNav extends StatelessWidget {
           }
         });
         return Dialog(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(

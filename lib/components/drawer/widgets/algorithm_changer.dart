@@ -21,6 +21,7 @@ class AlgoSelected extends StatelessWidget {
         horizontal: 20,
       ),
       child: Material(
+        color: Theme.of(context).scaffoldBackgroundColor,
         child: InkWell(
           onTap: () {
             Provider.of<AlgoVisualizerTools>(context, listen: false).changeAlgorithm(index);

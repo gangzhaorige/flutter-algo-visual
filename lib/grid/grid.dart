@@ -372,7 +372,15 @@ class StaticGrid extends StatelessWidget {
       width: width,
       height: height,
       child: CustomPaint(
-        painter: GridPainter(rows, columns, unitSize, width, height),
+        painter: GridPainter(
+          rows,
+          columns,
+          unitSize,
+          width,
+          height,
+          Theme.of(context).primaryColorLight,
+          Theme.of(context).scaffoldBackgroundColor,
+        ),
       ),
     );
   }

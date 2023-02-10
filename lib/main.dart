@@ -14,7 +14,13 @@ void main() {
     ],
   ).then(
     (_) => runApp(
-      const MyApp(),
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<AlgoVisualizerTools>(create: (BuildContext context) => AlgoVisualizerTools()),
+          ChangeNotifierProvider<ThemeNotifier>(create: (BuildContext context) => ThemeNotifier(lightTheme)),
+        ],
+        child: const MyApp(),
+      ),
     ),
   );
 }
@@ -24,29 +30,72 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<AlgoVisualizerTools>.value(
-      builder: (BuildContext context, Widget? child) {
-        return MaterialApp(
-          title: 'Path Finder', 
-          debugShowCheckedModeBanner: false,
-          scrollBehavior: const MaterialScrollBehavior().copyWith(
-            dragDevices: <PointerDeviceKind>{
-              PointerDeviceKind.mouse,
-              PointerDeviceKind.touch,
-              PointerDeviceKind.stylus,
-              PointerDeviceKind.unknown,
-            },
-          ),
-          home: Container(
-            color: Colors.blue,
-            child: const SafeArea(
-              child: HomeView()
-            ),
-          ),
-        );
-      }, 
-      value: algo,
-    ); 
+    return MaterialApp(
+      theme: Provider.of<ThemeNotifier>(context).getTheme(),
+      title: 'Path Finder', 
+      debugShowCheckedModeBanner: false,
+      scrollBehavior: const MaterialScrollBehavior().copyWith(
+        dragDevices: <PointerDeviceKind>{
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.touch,
+          PointerDeviceKind.stylus,
+          PointerDeviceKind.unknown,
+        },
+      ),
+      home: Container(
+        color: Theme.of(context).primaryColor,
+        child: const SafeArea(
+          child: HomeView()
+        ),
+      ),
+    );
   }
 }
+class ThemeNotifier with ChangeNotifier {
+  ThemeData _themeData;
+
+  ThemeNotifier(this._themeData);
+
+  bool _isLight = true;
+
+  isLight() => _isLight;
+
+  void toggle() async {
+    if(_isLight) {
+      _isLight = false;
+      setTheme(darkTheme);
+    } else {
+      _isLight = true;
+      setTheme(lightTheme);
+    }
+    notifyListeners();
+  }
+
+  getTheme() => _themeData;
+
+  setTheme(ThemeData themeData) async {
+    _themeData = themeData;
+    notifyListeners();
+  }
+}
+
+
+final lightTheme = ThemeData(
+  primaryColor: Colors.blue,
+  primaryColorLight: Colors.blue,
+  // dividerColor: Colors.black,
+  // brightness: Brightness.dark,
+  // primarySwatch: Colors.teal,
+  // canvasColor: const Color.fromARGB(255,41,45,62),
+);
+
+final darkTheme = ThemeData(
+  primaryColor: const Color.fromARGB(255, 28,30,43),
+  primaryColorLight: Colors.black,
+  scaffoldBackgroundColor: const Color.fromARGB(255,41,45,62),
+  dividerColor: Colors.black,
+  brightness: Brightness.dark,
+  primarySwatch: Colors.teal,
+  canvasColor: const Color.fromARGB(255,41,45,62),
+);
 

@@ -18,10 +18,10 @@ class HomeViewTablet extends StatelessWidget {
           constraints: const BoxConstraints(
             maxWidth: 300,
           ),
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             border: Border(
               right: BorderSide(
-                color: Colors.blue,
+                color: Theme.of(context).dividerColor,
               ),
             )
           ),
@@ -44,7 +44,7 @@ class HomeViewTablet extends StatelessWidget {
                         selector: (_, AlgoVisualizerTools model) => model.getAlgorithm(),
                         builder: (BuildContext context, Algorithm algo, Widget? child) {
                           return Text(
-                            '${algoDescription[algo]}',
+                            '${algoName[algo]}: ${algoDescription[algo]}',
                             style: const TextStyle(
                               fontSize: 16,
                             ),
@@ -53,8 +53,8 @@ class HomeViewTablet extends StatelessWidget {
                         }
                       ),
                     ),
-                    const Helper(
-                      color: Colors.blue,
+                    Helper(
+                      // color: Theme.of(context).,
                     ),
                   ],
                 ),

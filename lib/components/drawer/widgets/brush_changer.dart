@@ -52,6 +52,7 @@ class BrushSelected extends StatelessWidget {
         horizontal: 20,
       ),
       child: Material(
+        color: Theme.of(context).scaffoldBackgroundColor,
         child: InkWell(
           onTap: () {
             Provider.of<AlgoVisualizerTools>(context, listen: false).changeBrush(index);

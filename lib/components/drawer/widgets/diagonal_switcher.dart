@@ -27,59 +27,64 @@ class DirectionSwitcher extends StatelessWidget {
         selector: (_, AlgoVisualizerTools model) => model.getIsDiagonal(),
         builder: (BuildContext context, bool hasDiagonalDirection, Widget? child) {
           List<List<String>> list = textDirection;
-          return Material(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 10,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      for(int i = 0; i < 3; i++) ...[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            for(int j = 0; j < 3; j++) ...[
-                              SizedBox(
-                                height: 40,
-                                width: 40,
-                                child: list[i][j] != '' ? CustomPaint(
-                                  painter: TextCircularPainter(
-                                    fraction: 1,
-                                    unitSize: 30,
-                                    text: list[i][j],
-                                    color: (() {
-                                      if(!isDiagonalDirection(list[i][j])) {
-                                        if(hasDiagonalDirection) {
-                                          return Colors.green;
-                                        }
-                                        return Colors.blue;
-                                      }
-                                      if(hasDiagonalDirection) {
-                                        if(isDiagonalDirection(list[i][j])) {
-                                          return Colors.blue;
-                                        }
-                                      }
-                                      return Colors.grey;
-                                    } ())
+          return Builder(
+            builder: (context) {
+              return Material(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 10,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          for(int i = 0; i < 3; i++) ...[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                for(int j = 0; j < 3; j++) ...[
+                                  SizedBox(
+                                    height: 40,
+                                    width: 40,
+                                    child: list[i][j] != '' ? CustomPaint(
+                                      painter: TextCircularPainter(
+                                        fraction: 1,
+                                        unitSize: 30,
+                                        text: list[i][j],
+                                        color: (() {
+                                          if(!isDiagonalDirection(list[i][j])) {
+                                            if(hasDiagonalDirection) {
+                                              return Colors.green;
+                                            }
+                                            return Colors.blue;
+                                          }
+                                          if(hasDiagonalDirection) {
+                                            if(isDiagonalDirection(list[i][j])) {
+                                              return Colors.blue;
+                                            }
+                                          }
+                                          return Colors.grey;
+                                        } ())
+                                      ),
+                                    ) : null,
                                   ),
-                                ) : null,
-                              ),
-                            ],
-                          ],
-                        ),
-                      ]
-                    ],
-                  ),
+                                ],
+                              ],
+                            ),
+                          ]
+                        ],
+                      ),
+                    ),
+                    Switch(
+                      value: hasDiagonalDirection,
+                      onChanged: (bool value) => Provider.of<AlgoVisualizerTools>(context, listen: false).setDiagonal(!hasDiagonalDirection),
+                    ),
+                  ],
                 ),
-                Switch(
-                  value: hasDiagonalDirection,
-                  onChanged: (bool value) => Provider.of<AlgoVisualizerTools>(context, listen: false).setDiagonal(!hasDiagonalDirection),
-                ),
-              ],
-            ),
+              );
+            }
           );
         }
       ),

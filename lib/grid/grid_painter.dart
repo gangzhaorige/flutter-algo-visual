@@ -8,22 +8,24 @@ import '../node/wall_painter.dart';
 import '../node/weight_painter.dart';
 
 class GridPainter extends CustomPainter {
-  const GridPainter(this.rows, this.columns, this.unitSize, this.width, this.height);
+  const GridPainter(this.rows, this.columns, this.unitSize, this.width, this.height, this.color, this.backgroudColor);
   final int rows;
   final int columns;
   final double unitSize;
   final double width;
   final double height;
+  final Color color;
+  final Color backgroudColor;
 
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint();
 
     Rect background = Rect.fromLTRB(0, 0, size.width, size.height);
-    paint.color = Colors.white10;
+    paint.color = backgroudColor;
     canvas.drawRect(background, paint);
 
-    paint.color = Colors.blue;
+    paint.color = color;
     paint.strokeWidth = 0.7;
     
     for (int i = 0; i < rows + 1; i++) {

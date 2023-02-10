@@ -8,7 +8,7 @@ class ToolWidgets extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: [
-        const SliverAppBar(
+        SliverAppBar(
           toolbarHeight: 45,
           automaticallyImplyLeading: false,
           title: Text(
@@ -18,16 +18,16 @@ class ToolWidgets extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          backgroundColor: Colors.blue,
+          backgroundColor: Theme.of(context).primaryColor,
         ),
         for(Widget widget in drawerWidget) ...<Widget>[
           SliverToBoxAdapter(
             child: Column(
               children: [
                 widget,
-                const Divider(
+                Divider(
                   thickness: 1,
-                  color: Colors.blue,
+                  color: Theme.of(context).dividerColor,
                 ),
               ],
             ),
