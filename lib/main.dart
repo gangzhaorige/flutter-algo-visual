@@ -83,6 +83,9 @@ class ThemeNotifier with ChangeNotifier {
 final lightTheme = ThemeData(
   primaryColor: Colors.blue,
   primaryColorLight: Colors.blue,
+  iconTheme: const IconThemeData(
+    color: Colors.blue,
+  )
   // dividerColor: Colors.black,
   // brightness: Brightness.dark,
   // primarySwatch: Colors.teal,

@@ -91,7 +91,7 @@ class BrushSelected extends StatelessWidget {
                   builder: (BuildContext context, int selectedIndex, Widget? child) {
                     return Icon(
                       index == selectedIndex ? Icons.check : null,
-                      color: Colors.blue,
+                      color: Theme.of(context).indicatorColor,
                     );
                   }
                 ),

@@ -27,7 +27,7 @@ class ToolWidgets extends StatelessWidget {
                 widget,
                 Divider(
                   thickness: 1,
-                  color: Theme.of(context).dividerColor,
+                  color: Theme.of(context).primaryColorLight,
                 ),
               ],
             ),

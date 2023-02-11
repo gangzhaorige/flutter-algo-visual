@@ -43,8 +43,8 @@ class TopBarMobile extends StatelessWidget {
             );
           }
         ),
-        const Helper(
-          // color: Colors.white
+        Helper(
+          color: Colors.white,
         ),
       ],
     );
@@ -52,8 +52,8 @@ class TopBarMobile extends StatelessWidget {
 }
 
 class Helper extends StatelessWidget {
-  const Helper({super.key});
-
+  const Helper({super.key, required this.color});
+  final Color color;
   @override
   Widget build(BuildContext context) {
     if(Provider.of<AlgoVisualizerTools>(context, listen: false).getFirstTime()) {
@@ -69,8 +69,8 @@ class Helper extends StatelessWidget {
         },
         child: Icon(
           Icons.info_outline_rounded,
-          // color: color,
           size: 30,
+          color: color,
         ),
       ),
     );

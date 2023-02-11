@@ -504,11 +504,14 @@ class Algorithms {
           await Future<dynamic>.delayed(Duration(milliseconds: orderOfVisit.length * speed + pathingOrder.length * speed)).then((_) async {
             int firstPath = pathingOrder.length;
             if(curAlgorithm == Algorithm.aStar || curAlgorithm == Algorithm.dijkstra) {
+              int distance = 0;
               for(int i = 0; i < pathingOrder.length; i++) {
                 if(pathingOrder[i].type == NodeType.weight) {
                   firstPath += 4;
+                  distance += pathingOrder[i].gCost;
                 }
               }
+              print(distance);
             }
             setLengthPath(firstPath);
             if(!hasCoin) {

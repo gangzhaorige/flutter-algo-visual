@@ -21,7 +21,7 @@ class HomeViewTablet extends StatelessWidget {
           decoration: BoxDecoration(
             border: Border(
               right: BorderSide(
-                color: Theme.of(context).dividerColor,
+                color: Theme.of(context).primaryColor,
               ),
             )
           ),
@@ -30,33 +30,36 @@ class HomeViewTablet extends StatelessWidget {
         Expanded(
           child: Column(
             children: [
-              SizedBox(
-                height: 56,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const SizedBox(
-                      height: 15,
-                      width: 15,
-                    ),
-                    Flexible(
-                      child: Selector<AlgoVisualizerTools, Algorithm>(
-                        selector: (_, AlgoVisualizerTools model) => model.getAlgorithm(),
-                        builder: (BuildContext context, Algorithm algo, Widget? child) {
-                          return Text(
-                            '${algoName[algo]}: ${algoDescription[algo]}',
-                            style: const TextStyle(
-                              fontSize: 16,
-                            ),
-                            textAlign: TextAlign.center,
-                          );
-                        }
+              Padding(
+                padding: const EdgeInsets.all(5),
+                child: SizedBox(
+                  height: 56,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SizedBox(
+                        height: 30,
+                        width: 30,
                       ),
-                    ),
-                    Helper(
-                      // color: Theme.of(context).,
-                    ),
-                  ],
+                      Flexible(
+                        child: Selector<AlgoVisualizerTools, Algorithm>(
+                          selector: (_, AlgoVisualizerTools model) => model.getAlgorithm(),
+                          builder: (BuildContext context, Algorithm algo, Widget? child) {
+                            return Text(
+                              '${algoName[algo]}: ${algoDescription[algo]}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                              ),
+                              textAlign: TextAlign.center,
+                            );
+                          }
+                        ),
+                      ),
+                      Helper(
+                        color: Theme.of(context).iconTheme.color!,
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const Expanded(
