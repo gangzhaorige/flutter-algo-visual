@@ -319,11 +319,11 @@ class InformationModel extends ChangeNotifier {
               ),
               children: <TextSpan>[
                 TextSpan(text: 'In a weighted algorithm moving diagonally costs '),
-                TextSpan(text: '1.5 ', style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text: '1.1 ', style: TextStyle(fontWeight: FontWeight.bold)),
                 TextSpan(text: 'times than usual. Which means '),
                 TextSpan(text: '1 ', style: TextStyle(fontWeight: FontWeight.bold)),
                 TextSpan(text: 'to '),
-                TextSpan(text: '1.5. ', style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text: '1.1. ', style: TextStyle(fontWeight: FontWeight.bold)),
                 TextSpan(text: 'In a unweight algorithm it is '),
                 TextSpan(text: '1 ', style: TextStyle(fontWeight: FontWeight.bold)),
                 TextSpan(text: 'to '),

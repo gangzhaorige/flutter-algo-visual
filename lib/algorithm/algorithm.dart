@@ -284,7 +284,7 @@ class Algorithms {
           continue;
         }
         if(nodes[dx][dy].type != NodeType.wall && !nodes[dx][dy].visited) {
-          int weight = ((isMovingDiagonal(direction[0], direction[1]) ? nodes[dx][dy].weight * 1.5 : nodes[dx][dy].weight) * 10).round();
+          int weight = ((isMovingDiagonal(direction[0], direction[1]) ? nodes[dx][dy].weight * 1.1 : nodes[dx][dy].weight) * 10).round();
           if(nodes[dx][dy].distance > curNode.distance + weight) {
             nodes[dx][dy].distance = curNode.distance + weight;
             nodes[dx][dy].parent = curNode;
@@ -340,7 +340,7 @@ class Algorithms {
       return ((a.row - b.row).abs() + (a.col - b.col).abs()) * weight * 10;
     }
     int normal = weight * 10;
-    int diagonal = (weight * 1.4 * 10).round();
+    int diagonal = (weight * 1.1 * 10).round();
     int dstX = (a.row - b.row).abs();
 		int dstY = (a.col - b.col).abs();
 		if (dstX > dstY) {

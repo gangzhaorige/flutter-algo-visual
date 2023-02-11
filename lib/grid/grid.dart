@@ -335,7 +335,7 @@ class Grid {
           int random = rng.nextInt(6);
           if(random > 4) {
             random = rng.nextInt(6);
-            if(random > 3) {
+            if(random > 0) {
               painter.changeToWallWidget(i, j);
               nodes[i][j].changeNodeType(NodeType.wall);
             } else {
