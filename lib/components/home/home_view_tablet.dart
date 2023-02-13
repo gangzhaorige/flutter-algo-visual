@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fluttericon/font_awesome_icons.dart';
-import 'package:fluttericon/fontelico_icons.dart';
-import 'package:fluttericon/typicons_icons.dart';
 import 'package:path_visualizer/algorithm/algorithm.dart';
 import 'package:path_visualizer/components/drawer/widgets/tools.dart';
 import 'package:path_visualizer/components/topbar/helper/helper.dart';
-import 'package:path_visualizer/components/topbar/top_bar_mobile.dart';
 import 'package:path_visualizer/grid/grid.dart';
-import 'package:path_visualizer/main.dart';
 import 'package:provider/provider.dart';
 
 class HomeViewTablet extends StatelessWidget {
@@ -42,26 +37,9 @@ class HomeViewTablet extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Selector<ThemeNotifier, bool>(
-                        selector: (_, ThemeNotifier theme) => theme.isLight(),
-                        builder: (BuildContext context, bool isLight, Widget? child) {
-                          return Builder(
-                            builder: (context) {
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 15),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Provider.of<ThemeNotifier>(context, listen: false).toggle();
-                                  },
-                                  child: Icon(
-                                    isLight ? FontAwesome.sun : FontAwesome.moon,
-                                    size: 30,
-                                  ),
-                                ),
-                              );
-                            }
-                          );
-                        }
+                      const SizedBox(
+                        height: 30,
+                        width: 30,
                       ),
                       Flexible(
                         child: Selector<AlgoVisualizerTools, Algorithm>(
