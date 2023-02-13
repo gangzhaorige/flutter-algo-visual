@@ -11,7 +11,7 @@ class ToolWidgets extends StatelessWidget {
         SliverAppBar(
           toolbarHeight: 45,
           automaticallyImplyLeading: false,
-          title: Text(
+          title: const Text(
             'Path Finder',
             style: TextStyle(
               fontSize: 20,

@@ -85,7 +85,7 @@ final lightTheme = ThemeData(
   primaryColorLight: Colors.blue,
   iconTheme: const IconThemeData(
     color: Colors.blue,
-  )
+  ),
   // dividerColor: Colors.black,
   // brightness: Brightness.dark,
   // primarySwatch: Colors.teal,

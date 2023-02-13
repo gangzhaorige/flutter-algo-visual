@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:path_visualizer/components/drawer/widgets/coin_switcher.dart';
 import 'package:path_visualizer/components/drawer/widgets/diagonal_switcher.dart';
-import 'package:path_visualizer/components/drawer/widgets/theme_switcher.dart';
 import 'package:path_visualizer/components/drawer/widgets/tools.dart';
 
 import 'widgets/algorithm_changer.dart';
@@ -14,7 +13,6 @@ const List<Widget> drawerWidget = <Widget>[
   BrushChanger(),
   CoinSwitcher(),
   DirectionSwitcher(),
-  ThemeSwitcher(),
 ];
 
 class AppDrawer extends StatelessWidget {
