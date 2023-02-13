@@ -27,6 +27,7 @@ class ButtonNav extends StatelessWidget {
           ),
           Image.asset(
             'assets/images/nav.png',
+            height: 100,
           ),
         ],
       ),

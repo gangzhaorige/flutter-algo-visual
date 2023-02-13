@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:path_visualizer/components/animated_button.dart';
 import 'package:path_visualizer/components/border_button.dart';
-import 'package:path_visualizer/my_icon_icons.dart';
-import 'package:provider/provider.dart';
 
-import '../../algorithm/algorithm.dart';
 import '../../grid/grid.dart';
 
 class BottomNav extends StatelessWidget {
