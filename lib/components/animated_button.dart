@@ -106,11 +106,17 @@ class _AnimatedButtonState extends State<AnimatedButton> {
                   style: const TextStyle(
                     fontSize: 20,
                   ),
+                  softWrap: true,
+                  textAlign: TextAlign.center,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
-                Text(text),
+                Text(
+                  text,
+                  softWrap: true,
+                  textAlign: TextAlign.center,
+                ),
                 const SizedBox(height: 10),
                 TextButton(
                   onPressed: () {
