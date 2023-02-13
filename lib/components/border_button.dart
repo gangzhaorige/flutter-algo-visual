@@ -21,7 +21,11 @@ class BorderButton extends StatelessWidget {
             )
           ),
           child: TextButton(
-            onPressed: () => onPressed(),
+            onPressed: () {
+              if(!tool.getVisualizing()) {
+                onPressed();
+              }
+            },
             child: Text(
               text,
               style: TextStyle(
