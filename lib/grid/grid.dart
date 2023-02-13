@@ -292,7 +292,7 @@ class Grid {
     onTapNode(row, col, brush, func);
   }
 
-  void resetPath(bool resetVisual) {
+  void resetPath() {
     for(List<NodeModel> list in nodes) {
       for(NodeModel node in list) {
         node.parent = null;
@@ -305,9 +305,22 @@ class Grid {
         }
       }
     }
-    if(resetVisual) {
-      painter.removePathAndVisited();
+  }
+
+  void resetPathVisual() {
+    for(List<NodeModel> list in nodes) {
+      for(NodeModel node in list) {
+        node.parent = null;
+        node.parent2 = null;
+        node.visited = false;
+        node.visited2 = false;
+        node.distance = 10000;
+        if(node.type == NodeType.visiting || node.type == NodeType.pathing) {
+          node.changeNodeType(NodeType.empty);
+        }
+      }
     }
+    painter.removePathAndVisited();
   }
 
   void resetWalls() {
@@ -323,7 +336,7 @@ class Grid {
   }
 
   void reset() {
-    resetPath(true);
+    resetPathVisual();
     resetWalls();
   }
 

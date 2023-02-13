@@ -517,7 +517,7 @@ class Algorithms {
             if(!hasCoin) {
               toggleVisualizing();
             } else {
-              grid.resetPath(false);
+              grid.resetPath();
               orderOfVisit = executeAlgorithm(curAlgorithm, coinRow, coinCol, this.endRow, this.endCol, hasDiagonal);
               pathingOrder = curAlgorithm == Algorithm.biBfs ? getPathFromStartToEndBidirectional(orderOfVisit, false) : getPathFromStartToEnd(this.endRow, this.endCol, false);
               await visualizeVisitedNodes(orderOfVisit, speed, Colors.redAccent, hasCoin).then((_) async {
