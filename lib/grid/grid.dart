@@ -341,12 +341,13 @@ class Grid {
   }
 
   void randomMaze() {
+    reset();
     Random rng = Random();
     for(int i = 0; i < nodes.length; i++) {
       for(int j = 0; j < nodes[0].length; j++) {
         if(nodes[i][j].type == NodeType.empty) {
           int random = rng.nextInt(6);
-          if(random > 4) {
+          if(random > 2) {
             random = rng.nextInt(6);
             if(random > 0) {
               painter.changeToWallWidget(i, j);
