@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
-import 'package:path_visualizer/main.dart';
 import 'package:provider/provider.dart';
+
+import '../../../theme.dart';
 
 class ThemeChanger extends StatelessWidget {
   const ThemeChanger({super.key});
